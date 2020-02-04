@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MessageSender.ViewModel
@@ -21,10 +22,10 @@ namespace MessageSender.ViewModel
                 CanExecuteChanged?.Invoke(null, new EventArgs());
             }
         }
-        private readonly Action _action;
+        private readonly Func<Task> _action;
         private bool BlockWhileExecute;
 
-        public DelegateCommand(Action action, bool executable = true, bool blockWhileExecute = false)
+        public DelegateCommand(Func<Task> action, bool executable = true, bool blockWhileExecute = false)
         {
             _action = action;
             Executable = executable;
@@ -40,7 +41,9 @@ namespace MessageSender.ViewModel
             if (BlockWhileExecute)
                 Executable = false;
 
-            _action();
+            var task = _action();
+            var tasks = new[] { task };
+            Task.WaitAll(tasks);
 
             if (BlockWhileExecute)
                 Executable = true;

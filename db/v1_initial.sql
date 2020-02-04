@@ -71,10 +71,10 @@ ALTER TABLE application ADD CONSTRAINT application_con_unq_name UNIQUE (name);
 CREATE TABLE contact
 (
 	id INTEGER NOT NULL,
-	name VARCHAR(20) NOT NULL,
-	app_user_id INTEGER NOT NULL,
-	application_id INTEGER NOT NULL,
+	name VARCHAR(100) NOT NULL,
 	in_application_id VARCHAR(100)
+	app_user_id INTEGER NOT NULL,
+	application_id INTEGER NOT NULL,	
 );
 ALTER TABLE contact ADD CONSTRAINT contact_pkey PRIMARY KEY (id);
 CREATE SEQUENCE public.contact_id_seq

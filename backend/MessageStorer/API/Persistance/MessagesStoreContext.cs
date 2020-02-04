@@ -123,7 +123,7 @@ namespace API.Persistance
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(20);
+                    .HasMaxLength(100);
 
                 entity.HasOne(d => d.AppUser)
                     .WithMany(p => p.Contact)

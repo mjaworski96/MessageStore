@@ -9,7 +9,6 @@ using Android.Support.V4.Content;
 using MessageSender.Model;
 using MessageSender.ViewModel.Interfaces;
 using System.Collections.Generic;
-using static Android.Provider.Contacts;
 
 namespace MessageSender.Droid.DeviceServices
 {
@@ -29,24 +28,21 @@ namespace MessageSender.Droid.DeviceServices
             RequestPermisions();
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
             {
-                var uri = ContactsContract.Contacts.ContentUri;
-                var contacts = _contentResolver.Query(uri, null, null, null);
                 var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null);
-                var test = phones.GetColumnNames();
                 if (phones.MoveToFirst())
                 {
                     do
                     {
-
-                        string phonesData = "";
-                        for (int idx = 0; idx < phones.ColumnCount; idx++)
+                        yield return new Contact
                         {
-                            phonesData += phones.GetColumnName(idx) + ":" + phones.GetString(idx) + '\n';
-                        }
+                            Name = phones.GetString(phones.GetColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.InterfaceConsts.DisplayName)),
+                            PhoneNumber = phones.GetString(phones.GetColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NormalizedNumber))
+                        };
 
                     } while (phones.MoveToNext());
                 }
-                yield break;
             }
 
         }
