@@ -73,7 +73,8 @@ CREATE TABLE contact
 	id INTEGER NOT NULL,
 	name VARCHAR(20) NOT NULL,
 	app_user_id INTEGER NOT NULL,
-	application_id INTEGER NOT NULL
+	application_id INTEGER NOT NULL,
+	in_application_id VARCHAR(100)
 );
 ALTER TABLE contact ADD CONSTRAINT contact_pkey PRIMARY KEY (id);
 CREATE SEQUENCE public.contact_id_seq
@@ -141,11 +142,3 @@ INSERT INTO writer_type(name) VALUES
 
 INSERT INTO application(name) VALUES
 ('sms'), ('messenger');
-
---DROP TABLE alias CASCADE;
---DROP TABLE writer_type CASCADE;
---DROP TABLE app_user CASCADE;
---DROP TABLE application CASCADE;
---DROP TABLE contact CASCADE;
---DROP TABLE alias_member CASCADE;
---DROP TABLE message CASCADE;

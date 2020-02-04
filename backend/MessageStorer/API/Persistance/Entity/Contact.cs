@@ -15,6 +15,7 @@ namespace API.Persistance.Entity
         public string Name { get; set; }
         public int AppUserId { get; set; }
         public int ApplicationId { get; set; }
+        public string InApplicationId { get; set; }
 
         public virtual AppUser AppUser { get; set; }
         public virtual Application Application { get; set; }

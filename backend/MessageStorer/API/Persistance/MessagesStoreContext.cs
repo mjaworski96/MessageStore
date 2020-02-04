@@ -121,6 +121,10 @@ namespace API.Persistance
 
                 entity.Property(e => e.ApplicationId).HasColumnName("application_id");
 
+                entity.Property(e => e.InApplicationId)
+                    .HasColumnName("in_application_id")
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
