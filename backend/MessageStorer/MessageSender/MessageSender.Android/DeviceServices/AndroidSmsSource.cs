@@ -8,6 +8,7 @@ using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using MessageSender.Model;
 using MessageSender.ViewModel.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace MessageSender.Droid.DeviceServices
@@ -34,17 +35,28 @@ namespace MessageSender.Droid.DeviceServices
                 {
                     do
                     {
-                        var names = cursor.GetColumnNames();
+                        var date = long.Parse(cursor.GetString(
+                                cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Date)));
 
+                        yield return new Sms
+                        {
+                            Content = cursor.GetString(
+                                cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Body)),
+                            Date = DateTime.UtcNow.AddMilliseconds(date),
+                            PhoneNumber = cursor.GetString(
+                                cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Address)), //TODO Handle with sms conversation out of contacts
+                            WriterType = cursor.GetString(
+                                cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Type)) == ((int)SmsMessageType.Sent).ToString()
+                                ? Sms.WRITER_ME : Sms.WRITER_CONTACT
+                        };
                         string msgData = "";
                         for (int idx = 0; idx < cursor.ColumnCount; idx++)
                         {
                             msgData += cursor.GetColumnName(idx) + ":" + cursor.GetString(idx) + '\n';
                         }
-                        
+
                     } while (cursor.MoveToNext());
                 }
-                yield break;
             }
             
         }

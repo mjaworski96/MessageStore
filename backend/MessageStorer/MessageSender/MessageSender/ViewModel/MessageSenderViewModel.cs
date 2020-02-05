@@ -1,4 +1,5 @@
-﻿using MessageSender.Model.Http;
+﻿using MessageSender.Model;
+using MessageSender.Model.Http;
 using MessageSender.ViewModel.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,13 +30,30 @@ namespace MessageSender.ViewModel
                 foreach (var contact in _contactSource.GetAll())
                 {
                     var contactWithId = await contactHttpSender.Send(contact);
-                    if(!contactNumberToId.ContainsKey(contactWithId.PhoneNumber))
+                    if (!contactNumberToId.ContainsKey(contactWithId.PhoneNumber))
                         contactNumberToId.Add(contactWithId.PhoneNumber, contactWithId.Id);
                 }
-            }
-            
 
-            //_smsSource.GetAll().ToList();
+                using (var smsHttpSender = new SmsContactHttpSender())
+                {
+                    foreach (var sms in _smsSource.GetAll())
+                    {
+                        if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
+                        {
+                            var missingContact = await contactHttpSender.Send(new Contact
+                            {
+                                Name = sms.PhoneNumber,
+                                PhoneNumber = sms.PhoneNumber,
+                            });
+                            if (!contactNumberToId.ContainsKey(missingContact.PhoneNumber))
+                                contactNumberToId.Add(missingContact.PhoneNumber, missingContact.Id);
+                        }
+                        sms.ContactId = contactNumberToId[sms.PhoneNumber];
+                        await smsHttpSender.Send(sms);
+                    }
+                }
+            }
+
         }
     }
 }

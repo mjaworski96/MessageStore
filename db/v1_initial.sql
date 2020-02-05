@@ -14,7 +14,6 @@ CREATE SEQUENCE public.alias_id_seq
     CACHE 1;
 ALTER SEQUENCE alias_id_seq OWNED BY alias.id;
 ALTER TABLE alias ALTER COLUMN id SET DEFAULT nextval('public.alias_id_seq'::regclass);
-ALTER TABLE alias ADD CONSTRAINT alias_con_unq_name UNIQUE (name);
 
 CREATE TABLE writer_type
 (
@@ -138,7 +137,7 @@ INSERT INTO app_user(username, password) VALUES
 ('marcin', '$2a$10$XxY/vqp0dT3sQPRvcdDDM.lnpT6Q3SJF3lWN3HLmeT4rdmZ8nHtQe'); --test
 
 INSERT INTO writer_type(name) VALUES
-('app_user'), ('writer');
+('app_user'), ('contact');
 
 INSERT INTO application(name) VALUES
 ('sms'), ('messenger');
