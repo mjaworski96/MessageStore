@@ -1,12 +1,14 @@
-﻿using API.Persistance.Entity;
+﻿using API.Exceptions;
+using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace API.Persistance.Repository
 {
     public interface IContactRepository
     {
+        Task<Contact> Get(int id);
         Task<Contact> Get(string appName, string inAppId, string appUserName);
         Task AddIfNotExists(Contact entity);
         Task Save();
@@ -35,6 +37,20 @@ namespace API.Persistance.Repository
                 x.Application.Name == appName &&
                 x.InApplicationId == inAppId &&
                 x.AppUser.Username == appUserName);
+        }
+
+        public Task<Contact> Get(int id)
+        {
+            try
+            {
+                return _messageStoreContext
+                .Contact
+                .FirstAsync(x => x.Id == id);
+            }
+            catch(InvalidOperationException e)
+            {
+                throw new NotFoundException($"Contact with id {id} not found.", e);
+            }
         }
 
         public async Task Save()

@@ -1,5 +1,6 @@
 ﻿using API.Exceptions;
 using API.Persistance.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace API.Persistance.Repository
 {
     public interface IAppUserRepository
     {
-        AppUser Get(string name);
+        Task<AppUser> Get(string name);
     }
     public class AppUserRepository: IAppUserRepository
     {
@@ -20,12 +21,12 @@ namespace API.Persistance.Repository
             _messageStoreContext = messageStoreContext;
         }
 
-        public AppUser Get(string name)
+        public async Task<AppUser> Get(string name)
         {
             try
             {
-                return _messageStoreContext.AppUser
-                    .First(x => x.Username == name);
+                return await _messageStoreContext.AppUser
+                    .FirstAsync(x => x.Username == name);
             }
             catch(InvalidOperationException e)
             {

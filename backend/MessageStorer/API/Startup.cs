@@ -32,15 +32,19 @@ namespace API
             services.AddControllers();
             services.AddDbContext<MessagesStoreContext>(options =>
             {
-            options.UseNpgsql(Configuration["ConnectionStrings:MessagesStore"]);
-            });
+                options.UseNpgsql(Configuration["ConnectionStrings:MessagesStore"]);
+                options.EnableDetailedErrors(true);
+            }, ServiceLifetime.Singleton);
+            services.AddMemoryCache();
 
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IHttpMetadataService, MockHttpMetadataService>();
-
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IWriterTypeRepository, WriterTypeRepository>();
+            services.AddScoped<IMessageService, MessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

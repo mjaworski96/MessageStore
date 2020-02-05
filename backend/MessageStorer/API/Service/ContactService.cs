@@ -37,8 +37,8 @@ namespace API.Service
             {
                 entity = new Contact
                 {
-                    AppUser = _appUserRepository.Get(_httpMetadataService.Username),
-                    Application = _applicationRepository.Get(_httpMetadataService.Application)
+                    AppUser = await _appUserRepository.Get(_httpMetadataService.Username),
+                    Application = await _applicationRepository.Get(_httpMetadataService.Application)
                 };
             }
             entity.Name = contactDto.Name;
