@@ -33,7 +33,10 @@ namespace API.Persistance.Repository
         public Task<Contact> Get(string appName, string inAppId, string appUserName)
         {
             return _messageStoreContext
-                .Contact.FirstOrDefaultAsync(x =>
+                .Contact
+                .Include(x => x.AliasMember)
+                .ThenInclude(x => x.Alias)
+                .FirstOrDefaultAsync(x =>
                 x.Application.Name == appName &&
                 x.InApplicationId == inAppId &&
                 x.AppUser.Username == appUserName);
