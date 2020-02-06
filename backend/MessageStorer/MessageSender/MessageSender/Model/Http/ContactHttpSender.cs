@@ -6,20 +6,9 @@ using System.Threading.Tasks;
 
 namespace MessageSender.Model.Http
 {
-    public class ContactHttpSender : IDisposable
+    public class ContactHttpSender : HttpSender
     {
-        public const string ADDRESS = "http://10.8.39.172:5000";
-        public const string URL = "api/contacts";
-        private HttpClient _http = new HttpClient();
-        public ContactHttpSender()
-        {
-            _http = new HttpClient();
-        }
-
-        public void Dispose()
-        {
-            _http.Dispose();
-        }
+        private const string URL = "api/contacts";
 
         public async Task<ContactWithId> Send(Contact contact)
         {
@@ -27,7 +16,7 @@ namespace MessageSender.Model.Http
             {
                 var json = JsonConvert.SerializeObject(contact);
                 var data = new StringContent(json, Encoding.UTF8, "application/json");
-                var result = _http.PutAsync($"{ADDRESS}/{URL}", data).Result;
+                var result = await _http.PutAsync(URL, data);
                 var body = await result.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<ContactWithId>(body);
             }

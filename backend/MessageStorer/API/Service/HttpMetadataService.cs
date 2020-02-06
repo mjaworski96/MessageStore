@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace API.Service
 {
@@ -10,10 +7,27 @@ namespace API.Service
         string Username { get; }
         string Application { get; }
     }
-    public class MockHttpMetadataService : IHttpMetadataService
+    public class HttpMetadataService : IHttpMetadataService
     {
-        public string Username => "test";
+        private HttpContext _httpContext;
+        public HttpMetadataService(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContext = httpContextAccessor.HttpContext;
+        }
+        public string Username
+        {
+            get
+            {
+                return _httpContext.Request.Headers["X-MockedAuthority"];
+            }
+        }
 
-        public string Application => "sms";
+        public string Application
+        {
+            get
+            {
+                return _httpContext.Request.Headers["X-Application"];
+            }
+        }
     }
 }

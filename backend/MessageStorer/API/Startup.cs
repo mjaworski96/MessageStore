@@ -36,12 +36,13 @@ namespace API
                 options.EnableDetailedErrors(true);
             }, ServiceLifetime.Singleton);
             services.AddMemoryCache();
+            services.AddHttpContextAccessor();
 
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IContactService, ContactService>();
-            services.AddScoped<IHttpMetadataService, MockHttpMetadataService>();
+            services.AddScoped<IHttpMetadataService, HttpMetadataService>();
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IWriterTypeRepository, WriterTypeRepository>();
             services.AddScoped<IMessageService, MessageService>();

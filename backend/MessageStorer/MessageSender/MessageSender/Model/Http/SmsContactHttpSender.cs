@@ -6,20 +6,9 @@ using System.Threading.Tasks;
 
 namespace MessageSender.Model.Http
 {
-    public class SmsContactHttpSender: IDisposable
+    public class SmsContactHttpSender: HttpSender
     {
-        public const string ADDRESS = "http://10.8.39.172:5000";
-        public const string URL = "api/messages";
-        private HttpClient _http = new HttpClient();
-        public SmsContactHttpSender()
-        {
-            _http = new HttpClient();
-        }
-
-        public void Dispose()
-        {
-            _http.Dispose();
-        }
+        private const string URL = "api/messages";
 
         public async Task<SmsWithId> Send(Sms sms)
         {
@@ -27,7 +16,7 @@ namespace MessageSender.Model.Http
             {
                 var json = JsonConvert.SerializeObject(sms);
                 var data = new StringContent(json, Encoding.UTF8, "application/json");
-                var result = _http.PostAsync($"{ADDRESS}/{URL}", data).Result;
+                var result = await _http.PostAsync(URL, data);
                 var body = await result.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<SmsWithId>(body);
             }
