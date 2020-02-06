@@ -51,9 +51,21 @@ namespace MessageSender.Droid.DeviceServices
                         };
                     } while (cursor.MoveToNext());
                 }
-            }
-            
+            }       
         }
+
+        public int GetCount()
+        {
+            RequestPermisions();
+            if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
+            {
+                var uri = Telephony.Sms.ContentUri;
+                var cursor = _contentResolver.Query(uri, null, null, null);
+                return cursor.Count;
+            }
+            return 0;
+        }
+
         private void RequestPermisions()
         {
             ActivityCompat.RequestPermissions(_context,

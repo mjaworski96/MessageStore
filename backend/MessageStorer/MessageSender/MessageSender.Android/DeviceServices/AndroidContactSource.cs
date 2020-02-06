@@ -44,8 +44,19 @@ namespace MessageSender.Droid.DeviceServices
                     } while (phones.MoveToNext());
                 }
             }
-
         }
+
+        public int GetCount()
+        {
+            RequestPermisions();
+            if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
+            {
+                var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null);
+                return phones.Count;
+            }
+            return 0;
+        }
+
         private void RequestPermisions()
         {
             ActivityCompat.RequestPermissions(_context,

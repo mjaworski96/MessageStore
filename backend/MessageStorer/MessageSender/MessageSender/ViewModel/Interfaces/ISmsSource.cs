@@ -7,5 +7,6 @@ namespace MessageSender.ViewModel.Interfaces
     public interface ISmsSource
     {
         IEnumerable<Sms> GetAll();
+        int GetCount();
     }
 }

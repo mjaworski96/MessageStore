@@ -6,5 +6,6 @@ namespace MessageSender.ViewModel.Interfaces
     public interface IContactSource
     {
         IEnumerable<Contact> GetAll();
+        int GetCount();
     }
 }

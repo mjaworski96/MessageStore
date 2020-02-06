@@ -2,16 +2,17 @@
 using MessageSender.Model.Http;
 using MessageSender.ViewModel.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MessageSender.ViewModel
 {
-    public class MessageSenderViewModel
+    public class MessageSenderViewModel: INotifyPropertyChanged
     {
         private ISmsSource _smsSource;
         private IContactSource _contactSource;
+        private double _currentProgress;
 
         public MessageSenderViewModel(ISmsSource smsSource,
             IContactSource contactSource)
@@ -19,12 +20,29 @@ namespace MessageSender.ViewModel
             _smsSource = smsSource;
             _contactSource = contactSource;
         }
-
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         public ICommand SyncSmsCommand { get => new DelegateCommand(Sync, true, true); }
+        public double CurrentProgress
+        {
+            get => _currentProgress;
+            set
+            {
+                _currentProgress = value;
+                NotifyPropertyChanged("CurrentProgress");
+            }
+        }
 
         private async Task Sync()
         {
             Dictionary<string, int> contactNumberToId = new Dictionary<string, int>();
+            CurrentProgress = 0;
+            int currentSent = 0;
+            int maxProgress = _contactSource.GetCount() + _smsSource.GetCount();
+
             using (var contactHttpSender = new ContactHttpSender())
             {
                 foreach (var contact in _contactSource.GetAll())
@@ -32,6 +50,7 @@ namespace MessageSender.ViewModel
                     var contactWithId = await contactHttpSender.Send(contact);
                     if (!contactNumberToId.ContainsKey(contactWithId.PhoneNumber))
                         contactNumberToId.Add(contactWithId.PhoneNumber, contactWithId.Id);
+                    UpdateProgress(ref currentSent, maxProgress);
                 }
 
                 using (var smsHttpSender = new SmsContactHttpSender())
@@ -50,10 +69,16 @@ namespace MessageSender.ViewModel
                         }
                         sms.ContactId = contactNumberToId[sms.PhoneNumber];
                         await smsHttpSender.Send(sms);
+                        UpdateProgress(ref currentSent, maxProgress);
                     }
                 }
             }
 
+        }
+        private void UpdateProgress(ref int current, int max)
+        {
+            current++;
+            CurrentProgress = 1.0 * current / max;
         }
     }
 }

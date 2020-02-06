@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 
 namespace MessageSender.ViewModel
 {
@@ -19,17 +18,30 @@ namespace MessageSender.ViewModel
             set
             {
                 _executable = value;
-                CanExecuteChanged?.Invoke(null, new EventArgs());
+                if (MainThread.IsMainThread)
+                {
+                    RaiseExecutableChanged();
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(RaiseExecutableChanged);
+                } 
             }
         }
+
+        private void RaiseExecutableChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         private readonly Func<Task> _action;
-        private bool BlockWhileExecute;
+        private bool _blockWhileExecute;
 
         public DelegateCommand(Func<Task> action, bool executable = true, bool blockWhileExecute = false)
         {
             _action = action;
             Executable = executable;
-            BlockWhileExecute = blockWhileExecute;
+            _blockWhileExecute = blockWhileExecute;
         }
         public bool CanExecute(object parameter)
         {
@@ -38,14 +50,17 @@ namespace MessageSender.ViewModel
 
         public void Execute(object parameter)
         {
-            if (BlockWhileExecute)
+            Task.Run(async () => await Perfrom());
+        }
+
+        private async Task Perfrom()
+        {
+            if (_blockWhileExecute)
                 Executable = false;
 
-            var task = _action();
-            var tasks = new[] { task };
-            Task.WaitAll(tasks);
+            await _action();
 
-            if (BlockWhileExecute)
+            if (_blockWhileExecute)
                 Executable = true;
         }
     }
