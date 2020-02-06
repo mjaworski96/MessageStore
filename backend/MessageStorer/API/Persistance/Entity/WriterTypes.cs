@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace API.Persistance.Entity
 {
-    public partial class Application
+    public partial class WriterTypes
     {
-        public Application()
+        public WriterTypes()
         {
-            Contact = new HashSet<Contact>();
+            Messages = new HashSet<Messages>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Contact> Contact { get; set; }
+        public virtual ICollection<Messages> Messages { get; set; }
     }
 }

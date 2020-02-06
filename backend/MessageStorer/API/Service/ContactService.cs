@@ -29,20 +29,20 @@ namespace API.Service
 
         public async Task<ContactDtoWithId> AddIfNotExists(ContactDto contactDto)
         {
-            Contact entity = await _contactRepository.Get(
+            Contacts entity = await _contactRepository.Get(
                 _httpMetadataService.Application,
                 contactDto.InApplicationId,
                 _httpMetadataService.Username);
             if (entity == null)
             {
-                entity = new Contact
+                entity = new Contacts
                 {
                     AppUser = await _appUserRepository.Get(_httpMetadataService.Username),
                     Application = await _applicationRepository.Get(_httpMetadataService.Application),
                 };
-                entity.AliasMember.Add(new AliasMember
+                entity.AliasesMembers.Add(new AliasesMembers
                 {
-                    Alias = new Alias
+                    Alias = new Aliases
                     {
                         Internal = true
                     }
@@ -50,7 +50,7 @@ namespace API.Service
             }
             entity.Name = contactDto.Name;
             entity.InApplicationId = contactDto.InApplicationId;
-            entity.AliasMember.First(x => x.Alias.Internal == true).Alias.Name = contactDto.Name;
+            entity.AliasesMembers.First(x => x.Alias.Internal == true).Alias.Name = contactDto.Name;
 
             await _contactRepository.AddIfNotExists(entity);
             await _contactRepository.Save();

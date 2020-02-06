@@ -1,7 +1,7 @@
 ﻿using System;
-using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using API.Persistance.Entity;
 
 namespace API.Persistance
 {
@@ -16,27 +16,28 @@ namespace API.Persistance
         {
         }
 
-        public virtual DbSet<Alias> Alias { get; set; }
-        public virtual DbSet<AliasMember> AliasMember { get; set; }
-        public virtual DbSet<AppUser> AppUser { get; set; }
-        public virtual DbSet<Application> Application { get; set; }
-        public virtual DbSet<Contact> Contact { get; set; }
-        public virtual DbSet<Message> Message { get; set; }
-        public virtual DbSet<WriterType> WriterType { get; set; }
+        public virtual DbSet<Aliases> Aliases { get; set; }
+        public virtual DbSet<AliasesMembers> AliasesMembers { get; set; }
+        public virtual DbSet<AppUsers> AppUsers { get; set; }
+        public virtual DbSet<Applications> Applications { get; set; }
+        public virtual DbSet<Contacts> Contacts { get; set; }
+        public virtual DbSet<Messages> Messages { get; set; }
+        public virtual DbSet<WriterTypes> WriterTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=MessagesStore;Username=messagestorer;Password=messagestorer");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Alias>(entity =>
+            modelBuilder.Entity<Aliases>(entity =>
             {
-                entity.ToTable("alias");
-
-                entity.HasIndex(e => e.Name)
-                    .HasName("alias_con_unq_name")
-                    .IsUnique();
+                entity.ToTable("aliases");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -48,9 +49,9 @@ namespace API.Persistance
                     .HasMaxLength(100);
             });
 
-            modelBuilder.Entity<AliasMember>(entity =>
+            modelBuilder.Entity<AliasesMembers>(entity =>
             {
-                entity.ToTable("alias_member");
+                entity.ToTable("aliases_members");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -59,22 +60,22 @@ namespace API.Persistance
                 entity.Property(e => e.ContactId).HasColumnName("contact_id");
 
                 entity.HasOne(d => d.Alias)
-                    .WithMany(p => p.AliasMember)
+                    .WithMany(p => p.AliasesMembers)
                     .HasForeignKey(d => d.AliasId)
-                    .HasConstraintName("fk_alias_member_alias");
+                    .HasConstraintName("fk_aliases_members_aliases");
 
                 entity.HasOne(d => d.Contact)
-                    .WithMany(p => p.AliasMember)
+                    .WithMany(p => p.AliasesMembers)
                     .HasForeignKey(d => d.ContactId)
-                    .HasConstraintName("fk_alias_member_contact");
+                    .HasConstraintName("fk_aliases_members_contacts");
             });
 
-            modelBuilder.Entity<AppUser>(entity =>
+            modelBuilder.Entity<AppUsers>(entity =>
             {
-                entity.ToTable("app_user");
+                entity.ToTable("app_users");
 
                 entity.HasIndex(e => e.Username)
-                    .HasName("app_user_con_unq_name")
+                    .HasName("app_users_con_unq_name")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -90,12 +91,12 @@ namespace API.Persistance
                     .HasMaxLength(20);
             });
 
-            modelBuilder.Entity<Application>(entity =>
+            modelBuilder.Entity<Applications>(entity =>
             {
-                entity.ToTable("application");
+                entity.ToTable("applications");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("application_con_unq_name")
+                    .HasName("applications_con_unq_name")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -106,9 +107,9 @@ namespace API.Persistance
                     .HasMaxLength(20);
             });
 
-            modelBuilder.Entity<Contact>(entity =>
+            modelBuilder.Entity<Contacts>(entity =>
             {
-                entity.ToTable("contact");
+                entity.ToTable("contacts");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -126,19 +127,19 @@ namespace API.Persistance
                     .HasMaxLength(100);
 
                 entity.HasOne(d => d.AppUser)
-                    .WithMany(p => p.Contact)
+                    .WithMany(p => p.Contacts)
                     .HasForeignKey(d => d.AppUserId)
-                    .HasConstraintName("fk_contact_app_user");
+                    .HasConstraintName("fk_contacts_app_users");
 
                 entity.HasOne(d => d.Application)
-                    .WithMany(p => p.Contact)
+                    .WithMany(p => p.Contacts)
                     .HasForeignKey(d => d.ApplicationId)
-                    .HasConstraintName("fk_contact_application");
+                    .HasConstraintName("fk_contacts_applications");
             });
 
-            modelBuilder.Entity<Message>(entity =>
+            modelBuilder.Entity<Messages>(entity =>
             {
-                entity.ToTable("message");
+                entity.ToTable("messages");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -155,22 +156,22 @@ namespace API.Persistance
                 entity.Property(e => e.WriterTypeId).HasColumnName("writer_type_id");
 
                 entity.HasOne(d => d.Contact)
-                    .WithMany(p => p.Message)
+                    .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.ContactId)
-                    .HasConstraintName("fk_message_contact");
+                    .HasConstraintName("fk_messages_contacts");
 
                 entity.HasOne(d => d.WriterType)
-                    .WithMany(p => p.Message)
+                    .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.WriterTypeId)
-                    .HasConstraintName("fk_message_writer_type");
+                    .HasConstraintName("fk_messages_writer_types");
             });
 
-            modelBuilder.Entity<WriterType>(entity =>
+            modelBuilder.Entity<WriterTypes>(entity =>
             {
-                entity.ToTable("writer_type");
+                entity.ToTable("writer_types");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("writer_type_con_unq_name")
+                    .HasName("writer_types_con_unq_name")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");

@@ -8,9 +8,9 @@ namespace API.Persistance.Repository
 {
     public interface IContactRepository
     {
-        Task<Contact> Get(int id);
-        Task<Contact> Get(string appName, string inAppId, string appUserName);
-        Task AddIfNotExists(Contact entity);
+        Task<Contacts> Get(int id);
+        Task<Contacts> Get(string appName, string inAppId, string appUserName);
+        Task AddIfNotExists(Contacts entity);
         Task Save();
     }
     public class ContactRepository: IContactRepository
@@ -22,19 +22,19 @@ namespace API.Persistance.Repository
             _messageStoreContext = messageStoreContext;
         }
 
-        public async Task AddIfNotExists(Contact entity)
+        public async Task AddIfNotExists(Contacts entity)
         {
             if(entity.Id == 0)
             {
-                await _messageStoreContext.Contact.AddAsync(entity);
+                await _messageStoreContext.Contacts.AddAsync(entity);
             }
         }
 
-        public Task<Contact> Get(string appName, string inAppId, string appUserName)
+        public Task<Contacts> Get(string appName, string inAppId, string appUserName)
         {
             return _messageStoreContext
-                .Contact
-                .Include(x => x.AliasMember)
+                .Contacts
+                .Include(x => x.AliasesMembers)
                 .ThenInclude(x => x.Alias)
                 .FirstOrDefaultAsync(x =>
                 x.Application.Name == appName &&
@@ -42,12 +42,12 @@ namespace API.Persistance.Repository
                 x.AppUser.Username == appUserName);
         }
 
-        public Task<Contact> Get(int id)
+        public Task<Contacts> Get(int id)
         {
             try
             {
                 return _messageStoreContext
-                .Contact
+                .Contacts
                 .FirstAsync(x => x.Id == id);
             }
             catch(InvalidOperationException e)

@@ -10,7 +10,7 @@ namespace API.Persistance.Repository
 {
     public interface IWriterTypeRepository
     {
-        Task<WriterType> Get(string name);
+        Task<WriterTypes> Get(string name);
     }
     public class WriterTypeRepository : IWriterTypeRepository
     {
@@ -23,14 +23,14 @@ namespace API.Persistance.Repository
             _cache = cache;
         }
 
-        public Task<WriterType> Get(string name)
+        public Task<WriterTypes> Get(string name)
         {
             try
             {
                 return _cache.GetOrCreateAsync($"WriterType_{name}", x =>
                 {
                     return _messagesStoreContext
-                    .WriterType
+                    .WriterTypes
                     .FirstAsync(x => x.Name == name);
                 });
             }

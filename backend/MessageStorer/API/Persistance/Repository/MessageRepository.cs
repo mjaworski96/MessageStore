@@ -7,9 +7,9 @@ namespace API.Persistance.Repository
 {
     public interface IMessageRepository
     {
-        Task Add(Message message);
+        Task Add(Messages message);
         Task Save();
-        Task<Message> GetNewest(string appUser, string application);
+        Task<Messages> GetNewest(string appUser, string application);
     }
     public class MessageRepository: IMessageRepository
     {
@@ -19,15 +19,15 @@ namespace API.Persistance.Repository
         {
             _messageStoreContext = messageStoreContext;
         }
-        public async Task Add(Message message)
+        public async Task Add(Messages message)
         {
             await _messageStoreContext.AddAsync(message);
         }
 
-        public Task<Message> GetNewest(string appUser, string application)
+        public Task<Messages> GetNewest(string appUser, string application)
         {
             return _messageStoreContext
-                .Message
+                .Messages
                 .OrderByDescending(x => x.Date)
                 .FirstOrDefaultAsync(x =>
                     x.Contact.AppUser.Username == appUser

@@ -10,7 +10,7 @@ namespace API.Persistance.Repository
 {
     public interface IAppUserRepository
     {
-        Task<AppUser> Get(string name);
+        Task<AppUsers> Get(string name);
     }
     public class AppUserRepository: IAppUserRepository
     {
@@ -21,11 +21,11 @@ namespace API.Persistance.Repository
             _messageStoreContext = messageStoreContext;
         }
 
-        public async Task<AppUser> Get(string name)
+        public async Task<AppUsers> Get(string name)
         {
             try
             {
-                return await _messageStoreContext.AppUser
+                return await _messageStoreContext.AppUsers
                     .FirstAsync(x => x.Username == name);
             }
             catch(InvalidOperationException e)

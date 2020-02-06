@@ -24,7 +24,7 @@ namespace API.Service
 
         public async Task<MessageDtoWithId> Create(MessageDto messageDto)
         {
-            var message = new Message
+            var message = new Messages
             {
                 Attachment = messageDto.Attachment,
                 Contact = await _contactRepository.Get(messageDto.ContactId),

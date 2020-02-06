@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace API.Persistance.Entity
 {
-    public partial class AppUser
+    public partial class AppUsers
     {
-        public AppUser()
+        public AppUsers()
         {
-            Contact = new HashSet<Contact>();
+            Contacts = new HashSet<Contacts>();
         }
 
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
 
-        public virtual ICollection<Contact> Contact { get; set; }
+        public virtual ICollection<Contacts> Contacts { get; set; }
     }
 }

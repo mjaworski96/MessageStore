@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace API.Persistance.Entity
 {
-    public partial class Message
+    public partial class Messages
     {
         public int Id { get; set; }
         public string Content { get; set; }
@@ -12,7 +12,7 @@ namespace API.Persistance.Entity
         public int WriterTypeId { get; set; }
         public int ContactId { get; set; }
 
-        public virtual Contact Contact { get; set; }
-        public virtual WriterType WriterType { get; set; }
+        public virtual Contacts Contact { get; set; }
+        public virtual WriterTypes WriterType { get; set; }
     }
 }

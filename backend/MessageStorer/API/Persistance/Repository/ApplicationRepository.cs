@@ -11,7 +11,7 @@ namespace API.Persistance.Repository
 {
     public interface IApplicationRepository
     {
-        Task<Application> Get(string name);
+        Task<Applications> Get(string name);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -24,14 +24,14 @@ namespace API.Persistance.Repository
             _cache = cache;
         }
 
-        public async Task<Application> Get(string name)
+        public async Task<Applications> Get(string name)
         {
             try
             {
                 return await _cache.GetOrCreateAsync($"Application_{name}", x =>
                 {
                     return _messagesStoreContext
-                    .Application
+                    .Applications
                     .FirstAsync(x => x.Name == name);
                 });
             }
