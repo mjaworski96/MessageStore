@@ -37,24 +37,18 @@ namespace MessageSender.Droid.DeviceServices
                     {
                         var date = long.Parse(cursor.GetString(
                                 cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Date)));
-
+                        
                         yield return new Sms
                         {
                             Content = cursor.GetString(
                                 cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Body)),
-                            Date = DateTime.UtcNow.AddMilliseconds(date),
+                            Date = new DateTime(1970, 1, 1).AddMilliseconds(date),
                             PhoneNumber = cursor.GetString(
-                                cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Address)), //TODO Handle with sms conversation out of contacts
+                                cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Address)),
                             WriterType = cursor.GetString(
                                 cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Type)) == ((int)SmsMessageType.Sent).ToString()
                                 ? Sms.WRITER_ME : Sms.WRITER_CONTACT
                         };
-                        string msgData = "";
-                        for (int idx = 0; idx < cursor.ColumnCount; idx++)
-                        {
-                            msgData += cursor.GetColumnName(idx) + ":" + cursor.GetString(idx) + '\n';
-                        }
-
                     } while (cursor.MoveToNext());
                 }
             }
