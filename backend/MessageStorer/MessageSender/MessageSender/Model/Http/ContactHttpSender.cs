@@ -12,18 +12,11 @@ namespace MessageSender.Model.Http
 
         public async Task<ContactWithId> Send(Contact contact)
         {
-            try
-            {
-                var json = JsonConvert.SerializeObject(contact);
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
-                var result = await _http.PutAsync(URL, data);
-                var body = await result.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<ContactWithId>(body);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            var json = JsonConvert.SerializeObject(contact);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var result = await _http.PutAsync(URL, data);
+            var body = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ContactWithId>(body);
         }
     }
 }

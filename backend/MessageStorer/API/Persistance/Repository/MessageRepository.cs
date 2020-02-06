@@ -1,4 +1,6 @@
 ﻿using API.Persistance.Entity;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Persistance.Repository
@@ -7,6 +9,7 @@ namespace API.Persistance.Repository
     {
         Task Add(Message message);
         Task Save();
+        Task<Message> GetNewest(string appUser, string application);
     }
     public class MessageRepository: IMessageRepository
     {
@@ -20,7 +23,17 @@ namespace API.Persistance.Repository
         {
             await _messageStoreContext.AddAsync(message);
         }
-   
+
+        public Task<Message> GetNewest(string appUser, string application)
+        {
+            return _messageStoreContext
+                .Message
+                .OrderByDescending(x => x.Date)
+                .FirstOrDefaultAsync(x =>
+                    x.Contact.AppUser.Username == appUser
+                    && x.Contact.Application.Name == application);
+        }
+
         public async Task Save()
         {
             await _messageStoreContext.SaveChangesAsync();

@@ -31,7 +31,7 @@ namespace MessageSender.Droid.DeviceServices
             {
                 var uri = Telephony.Sms.ContentUri;
                 var cursor = _contentResolver.Query(uri, null, null, null);
-                if(cursor.MoveToFirst())
+                if(cursor.MoveToLast())
                 {
                     do
                     {
@@ -49,7 +49,7 @@ namespace MessageSender.Droid.DeviceServices
                                 cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Type)) == ((int)SmsMessageType.Sent).ToString()
                                 ? Sms.WRITER_ME : Sms.WRITER_CONTACT
                         };
-                    } while (cursor.MoveToNext());
+                    } while (cursor.MoveToPrevious());
                 }
             }       
         }

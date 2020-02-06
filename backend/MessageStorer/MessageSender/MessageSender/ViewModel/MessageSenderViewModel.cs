@@ -3,6 +3,7 @@ using MessageSender.Model.Http;
 using MessageSender.ViewModel.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -53,27 +54,31 @@ namespace MessageSender.ViewModel
                     UpdateProgress(ref currentSent, maxProgress);
                 }
 
-                using (var smsHttpSender = new SmsContactHttpSender())
+                using (var smsHttpSender = new SmsHttpSender())
                 {
+                    var lastSyncTime = await smsHttpSender.GetLastSyncTime();
                     foreach (var sms in _smsSource.GetAll())
                     {
-                        if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
+                        if(sms.Date.Value > lastSyncTime)
                         {
-                            var missingContact = await contactHttpSender.Send(new Contact
+                            if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
                             {
-                                Name = sms.PhoneNumber,
-                                PhoneNumber = sms.PhoneNumber,
-                            });
-                            if (!contactNumberToId.ContainsKey(missingContact.PhoneNumber))
-                                contactNumberToId.Add(missingContact.PhoneNumber, missingContact.Id);
-                        }
-                        sms.ContactId = contactNumberToId[sms.PhoneNumber];
-                        await smsHttpSender.Send(sms);
+                                var missingContact = await contactHttpSender.Send(new Contact
+                                {
+                                    Name = sms.PhoneNumber,
+                                    PhoneNumber = sms.PhoneNumber,
+                                });
+                                if (!contactNumberToId.ContainsKey(missingContact.PhoneNumber))
+                                    contactNumberToId.Add(missingContact.PhoneNumber, missingContact.Id);
+                            }
+                            sms.ContactId = contactNumberToId[sms.PhoneNumber];
+                            await smsHttpSender.Send(sms);
+                        }                    
                         UpdateProgress(ref currentSent, maxProgress);
                     }
                 }
             }
-
+            CurrentProgress = 0;
         }
         private void UpdateProgress(ref int current, int max)
         {

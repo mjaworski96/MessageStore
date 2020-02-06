@@ -58,7 +58,14 @@ namespace MessageSender.ViewModel
             if (_blockWhileExecute)
                 Executable = false;
 
-            await _action();
+            try
+            {
+                await _action();
+            }
+            catch(Exception e)
+            {
+                throw e; //TODO
+            }
 
             if (_blockWhileExecute)
                 Executable = true;
