@@ -81,6 +81,11 @@ namespace API.Persistance
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasColumnName("email")
+                    .HasMaxLength(256);
+
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
@@ -145,7 +150,7 @@ namespace API.Persistance
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(100);
+                    .HasMaxLength(256);
 
                 entity.HasOne(d => d.AppUser)
                     .WithMany(p => p.Contacts)
@@ -168,7 +173,7 @@ namespace API.Persistance
 
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
-                    .HasMaxLength(1000);
+                    .HasMaxLength(307200);
 
                 entity.Property(e => e.Date).HasColumnName("date");
 

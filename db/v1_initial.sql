@@ -36,6 +36,7 @@ CREATE TABLE app_users
 (
 	id INTEGER NOT NULL,
 	username VARCHAR(20) NOT NULL,
+	email VARCHAR(256) NOT NULL,
 	password VARCHAR(60) NOT NULL
 );
 ALTER TABLE app_users ADD CONSTRAINT app_users_pkey PRIMARY KEY (id);
@@ -70,7 +71,7 @@ ALTER TABLE applications ADD CONSTRAINT applications_con_unq_name UNIQUE (name);
 CREATE TABLE contacts
 (
 	id INTEGER NOT NULL,
-	name VARCHAR(100) NOT NULL,
+	name VARCHAR(256) NOT NULL,
 	in_application_id VARCHAR(100),
 	app_user_id INTEGER NOT NULL,
 	application_id INTEGER NOT NULL
@@ -112,7 +113,7 @@ ALTER TABLE aliases_members ADD CONSTRAINT fk_aliases_members_contacts FOREIGN K
 CREATE TABLE messages
 (
 	id INTEGER NOT NULL,
-	content VARCHAR(1000),
+	content VARCHAR(307200), -- 30KiB
 	date TIMESTAMP,
 	writer_type_id INTEGER NOT NULL,
 	contact_id INTEGER NOT NULL
@@ -151,9 +152,9 @@ ALTER TABLE attachments ALTER COLUMN id SET DEFAULT nextval('public.attachments_
 
 ALTER TABLE attachments ADD CONSTRAINT fk_attachments_messages FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE;
 
-INSERT INTO app_users(username, password) VALUES
-('test', '$2a$10$hbnIe4MWaMmiL6eWHRqYFu2n.HBs9DtfG33tm.Qct13t9vqzYCfEO'), --test
-('marcin', '$2a$10$XxY/vqp0dT3sQPRvcdDDM.lnpT6Q3SJF3lWN3HLmeT4rdmZ8nHtQe'); --test
+INSERT INTO app_users(username, email, password) VALUES
+('test', 'test@test', '$2a$10$hbnIe4MWaMmiL6eWHRqYFu2n.HBs9DtfG33tm.Qct13t9vqzYCfEO'), --test
+('marcin','marcin@test', '$2a$10$XxY/vqp0dT3sQPRvcdDDM.lnpT6Q3SJF3lWN3HLmeT4rdmZ8nHtQe'); --test
 
 INSERT INTO writer_types(name) VALUES
 ('app_user'), ('contact');
