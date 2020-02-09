@@ -20,6 +20,7 @@ namespace API.Persistance
         public virtual DbSet<AliasesMembers> AliasesMembers { get; set; }
         public virtual DbSet<AppUsers> AppUsers { get; set; }
         public virtual DbSet<Applications> Applications { get; set; }
+        public virtual DbSet<Attachments> Attachments { get; set; }
         public virtual DbSet<Contacts> Contacts { get; set; }
         public virtual DbSet<Messages> Messages { get; set; }
         public virtual DbSet<WriterTypes> WriterTypes { get; set; }
@@ -107,6 +108,26 @@ namespace API.Persistance
                     .HasMaxLength(20);
             });
 
+            modelBuilder.Entity<Attachments>(entity =>
+            {
+                entity.ToTable("attachments");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Content).HasColumnName("content");
+
+                entity.Property(e => e.ContentType)
+                    .HasColumnName("content_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MessageId).HasColumnName("message_id");
+
+                entity.HasOne(d => d.Message)
+                    .WithMany(p => p.Attachments)
+                    .HasForeignKey(d => d.MessageId)
+                    .HasConstraintName("fk_attachments_messages");
+            });
+
             modelBuilder.Entity<Contacts>(entity =>
             {
                 entity.ToTable("contacts");
@@ -142,8 +163,6 @@ namespace API.Persistance
                 entity.ToTable("messages");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Attachment).HasColumnName("attachment");
 
                 entity.Property(e => e.ContactId).HasColumnName("contact_id");
 

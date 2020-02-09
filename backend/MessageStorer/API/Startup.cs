@@ -47,6 +47,7 @@ namespace API
             services.AddScoped<IWriterTypeRepository, WriterTypeRepository>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ILastSyncService, LastSyncService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

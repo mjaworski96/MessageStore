@@ -1,4 +1,4 @@
-using MessageSender.Model;
+﻿using MessageSender.Model;
 using MessageSender.Model.Http;
 using MessageSender.ViewModel.Interfaces;
 using System.Collections.Generic;
@@ -63,7 +63,7 @@ namespace MessageSender.ViewModel
                     var lastSyncTime = await smsHttpSender.GetLastSyncTime();
                     foreach (var sms in _smsSource.GetAll())
                     {
-                        if(sms.Date.Value > lastSyncTime)
+                        if (sms.Date.Value > lastSyncTime)
                         {
                             if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
                             {

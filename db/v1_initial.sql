@@ -113,7 +113,6 @@ CREATE TABLE messages
 (
 	id INTEGER NOT NULL,
 	content VARCHAR(1000),
-	attachment BYTEA,
 	date TIMESTAMP,
 	writer_type_id INTEGER NOT NULL,
 	contact_id INTEGER NOT NULL
@@ -131,6 +130,26 @@ ALTER TABLE messages ALTER COLUMN id SET DEFAULT nextval('public.messages_id_seq
 
 ALTER TABLE messages ADD CONSTRAINT fk_messages_writer_types FOREIGN KEY (writer_type_id) REFERENCES writer_types(id) ON DELETE CASCADE;
 ALTER TABLE messages ADD CONSTRAINT fk_messages_contacts FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
+
+CREATE TABLE attachments
+(
+	id INTEGER NOT NULL,
+	content BYTEA,
+	content_type VARCHAR(100),
+	message_id INTEGER NOT NULL
+);
+ALTER TABLE attachments ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);
+CREATE SEQUENCE public.attachments_id_seq
+    AS INTEGER
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE attachments_id_seq OWNED BY attachments.id;
+ALTER TABLE attachments ALTER COLUMN id SET DEFAULT nextval('public.attachments_id_seq'::regclass);
+
+ALTER TABLE attachments ADD CONSTRAINT fk_attachments_messages FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE;
 
 INSERT INTO app_users(username, password) VALUES
 ('test', '$2a$10$hbnIe4MWaMmiL6eWHRqYFu2n.HBs9DtfG33tm.Qct13t9vqzYCfEO'), --test

@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace MessageSender.Model
 {
     public class Sms
     {
         public string Content { get; set; }
-        public byte[] Attachment { get; set; }
+        public List<Attachment> Attachments { get; set; }
         public DateTime? Date { get; set; }
         public string WriterType { get; set; }
         public int ContactId { get; set; }
@@ -21,7 +22,7 @@ namespace MessageSender.Model
     {
         public int Id { get; set; }
         public string Content { get; set; }
-        public byte[] Attachment { get; set; }
+        public List<AttachmentWithId> Attachments { get; set; }
         public DateTime? Date { get; set; }
         public string WriterType { get; set; }
         public int ContactId { get; set; }
