@@ -15,10 +15,10 @@ namespace MessageSender.View
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        public MainPage(ISmsSource smsSource, IContactSource contactSource)
+        public MainPage(ISmsSource smsSource, IContactSource contactSource, IPermisionsService permisionsService)
         {
             InitializeComponent();
-            BindingContext = new MessageSenderViewModel(smsSource, contactSource);
+            BindingContext = new MessageSenderViewModel(smsSource, contactSource, permisionsService);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using MessageSender.Model;
+using MessageSender.Model;
 using MessageSender.Model.Http;
 using MessageSender.ViewModel.Interfaces;
 using System.Collections.Generic;
@@ -11,15 +11,18 @@ namespace MessageSender.ViewModel
 {
     public class MessageSenderViewModel: INotifyPropertyChanged
     {
-        private ISmsSource _smsSource;
-        private IContactSource _contactSource;
+        private readonly ISmsSource _smsSource;
+        private readonly IContactSource _contactSource;
+        private readonly IPermisionsService _permisionsService;
         private double _currentProgress;
 
         public MessageSenderViewModel(ISmsSource smsSource,
-            IContactSource contactSource)
+            IContactSource contactSource,
+            IPermisionsService permisionsService)
         {
             _smsSource = smsSource;
             _contactSource = contactSource;
+            _permisionsService = permisionsService;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
@@ -39,6 +42,7 @@ namespace MessageSender.ViewModel
 
         private async Task Sync()
         {
+            _permisionsService.Request();
             Dictionary<string, int> contactNumberToId = new Dictionary<string, int>();
             CurrentProgress = 0;
             int currentSent = 0;

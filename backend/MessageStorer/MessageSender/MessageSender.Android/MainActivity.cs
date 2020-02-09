@@ -23,7 +23,8 @@ namespace MessageSender.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App(
                 new AndroidSmsSource(ContentResolver, this),
-                new AndroidContactSource(ContentResolver, this)
+                new AndroidContactSource(ContentResolver, this),
+                new AndroidPermisionsService(this)
                 ));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

@@ -8,11 +8,11 @@ namespace MessageSender
 {
     public partial class App : Application
     {
-        public App(ISmsSource smsSource, IContactSource contactSource)
+        public App(ISmsSource smsSource, IContactSource contactSource, IPermisionsService permisionsService)
         {
             InitializeComponent();
 
-            MainPage = new MainPage(smsSource, contactSource);
+            MainPage = new MainPage(smsSource, contactSource, permisionsService);
         }
 
         protected override void OnStart()

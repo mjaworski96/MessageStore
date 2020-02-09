@@ -25,7 +25,6 @@ namespace MessageSender.Droid.DeviceServices
 
         public IEnumerable<Contact> GetAll()
         {
-            RequestPermisions();
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
             {
                 var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null);
@@ -48,7 +47,6 @@ namespace MessageSender.Droid.DeviceServices
 
         public int GetCount()
         {
-            RequestPermisions();
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
             {
                 var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null);
@@ -57,11 +55,5 @@ namespace MessageSender.Droid.DeviceServices
             return 0;
         }
 
-        private void RequestPermisions()
-        {
-            ActivityCompat.RequestPermissions(_context,
-                new[] { Manifest.Permission.ReadContacts },
-                (int)RequestPermissionCodes.READ_CONTACT);
-        }
     }
 }

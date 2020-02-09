@@ -26,7 +26,6 @@ namespace MessageSender.Droid.DeviceServices
 
         public IEnumerable<Sms> GetAll()
         {
-            RequestPermisions();
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
             {
                 var uri = Telephony.Sms.ContentUri;
@@ -56,7 +55,6 @@ namespace MessageSender.Droid.DeviceServices
 
         public int GetCount()
         {
-            RequestPermisions();
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
             {
                 var uri = Telephony.Sms.ContentUri;
@@ -64,13 +62,6 @@ namespace MessageSender.Droid.DeviceServices
                 return cursor.Count;
             }
             return 0;
-        }
-
-        private void RequestPermisions()
-        {
-            ActivityCompat.RequestPermissions(_context,
-                new[] { Manifest.Permission.ReadSms },
-                (int)RequestPermissionCodes.READ_SMS);
         }
     }
 }
