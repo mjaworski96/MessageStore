@@ -9,6 +9,10 @@ namespace MessageSender.ViewModel
     {
         public event EventHandler CanExecuteChanged;
         private bool _executable;
+        private readonly Func<Task> _action;
+        private bool _blockWhileExecute;
+        private readonly IExceptionHandler _exceptionHandler;
+
         public bool Executable
         {
             get
@@ -34,14 +38,13 @@ namespace MessageSender.ViewModel
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private readonly Func<Task> _action;
-        private bool _blockWhileExecute;
-
-        public DelegateCommand(Func<Task> action, bool executable = true, bool blockWhileExecute = false)
+        public DelegateCommand(Func<Task> action, IExceptionHandler exceptionHandler, 
+            bool executable, bool blockWhileExecute)
         {
             _action = action;
             Executable = executable;
             _blockWhileExecute = blockWhileExecute;
+            _exceptionHandler = exceptionHandler;
         }
         public bool CanExecute(object parameter)
         {
@@ -50,6 +53,7 @@ namespace MessageSender.ViewModel
 
         public void Execute(object parameter)
         {
+            _exceptionHandler?.Clear();
             Task.Run(async () => await Perfrom());
         }
 
@@ -64,7 +68,7 @@ namespace MessageSender.ViewModel
             }
             catch(Exception e)
             {
-                throw e; //TODO
+                _exceptionHandler?.Handle(e);
             }
 
             if (_blockWhileExecute)

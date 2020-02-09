@@ -1,6 +1,7 @@
 ﻿using MessageSender.Model;
 using MessageSender.Model.Http;
 using MessageSender.ViewModel.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,12 +10,13 @@ using System.Windows.Input;
 
 namespace MessageSender.ViewModel
 {
-    public class MessageSenderViewModel: INotifyPropertyChanged
+    public class MessageSenderViewModel: INotifyPropertyChanged, IExceptionHandler
     {
         private readonly ISmsSource _smsSource;
         private readonly IContactSource _contactSource;
         private readonly IPermisionsService _permisionsService;
         private double _currentProgress;
+        private string _error;
 
         public MessageSenderViewModel(ISmsSource smsSource,
             IContactSource contactSource,
@@ -29,7 +31,7 @@ namespace MessageSender.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public ICommand SyncSmsCommand { get => new DelegateCommand(Sync, true, true); }
+        public ICommand SyncSmsCommand { get => new DelegateCommand(Sync, this, true, true); }
         public double CurrentProgress
         {
             get => _currentProgress;
@@ -39,7 +41,24 @@ namespace MessageSender.ViewModel
                 NotifyPropertyChanged("CurrentProgress");
             }
         }
+        public string Error
+        {
+            get => _error;
+            set
+            {
+                _error = value;
+                NotifyPropertyChanged("Error");
+            }
+        }
+        public void Handle(Exception e)
+        {
+            Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
+        }
 
+        public void Clear()
+        {
+            Error = "";
+        }
         private async Task Sync()
         {
             _permisionsService.Request();

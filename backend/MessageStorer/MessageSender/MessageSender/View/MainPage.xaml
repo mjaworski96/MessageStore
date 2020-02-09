@@ -9,6 +9,7 @@
     <StackLayout>
         <ProgressBar Progress="{Binding CurrentProgress}" ProgressColor="Orange"></ProgressBar>
         <Button Text="Sync SMS" Command="{Binding SyncSmsCommand}"></Button>
+        <Label Text="{Binding Error}"/>
     </StackLayout>
 
 </ContentPage>
