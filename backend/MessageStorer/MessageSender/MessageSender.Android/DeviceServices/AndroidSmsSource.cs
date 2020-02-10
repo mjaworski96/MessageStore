@@ -27,13 +27,15 @@ namespace MessageSender.Droid.DeviceServices
             _context = context;
         }
 
-        public IEnumerable<Sms> GetAll()
+        public IEnumerable<Sms> GetAll(DateTime from)
         {
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
             {
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
                 var projection = new[] { "_id", "ct_t" };
-                using (var cursor = _contentResolver.Query(uri, projection, null, null))
+                long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                var selection = $"date>{fromMiliseconds}";
+                using (var cursor = _contentResolver.Query(uri, projection, selection, null, null))
                 {
                     if (cursor.MoveToFirst())
                     {
@@ -50,7 +52,22 @@ namespace MessageSender.Droid.DeviceServices
                 }
             }
         }
-
+        public int GetCount(DateTime from)
+        {
+            if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
+            {
+                var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
+                var projection = new[] { "_id" };
+                long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                var selection = $"date>{fromMiliseconds}";
+                using (var cursor = _contentResolver.Query(uri, projection, selection, null, null))
+                {
+                    return cursor.Count;
+                }
+                
+            }
+            return 0;
+        }
         private Sms GetSms(string id)
         {
             var uri = Telephony.Sms.ContentUri;
@@ -120,17 +137,7 @@ namespace MessageSender.Droid.DeviceServices
                         ? Sms.WRITER_ME : Sms.WRITER_CONTACT
             };
         }
-        public int GetCount()
-        {
-            if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
-            {
-                var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
-                var projection = new[] { "_id" };
-                var cursor = _contentResolver.Query(uri, projection, null, null);
-                return cursor.Count;
-            }
-            return 0;
-        }
+        
         private string GetMmsContent(string id)
         {
             var selectionPart = "mid=" + id;

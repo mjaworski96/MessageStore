@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MessageSender.ViewModel
 {
-    public class MessageSenderViewModel: INotifyPropertyChanged, IExceptionHandler
+    public class MessageSenderViewModel : INotifyPropertyChanged, IExceptionHandler
     {
         private readonly ISmsSource _smsSource;
         private readonly IContactSource _contactSource;
@@ -65,10 +65,14 @@ namespace MessageSender.ViewModel
             Dictionary<string, int> contactNumberToId = new Dictionary<string, int>();
             CurrentProgress = 0;
             int currentSent = 0;
-            int maxProgress = _contactSource.GetCount() + _smsSource.GetCount();
+
 
             using (var contactHttpSender = new ContactHttpSender())
+            using (var smsHttpSender = new SmsHttpSender())
             {
+                var lastSyncTime = await smsHttpSender.GetLastSyncTime();
+                int maxProgress = _contactSource.GetCount() + _smsSource.GetCount(lastSyncTime);
+
                 foreach (var contact in _contactSource.GetAll())
                 {
                     var contactWithId = await contactHttpSender.Send(contact);
@@ -77,29 +81,23 @@ namespace MessageSender.ViewModel
                     UpdateProgress(ref currentSent, maxProgress);
                 }
 
-                using (var smsHttpSender = new SmsHttpSender())
+                foreach (var sms in _smsSource.GetAll(lastSyncTime))
                 {
-                    var lastSyncTime = await smsHttpSender.GetLastSyncTime();
-                    foreach (var sms in _smsSource.GetAll())
+                    if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
                     {
-                        if (sms.Date.Value > lastSyncTime)
+                        var missingContact = await contactHttpSender.Send(new Contact
                         {
-                            if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
-                            {
-                                var missingContact = await contactHttpSender.Send(new Contact
-                                {
-                                    Name = sms.PhoneNumber,
-                                    PhoneNumber = sms.PhoneNumber,
-                                });
-                                if (!contactNumberToId.ContainsKey(missingContact.PhoneNumber))
-                                    contactNumberToId.Add(missingContact.PhoneNumber, missingContact.Id);
-                            }
-                            sms.ContactId = contactNumberToId[sms.PhoneNumber];
-                            await smsHttpSender.Send(sms);
-                        }                    
-                        UpdateProgress(ref currentSent, maxProgress);
+                            Name = sms.PhoneNumber,
+                            PhoneNumber = sms.PhoneNumber,
+                        });
+                        if (!contactNumberToId.ContainsKey(missingContact.PhoneNumber))
+                            contactNumberToId.Add(missingContact.PhoneNumber, missingContact.Id);
                     }
+                    sms.ContactId = contactNumberToId[sms.PhoneNumber];
+                    await smsHttpSender.Send(sms);
+                    UpdateProgress(ref currentSent, maxProgress);
                 }
+
             }
             CurrentProgress = 0;
         }

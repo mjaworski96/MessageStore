@@ -27,20 +27,22 @@ namespace MessageSender.Droid.DeviceServices
         {
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
             {
-                var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null);
-                if (phones.MoveToFirst())
+                using (var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null))
                 {
-                    do
+                    if (phones.MoveToFirst())
                     {
-                        yield return new Contact
+                        do
                         {
-                            Name = phones.GetString(phones.GetColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.InterfaceConsts.DisplayName)),
-                            PhoneNumber = phones.GetString(phones.GetColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NormalizedNumber))
-                        };
+                            yield return new Contact
+                            {
+                                Name = phones.GetString(phones.GetColumnIndex(
+                                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.DisplayName)),
+                                PhoneNumber = phones.GetString(phones.GetColumnIndex(
+                                    ContactsContract.CommonDataKinds.Phone.NormalizedNumber))
+                            };
 
-                    } while (phones.MoveToNext());
+                        } while (phones.MoveToNext());
+                    }
                 }
             }
         }
@@ -49,8 +51,10 @@ namespace MessageSender.Droid.DeviceServices
         {
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
             {
-                var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null);
-                return phones.Count;
+                using (var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null))
+                {
+                    return phones.Count;
+                }
             }
             return 0;
         }
