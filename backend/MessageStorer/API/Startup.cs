@@ -48,6 +48,8 @@ namespace API
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ILastSyncService, LastSyncService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IAliasRepository, AliasRepository>();
+            services.AddScoped<IAliasService, AliasService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
