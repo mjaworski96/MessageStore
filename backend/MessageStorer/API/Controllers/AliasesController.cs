@@ -12,12 +12,12 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AliasController : ControllerBase
+    public class AliasesController : ControllerBase
     {
         private readonly IAliasService _aliasService;
-        private readonly ILogger<AliasController> _logger;
+        private readonly ILogger<AliasesController> _logger;
 
-        public AliasController(IAliasService aliasService, ILogger<AliasController> logger)
+        public AliasesController(IAliasService aliasService, ILogger<AliasesController> logger)
         {
             _aliasService = aliasService;
             _logger = logger;
