@@ -10,6 +10,7 @@ namespace API.Service
     public interface IMessageService
     {
         Task<MessageDtoWithId> Create(MessageDto messageDto);
+        Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize);
     }
     public class MessageService : IMessageService
     {
@@ -49,6 +50,27 @@ namespace API.Service
                 WriterType = message.WriterType.Name,
                 ContactId = message.Contact.Id,
                 Attachments = message.Attachments.Select(x => _attachmentService.Map(x)).ToList()
+            };
+        }
+
+        public async Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize)
+        {
+            var raw = await _messageRepository.GetPage(aliasId, pageNumber, pageSize);
+
+            var list = raw.Select(x => new MessageDtoWithDetails
+            {
+                Id = x.Id,
+                Attachments = x.Attachments.Select(y => _attachmentService.Map(y)).ToList(),
+                ContactName = x.Contact.Name,
+                Application = x.Contact.Application.Name,
+                Content = x.Content,
+                Date = x.Date,
+                WriterType = x.WriterType.Name,
+            }).ToList();
+
+            return new MessageDtoWithDetailsList
+            {
+                Messages = list
             };
         }
     }

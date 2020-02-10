@@ -31,11 +31,12 @@ namespace API.Service
                     Id = x.Id,
                     Name = x.Name,
                     Internal = x.Internal,
+                    Application = x.Internal ? x.AliasesMembers.First().Contact.Application.Name : "",
                     InApplicationId = x.Internal ? x.AliasesMembers.First().Contact.InApplicationId : ""
-                });
+                }).ToList();
             return new AliasDtoWithIdList
             {
-                Aliases = list.ToList()
+                Aliases = list
             };
         }
     }

@@ -23,4 +23,18 @@ namespace API.Dto
         public string WriterType { get; set; }
         public int ContactId { get; set; }
     }
+    public class MessageDtoWithDetails
+    {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public List<AttachmentDtoWithId> Attachments { get; set; }
+        public DateTime? Date { get; set; }
+        public string WriterType { get; set; }
+        public string ContactName { get; set; }
+        public string Application { get; set; }
+    }
+    public class MessageDtoWithDetailsList
+    {
+        public List<MessageDtoWithDetails> Messages { get; set; }
+    }
 }

@@ -27,6 +27,7 @@ namespace API.Persistance.Repository
                 .Aliases
                 .Include(x => x.AliasesMembers)
                 .ThenInclude(x => x.Contact)
+                .ThenInclude(x => x.Application)
                 .Where(x => x.AliasesMembers
                     .Select(y => y.Contact.AppUser.Username)
                         .All(z => z == appUser));
@@ -42,7 +43,8 @@ namespace API.Persistance.Repository
                 query = query
                     .Where(x => x.AliasesMembers
                         .Select(y => y.Alias.Internal)
-                            .All(z => z == true));
+                            .All(z => z == true))
+                    .Where(x => x.AliasesMembers.Count == 1);
             }
             
             return query.ToListAsync();

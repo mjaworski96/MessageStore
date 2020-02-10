@@ -1,5 +1,6 @@
 ﻿using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace API.Persistance.Repository
         Task Add(Messages message);
         Task Save();
         Task<Messages> GetNewest(string appUser, string application);
+        Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
     }
     public class MessageRepository: IMessageRepository
     {
@@ -32,6 +34,22 @@ namespace API.Persistance.Repository
                 .FirstOrDefaultAsync(x =>
                     x.Contact.AppUser.Username == appUser
                     && x.Contact.Application.Name == application);
+        }
+
+        public Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize)
+        {
+            return _messageStoreContext
+                .Messages
+                .Include(x => x.WriterType)
+                .Include(x => x.Contact)
+                .ThenInclude(x => x.Application)
+                .Where(x => x.Contact.AliasesMembers
+                    .Select(y => y.Alias.Id)
+                        .Any(z => z == aliasId))
+                .OrderByDescending(x => x.Date)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task Save()
