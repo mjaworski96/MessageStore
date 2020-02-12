@@ -7,7 +7,8 @@
              x:Class="MessageSender.View.MainPage">
 
     <StackLayout>
-        <ProgressBar Progress="{Binding CurrentProgress}" ProgressColor="Orange"></ProgressBar>
+        <ProgressBar Progress="{Binding CurrentProgress}"></ProgressBar>
+        <Entry Text="{Binding ServerIp}" Placeholder="Server address"></Entry>
         <Button Text="Sync SMS" Command="{Binding SyncSmsCommand}"></Button>
         <Label Text="{Binding Error}"/>
     </StackLayout>

@@ -4,9 +4,11 @@ using MessageSender.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 
 namespace MessageSender.ViewModel
 {
@@ -50,6 +52,50 @@ namespace MessageSender.ViewModel
                 NotifyPropertyChanged("Error");
             }
         }
+        private string GetPath(string path)
+        {
+            string basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            return Path.Combine(basePath, path);
+        }
+        public Config Config
+        {
+            get
+            {
+                XmlSerializer deserializer = new XmlSerializer(typeof(Config));
+                try
+                {
+                    using (TextReader reader = new StreamReader(GetPath("./config.xml")))
+                    {
+                        return (Config)deserializer.Deserialize(reader);
+                    }
+                }
+                catch(IOException)
+                {
+                    return new Config { ServerAddress = "" };
+                }
+            }
+            set
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Config));
+                using (TextWriter writer = new StreamWriter(GetPath("./config.xml")))
+                {
+                    serializer.Serialize(writer, value);
+                }
+            }
+        }
+        public string ServerIp
+        {
+            get
+            {
+                return Config.ServerAddress;
+            }
+            set
+            {
+                var config = Config;
+                config.ServerAddress = value;
+                Config = config;
+            }
+        }
         public void Handle(Exception e)
         {
             Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
@@ -67,8 +113,8 @@ namespace MessageSender.ViewModel
             int currentSent = 0;
 
 
-            using (var contactHttpSender = new ContactHttpSender())
-            using (var smsHttpSender = new SmsHttpSender())
+            using (var contactHttpSender = new ContactHttpSender(ServerIp))
+            using (var smsHttpSender = new SmsHttpSender(ServerIp))
             {
                 var lastSyncTime = await smsHttpSender.GetLastSyncTime();
                 int maxProgress = _contactSource.GetCount() + _smsSource.GetCount(lastSyncTime);

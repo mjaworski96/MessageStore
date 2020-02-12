@@ -10,6 +10,10 @@ namespace MessageSender.Model.Http
     {
         private const string URL = "api/contacts";
 
+        public ContactHttpSender(string baseAddress) : base(baseAddress)
+        {
+        }
+
         public async Task<ContactWithId> Send(Contact contact)
         {
             var json = JsonConvert.SerializeObject(contact);

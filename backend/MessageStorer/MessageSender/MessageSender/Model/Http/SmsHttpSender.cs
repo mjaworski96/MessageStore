@@ -11,6 +11,10 @@ namespace MessageSender.Model.Http
         private const string URL = "api/messages";
         private const string LAST_SYNC_TIME_POSTFIX = "lastSyncTime";
 
+        public SmsHttpSender(string baseAddress) : base(baseAddress)
+        {
+        }
+
         public async Task<SmsWithId> Send(Sms sms)
         {
             var json = JsonConvert.SerializeObject(sms);
