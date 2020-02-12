@@ -33,8 +33,8 @@ namespace API
             services.AddDbContext<MessagesStoreContext>(options =>
             {
                 options.UseNpgsql(Configuration["ConnectionStrings:MessagesStore"]);
-                options.EnableDetailedErrors(true);
             }, ServiceLifetime.Singleton);
+
             services.AddMemoryCache();
             services.AddHttpContextAccessor();
 

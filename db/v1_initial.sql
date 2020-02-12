@@ -161,3 +161,24 @@ INSERT INTO writer_types(name) VALUES
 
 INSERT INTO applications(name) VALUES
 ('sms'), ('messenger');
+
+CREATE OR REPLACE FUNCTION FindRowNumber
+(pMessageId INT, pAliasId INT)
+RETURNS TABLE ("RowNum" BIGINT)
+LANGUAGE plpgsql    
+AS $$
+BEGIN
+	RETURN QUERY SELECT rn.rownum
+	FROM messages m 
+	LEFT JOIN (
+		SELECT m.id, ROW_NUMBER () OVER (ORDER BY date DESC) rownum 
+		FROM messages m
+		LEFT JOIN aliases_members am ON m.contact_id = am.contact_id
+		LEFT JOIN aliases a ON am.alias_id = a.id
+		WHERE a.id = pAliasID
+	) rn ON rn.id = m.id 
+	WHERE m.id = pMessageId;
+END;
+$$;
+
+

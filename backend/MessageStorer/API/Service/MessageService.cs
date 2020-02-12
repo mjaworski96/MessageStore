@@ -1,6 +1,7 @@
 ﻿using API.Dto;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace API.Service
     {
         Task<MessageDtoWithId> Create(MessageDto messageDto);
         Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize);
+        Task<SearchResultDtoList> Find(SearchQueryDto query);
     }
     public class MessageService : IMessageService
     {
@@ -50,6 +52,37 @@ namespace API.Service
                 WriterType = message.WriterType.Name,
                 ContactId = message.Contact.Id,
                 Attachments = message.Attachments.Select(x => _attachmentService.Map(x)).ToList()
+            };
+        }
+
+        public async Task<SearchResultDtoList> Find(SearchQueryDto query)
+        {
+            var rawMessages = await _messageRepository.Find(query.Query, query.AliasesIds, query.IgnoreLetterSize);
+
+            Func<Messages, int> aliasIdSelector = message => 
+                message.Contact.AliasesMembers.FirstOrDefault(y => y.Alias.Internal).AliasId;
+
+            var list = rawMessages
+                .Select(x => new SearchResultDto
+                {
+                    MessageId = x.Id,
+                    Content = x.Content,
+                    Application = x.Contact.Application.Name,
+                    ContactName = x.Contact.Name,
+                    WriterType = x.WriterType.Name,
+                    AliasId = aliasIdSelector(x),
+                    AllAliases = x.Contact.AliasesMembers.Select(y => new SearchAlias
+                    {
+                        Id = y.Alias.Id,
+                        Name = y.Alias.Name,
+                        MessageIndexOf = _messageRepository.GetRowNumber(x.Id, y.Alias.Id)
+                    }).ToList(),
+                    MessageIndexOf = _messageRepository.GetRowNumber(x.Id, aliasIdSelector(x))
+                }).ToList();
+
+            return new SearchResultDtoList
+            {
+                Results = list
             };
         }
 

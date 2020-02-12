@@ -41,7 +41,7 @@ namespace API.Controllers
             _logger.LogInformation($"Ended GET /api/messages/lastSyncTime with {JsonConvert.SerializeObject(result)}");
             return Ok(result);
         }
-        [HttpGet()]
+        [HttpGet]
         public async Task<IActionResult> GetPage([FromQuery] int aliasId, [FromQuery] int pageNumber = 1, int pageSize = 10)
         {
             _logger.LogInformation($"Started GET /api/messages");
@@ -49,5 +49,14 @@ namespace API.Controllers
             _logger.LogInformation($"Ended GET /api/messages with {JsonConvert.SerializeObject(result)}");
             return Ok(result);
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> Find([FromBody] SearchQueryDto query)
+        {
+            _logger.LogInformation($"Started GET /api/messages/search for {JsonConvert.SerializeObject(query)}");
+            var result = await _messageService.Find(query);
+            _logger.LogInformation($"Ended GET /api/messages/search with {JsonConvert.SerializeObject(result)}");
+            return Ok(result);
+        }
+        
     }
 }
