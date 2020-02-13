@@ -1,0 +1,14 @@
+<div>
+  <div>
+    <div #scroll>
+      <div *ngFor="let message of messages">
+        <div class="message"
+          [ngClass]="{'message-by-contact': writtenByContact(message), 'message-by-user': writtenByUser(message)}">
+          {{message.content}}
+        </div>
+        <div class="message-spacing"></div>
+      </div>
+    </div>
+  </div>
+</div>
+

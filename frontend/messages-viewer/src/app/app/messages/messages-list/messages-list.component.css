@@ -1,0 +1,17 @@
+.message-by-contact {
+  float: left;
+  background-color: bisque;
+}
+.message-by-user {
+  float: right;
+  background-color: darkkhaki;
+}
+.message {
+  padding: 10px;
+  width: 45%;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+.message-spacing {
+  clear: both;
+}

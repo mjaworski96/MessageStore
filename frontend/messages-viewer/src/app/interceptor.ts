@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {SessionStorageService} from './services/session-storage.service';
 import {Observable} from 'rxjs';
-import {finalize, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

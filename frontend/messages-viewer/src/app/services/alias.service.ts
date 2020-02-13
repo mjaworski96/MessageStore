@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AliasWithIdList} from '../app/model/alias';
+import {AliasWithIdList} from '../model/alias';
 
 @Injectable({
   providedIn: 'root'

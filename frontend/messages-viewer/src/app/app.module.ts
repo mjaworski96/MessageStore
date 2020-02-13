@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CoreModule} from './app/core/core.module';
 import {Interceptor} from './interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {AliasesModule} from './app/aliases/aliases.module';
+import {MessagesModule} from './app/messages/messages.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    CoreModule
+    CoreModule,
+    AliasesModule,
+    MessagesModule
   ],
   providers: [
     {
