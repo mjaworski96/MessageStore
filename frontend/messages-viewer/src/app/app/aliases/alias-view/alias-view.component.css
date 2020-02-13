@@ -1,0 +1,7 @@
+.alias {
+  padding: 10px;
+}
+.alias:hover {
+  cursor: pointer;
+  background-color: #e3e3e3;
+}

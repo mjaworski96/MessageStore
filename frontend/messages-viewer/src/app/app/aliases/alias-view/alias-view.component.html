@@ -1,0 +1,9 @@
+<div>
+  <div *ngIf="aliases">
+    <div *ngFor="let alias of aliases.aliases">
+      <div class="alias">
+          {{alias.name}} - {{alias.application}} ({{alias.inApplicationId}})
+      </div>
+    </div>
+  </div>
+</div>

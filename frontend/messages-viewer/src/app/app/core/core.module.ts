@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
-import {MatIconModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatToolbarModule} from '@angular/material';
+import {RouterModule} from '@angular/router';
 
 
 
@@ -13,7 +14,9 @@ import {MatIconModule, MatToolbarModule} from '@angular/material';
   imports: [
     CommonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule,
+    MatButtonModule
   ]
 })
 export class CoreModule { }
