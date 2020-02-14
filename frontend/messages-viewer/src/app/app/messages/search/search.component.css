@@ -25,3 +25,7 @@
 .search-button-container {
   margin-bottom: 20px;
 }
+.message-content {
+  white-space: pre-line;
+  word-break: break-word;
+}
