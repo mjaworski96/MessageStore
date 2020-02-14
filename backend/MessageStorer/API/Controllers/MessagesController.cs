@@ -58,6 +58,13 @@ namespace API.Controllers
             _logger.LogInformation($"Ended GET /api/messages/search with {JsonConvert.SerializeObject(result)}");
             return Ok(result);
         }
-        
+        [HttpGet("order")]
+        public async Task<IActionResult> GetOrder([FromQuery] int messageId, [FromQuery] int aliasId)
+        {
+            _logger.LogInformation($"Started GET /api/messages/order?messageId={messageId}&aliasId={aliasId}");
+            var result = await _messageService.GetOrder(messageId, aliasId);
+            _logger.LogInformation($"Ended GET /api/messages/order?messageId={messageId}&aliasId={aliasId} with {JsonConvert.SerializeObject(result)}");
+            return Ok(result);
+        }
     }
 }

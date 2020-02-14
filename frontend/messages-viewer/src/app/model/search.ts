@@ -6,11 +6,9 @@ export interface Query {
 export interface SearchAlias {
   id: number;
   name: string;
-  messageIndexOf: number;
 }
 export interface SearchResultDto {
   messageId: number;
-  messageIndexOf: number;
   content: string;
   date: string;
   writerType: string;

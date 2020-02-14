@@ -13,7 +13,7 @@ namespace API.Persistance.Repository
         Task<Messages> GetNewest(string appUser, string application);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<List<Messages>> Find(string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
-        long GetRowNumber(int messageId, int aliasId);
+        Task<long> GetRowNumber(int messageId, int aliasId);
     }
     public class MessageRepository: IMessageRepository
     {
@@ -81,9 +81,9 @@ namespace API.Persistance.Repository
                 .ToListAsync();
         }
 
-        public long GetRowNumber(int messageId, int aliasId)
+        public async Task<long> GetRowNumber(int messageId, int aliasId)
         {
-            var queryResult = _messageStoreContext.GetRowNumber(messageId, aliasId);
+            var queryResult = await _messageStoreContext.GetRowNumber(messageId, aliasId);
             return queryResult?.RowNum ?? -1L;
         }
 

@@ -13,6 +13,7 @@ namespace API.Service
         Task<MessageDtoWithId> Create(MessageDto messageDto);
         Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<SearchResultDtoList> Find(SearchQueryDto query);
+        Task<MessageInAliasOrderDto> GetOrder(int messageId, int aliasId);
     }
     public class MessageService : IMessageService
     {
@@ -76,14 +77,20 @@ namespace API.Service
                     {
                         Id = y.Alias.Id,
                         Name = y.Alias.Name,
-                        MessageIndexOf = _messageRepository.GetRowNumber(x.Id, y.Alias.Id)
                     }).ToList(),
-                    MessageIndexOf = _messageRepository.GetRowNumber(x.Id, aliasIdSelector(x))
                 }).ToList();
 
             return new SearchResultDtoList
             {
                 Results = list
+            };
+        }
+
+        public async Task<MessageInAliasOrderDto> GetOrder(int messageId, int aliasId)
+        {
+            return new MessageInAliasOrderDto
+            {
+                Order = await _messageRepository.GetRowNumber(messageId, aliasId)
             };
         }
 

@@ -70,13 +70,18 @@ export class SearchComponent implements OnInit {
       });
   }
   navigate(result: SearchResultDto): void {
-    const messageOnPage = Math.ceil(result.messageIndexOf / MessagesListComponent.pageSize);
-    this.router.navigate(['messages'], {
-      queryParams: {
-        aliasId: result.aliasId,
-        page: messageOnPage
-      }
-    });
+    this.searchService
+      .getOrder(result.messageId, result.aliasId)
+      .toPromise()
+      .then(order => {
+        const messageOnPage = Math.ceil(order.order / MessagesListComponent.pageSize);
+        this.router.navigate(['messages'], {
+          queryParams: {
+            aliasId: result.aliasId,
+            page: messageOnPage
+          }
+        });
+      });
   }
   writtenByAppUser(result: SearchResultDto): boolean {
     return result.writerType === 'app_user';

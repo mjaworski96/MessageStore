@@ -13,12 +13,12 @@ namespace API.Persistance
         {
             modelBuilder.Entity<RowNumber>().HasNoKey();
         }
-        public RowNumber GetRowNumber(int messageId, int aliasId)
+        public Task<RowNumber> GetRowNumber(int messageId, int aliasId)
         {
             var query = $"SELECT * FROM FindRowNumber({messageId}, {aliasId})";
             return RowNumbers
                 .FromSqlRaw(query)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
         }
     }
