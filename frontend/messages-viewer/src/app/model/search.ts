@@ -12,6 +12,7 @@ export interface SearchResultDto {
   messageId: number;
   messageIndexOf: number;
   content: string;
+  date: string;
   writerType: string;
   contactName: string;
   aliasId: number;

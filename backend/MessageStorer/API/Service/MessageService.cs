@@ -67,6 +67,7 @@ namespace API.Service
                 {
                     MessageId = x.Id,
                     Content = x.Content,
+                    Date = x.Date.Value,
                     Application = x.Contact.Application.Name,
                     ContactName = x.Contact.Name,
                     WriterType = x.WriterType.Name,

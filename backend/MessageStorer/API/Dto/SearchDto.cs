@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Dto
 {
@@ -13,6 +14,7 @@ namespace API.Dto
         public int MessageId { get; set; }
         public long MessageIndexOf { get; set; }
         public string Content { get; set; }
+        public DateTime Date { get; set; }
         public string WriterType { get; set; }
         public string ContactName { get; set; }
         public int AliasId { get; set; }

@@ -21,7 +21,7 @@
   <div *ngIf="results">
     <div *ngFor="let res of results" (click)="navigate(res)" class="result">
       <div class="contact-name">
-        {{res.contactName}} ({{res.application}})
+        {{res.contactName}} ({{res.application}}) - {{res.date | date: 'dd.MM.yyyy HH:mm:ss'}}
       </div>
       <div>
         {{res.content}}
