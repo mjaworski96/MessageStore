@@ -21,7 +21,11 @@
   <div *ngIf="results">
     <div *ngFor="let res of results" (click)="navigate(res)" class="result">
       <div class="contact-name">
-        {{res.contactName}} ({{res.application}}) - {{res.date | date: 'dd.MM.yyyy HH:mm:ss'}}
+        <span>{{res.contactName}} ({{res.application}}) </span>
+        <span *ngIf="writtenByAppUser(res)">Written by you</span>
+        <span *ngIf="writtenByContact(res)">Written by contact</span>
+        <span class="date">{{res.date | date: 'dd.MM.yyyy HH:mm:ss'}}</span>
+        <span class="clear"></span>
       </div>
       <div class="message-content">
         {{res.content}}

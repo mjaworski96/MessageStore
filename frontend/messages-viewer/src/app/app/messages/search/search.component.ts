@@ -78,4 +78,10 @@ export class SearchComponent implements OnInit {
       }
     });
   }
+  writtenByAppUser(result: SearchResultDto): boolean {
+    return result.writerType === 'app_user';
+  }
+  writtenByContact(result: SearchResultDto): boolean {
+    return result.writerType === 'contact';
+  }
 }

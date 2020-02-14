@@ -59,7 +59,6 @@ export class MessagesListComponent implements OnInit, AfterViewChecked {
   }
 
   loadData(pageNumber: number, scrollDownAfterLoad: boolean) {
-    console.log(`load: ${pageNumber}`);
     if (!this.end && pageNumber > 0 && !this.loading) {
       this.loading = true;
       this.messageService

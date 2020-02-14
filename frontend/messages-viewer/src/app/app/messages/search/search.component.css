@@ -29,3 +29,9 @@
   white-space: pre-line;
   word-break: break-word;
 }
+.date {
+  float: right;
+}
+.clear {
+  clear: both;
+}
