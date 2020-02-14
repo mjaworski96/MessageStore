@@ -33,6 +33,7 @@ namespace API.Persistance.Repository
                         .All(z => z == appUser))
                 .Where(x => x.AliasesMembers
                     .Select(y => y.Contact.Messages.Any()).Contains(true));
+
             if(!string.IsNullOrEmpty(app))
             {
                 query = query
