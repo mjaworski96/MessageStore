@@ -10,6 +10,8 @@ import {finalize} from 'rxjs/operators';
   styleUrls: ['./messages-list.component.css']
 })
 export class MessagesListComponent implements OnInit, AfterViewChecked {
+  static pageSize = 20;
+
   @ViewChild('scroll', {static: false})
   scrollContainer: ElementRef;
   mustScrollDown = false;
@@ -20,7 +22,6 @@ export class MessagesListComponent implements OnInit, AfterViewChecked {
   messages: MessageWithId[];
   aliasId: number;
 
-  pageSize = 20;
   minPage: number;
   maxPage: number;
   end = false;
@@ -62,7 +63,7 @@ export class MessagesListComponent implements OnInit, AfterViewChecked {
     if (!this.end && pageNumber > 0 && !this.loading) {
       this.loading = true;
       this.messageService
-        .get(this.aliasId, pageNumber, this.pageSize)
+        .get(this.aliasId, pageNumber, MessagesListComponent.pageSize)
         .pipe(finalize(() => {
           this.loading = false;
         }))

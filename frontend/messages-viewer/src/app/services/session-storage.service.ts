@@ -8,6 +8,6 @@ export class SessionStorageService {
   constructor() { }
 
   getUsername() {
-    return 'test';
+    return 'marcin';
   }
 }

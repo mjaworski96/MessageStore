@@ -1,0 +1,31 @@
+<div>
+  <div>
+    <div class="query">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Search for" [(ngModel)]="query">
+      </mat-form-field>
+
+    </div>
+    <div class="aliases-list">
+      <div *ngFor="let alias of aliases">
+        <mat-checkbox [(ngModel)]="alias.checked">{{alias.name}}</mat-checkbox>
+      </div>
+    </div>
+    <div class="ignore-letter-size-checkbox">
+      <mat-checkbox [(ngModel)]="ignoreLetterSize" >Ignore letter size</mat-checkbox>
+    </div>
+    <div class="search-button-container">
+      <button class="full-width" mat-button (click)="search()">Search</button>
+    </div>
+  </div>
+  <div *ngIf="results">
+    <div *ngFor="let res of results" (click)="navigate(res)" class="result">
+      <div class="contact-name">
+        {{res.contactName}} ({{res.application}})
+      </div>
+      <div>
+        {{res.content}}
+      </div>
+    </div>
+  </div>
+</div>

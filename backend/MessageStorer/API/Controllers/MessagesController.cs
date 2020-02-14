@@ -50,6 +50,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpGet("search")]
+        [HttpPost("search")]
         public async Task<IActionResult> Find([FromBody] SearchQueryDto query)
         {
             _logger.LogInformation($"Started GET /api/messages/search for {JsonConvert.SerializeObject(query)}");
