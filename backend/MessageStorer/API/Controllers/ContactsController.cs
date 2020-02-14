@@ -23,9 +23,9 @@ namespace API.Controllers
         [HttpPut]
         public async Task<IActionResult> AddOrUpdate(ContactDto contactDto)
         {
-            _logger.LogInformation($"Started PUT /api/contacts for {JsonConvert.SerializeObject(contactDto)}");
+            _logger.LogInformation($"Started PUT /api/contacts");
             var result = await _contactService.AddIfNotExists(contactDto);
-            _logger.LogInformation($"Ended PUT /api/contacts with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended PUT /api/contacts");
             return Ok(result);
         }
     }

@@ -27,9 +27,9 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(MessageDto messageDto)
         {
-            _logger.LogInformation($"Started POST /api/messages for {JsonConvert.SerializeObject(messageDto)}");
+            _logger.LogInformation($"Started POST /api/messages");
             var result = await _messageService.Create(messageDto);
-            _logger.LogInformation($"Ended POST /api/messages with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended POST /api/messages");
 
             return Ok(result);
         }
@@ -38,7 +38,7 @@ namespace API.Controllers
         {
             _logger.LogInformation($"Started GET /api/messages/lastSyncTime");
             var result = await _lastSyncService.Get();
-            _logger.LogInformation($"Ended GET /api/messages/lastSyncTime with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended GET /api/messages/lastSyncTime");
             return Ok(result);
         }
         [HttpGet]
@@ -46,16 +46,16 @@ namespace API.Controllers
         {
             _logger.LogInformation($"Started GET /api/messages");
             var result = await _messageService.GetPage(aliasId, pageNumber, pageSize);
-            _logger.LogInformation($"Ended GET /api/messages with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended GET /api/messages");
             return Ok(result);
         }
         [HttpGet("search")]
         [HttpPost("search")]
         public async Task<IActionResult> Find([FromBody] SearchQueryDto query)
         {
-            _logger.LogInformation($"Started GET /api/messages/search for {JsonConvert.SerializeObject(query)}");
+            _logger.LogInformation($"Started GET /api/messages/search");
             var result = await _messageService.Find(query);
-            _logger.LogInformation($"Ended GET /api/messages/search with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended GET /api/messages/search");
             return Ok(result);
         }
         [HttpGet("order")]
@@ -63,7 +63,7 @@ namespace API.Controllers
         {
             _logger.LogInformation($"Started GET /api/messages/order?messageId={messageId}&aliasId={aliasId}");
             var result = await _messageService.GetOrder(messageId, aliasId);
-            _logger.LogInformation($"Ended GET /api/messages/order?messageId={messageId}&aliasId={aliasId} with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended GET /api/messages/order?messageId={messageId}&aliasId={aliasId}");
             return Ok(result);
         }
     }

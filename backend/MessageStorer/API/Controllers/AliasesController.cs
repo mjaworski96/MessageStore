@@ -24,7 +24,7 @@ namespace API.Controllers
         {
             _logger.LogInformation($"Started GET /api/aliases?app={app}&internalOnly={internalOnly}");
             var result = await _aliasService.GetAll(app, internalOnly);
-            _logger.LogInformation($"Ended GET /api/aliases?app={app}&internalOnly={internalOnly} with {JsonConvert.SerializeObject(result)}");
+            _logger.LogInformation($"Ended GET /api/aliases?app={app}&internalOnly={internalOnly}");
             return Ok(result);
         }
     }
