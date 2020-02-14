@@ -12,6 +12,6 @@ export class AliasService {
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<AliasWithIdList> {
-    return this.http.get<AliasWithIdList>(this.url);
+    return this.http.get<AliasWithIdList>(`${this.url}?internalOnly=false`);
   }
 }

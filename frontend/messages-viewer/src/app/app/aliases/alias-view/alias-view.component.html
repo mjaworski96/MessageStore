@@ -2,7 +2,10 @@
   <div *ngIf="aliases">
     <div *ngFor="let alias of aliases">
       <div class="alias" (click)="navigate(alias)">
-          {{alias.name}} - {{alias.application}} ({{alias.inApplicationId}})
+        <span>{{alias.name}}</span>
+        <span *ngIf="alias.application || alias.inApplicationId"> - </span>
+        <span>{{alias.application}}</span>
+        <span *ngIf="alias.inApplicationId">({{alias.inApplicationId}})</span>
       </div>
     </div>
   </div>
