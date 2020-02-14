@@ -1,3 +1,8 @@
 .app-container {
   margin: 20px 50px 0 50px;
 }
+.header-container {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
