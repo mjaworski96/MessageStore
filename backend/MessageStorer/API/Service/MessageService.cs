@@ -68,6 +68,7 @@ namespace API.Service
                 {
                     MessageId = x.Id,
                     Content = x.Content,
+                    Attachments = x.Attachments.Select(y => _attachmentService.Map(y)).ToList(),
                     Date = x.Date.Value,
                     Application = x.Contact.Application.Name,
                     ContactName = x.Contact.Name,

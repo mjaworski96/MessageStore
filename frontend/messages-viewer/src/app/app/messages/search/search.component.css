@@ -35,3 +35,10 @@
 .clear {
   clear: both;
 }
+.attachment {
+  margin: 20px 0;
+}
+.attachment img {
+  margin: 0 25%;
+  width: 50%;
+}

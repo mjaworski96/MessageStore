@@ -38,6 +38,7 @@ namespace API.Persistance.Repository
                 .Include(x => x.Contact)
                 .ThenInclude(x => x.AliasesMembers)
                 .ThenInclude(x => x.Alias)
+                .Include(x => x.Attachments)
                 .AsQueryable();
 
             if(aliasesIds?.Any() ?? false)

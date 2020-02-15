@@ -19,16 +19,21 @@
     </div>
   </div>
   <div *ngIf="results">
-    <div *ngFor="let res of results" (click)="navigate(res)" class="result">
+    <div *ngFor="let result of results" (click)="navigate(result)" class="result">
       <div class="contact-name">
-        <span>{{res.contactName}} ({{res.application}}) </span>
-        <span *ngIf="writtenByAppUser(res)">Written by you</span>
-        <span *ngIf="writtenByContact(res)">Written by contact</span>
-        <span class="date">{{res.date | date: 'dd.MM.yyyy HH:mm:ss'}}</span>
+        <span>{{result.contactName}} ({{result.application}}) </span>
+        <span *ngIf="writtenByAppUser(result)">sritten by you</span>
+        <span *ngIf="writtenByContact(result)">sritten by contact</span>
+        <span class="date">{{result.date | date: 'dd.MM.yyyy HH:mm:ss'}}</span>
         <span class="clear"></span>
       </div>
       <div class="message-content">
-        {{res.content}}
+        {{result.content}}
+      </div>
+      <div *ngIf="result.attachments.length > 0">
+        <div *ngFor="let attachment of result.attachments" class="attachment">
+          <img [src]="'data:' + attachment.contentType + ';charset=utf-8;base64, ' + attachment.content | safeImage">
+        </div>
       </div>
     </div>
   </div>

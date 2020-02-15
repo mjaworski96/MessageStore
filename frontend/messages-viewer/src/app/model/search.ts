@@ -1,3 +1,5 @@
+import {AttachmentWithID} from './attachment';
+
 export interface Query {
   query: string;
   ignoreLetterSize: boolean;
@@ -10,6 +12,7 @@ export interface SearchAlias {
 export interface SearchResultDto {
   messageId: number;
   content: string;
+  attachments: AttachmentWithID[];
   date: string;
   writerType: string;
   contactName: string;
