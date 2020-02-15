@@ -72,6 +72,7 @@ namespace API.Persistance.Repository
                 .Include(x => x.WriterType)
                 .Include(x => x.Contact)
                 .ThenInclude(x => x.Application)
+                .Include(x => x.Attachments)
                 .Where(x => x.Contact.AliasesMembers
                     .Select(y => y.Alias.Id)
                         .Any(z => z == aliasId))

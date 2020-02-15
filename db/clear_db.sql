@@ -6,3 +6,4 @@ DROP TABLE contacts CASCADE;
 DROP TABLE aliases_members CASCADE;
 DROP TABLE messages CASCADE;
 DROP TABLE attachments CASCADE;
+DROP FUNCTION FindRowNumber;

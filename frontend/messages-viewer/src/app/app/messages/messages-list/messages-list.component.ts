@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MessageService} from '../../../services/message.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {MessageWithId} from '../../../model/message';
 import {finalize} from 'rxjs/operators';
 
@@ -28,8 +28,7 @@ export class MessagesListComponent implements OnInit, AfterViewChecked {
   loading = false;
 
   constructor(private route: ActivatedRoute,
-              private messageService: MessageService,
-              private router: Router) {
+              private messageService: MessageService) {
   }
 
   ngOnInit() {

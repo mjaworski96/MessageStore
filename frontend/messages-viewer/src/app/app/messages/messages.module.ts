@@ -6,6 +6,7 @@ import { MessagesListComponent } from './messages-list/messages-list.component';
 import { SearchComponent } from './search/search.component';
 import {MatButtonModule, MatCheckboxModule, MatInputModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {FormsModule} from '@angular/forms';
     MatCheckboxModule,
     FormsModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    SharedModule
   ]
 })
 export class MessagesModule { }

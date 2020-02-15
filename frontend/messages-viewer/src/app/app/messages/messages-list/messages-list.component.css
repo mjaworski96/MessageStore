@@ -21,3 +21,10 @@
   margin-top: 5px;
   float: right;
 }
+.attachment {
+  margin: 20px 0;
+}
+.attachment img {
+  margin: 0 5%;
+  width: 90%;
+}
