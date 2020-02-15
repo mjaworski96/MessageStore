@@ -46,18 +46,5 @@ namespace MessageSender.Droid.DeviceServices
                 }
             }
         }
-
-        public int GetCount()
-        {
-            if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadContacts) == (int)Permission.Granted)
-            {
-                using (var phones = _contentResolver.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, null, null))
-                {
-                    return phones.Count;
-                }
-            }
-            return 0;
-        }
-
     }
 }

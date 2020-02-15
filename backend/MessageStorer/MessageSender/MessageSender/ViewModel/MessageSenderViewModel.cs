@@ -69,7 +69,7 @@ namespace MessageSender.ViewModel
                         return (Config)deserializer.Deserialize(reader);
                     }
                 }
-                catch(IOException)
+                catch (IOException)
                 {
                     return new Config { ServerAddress = "" };
                 }
@@ -117,27 +117,22 @@ namespace MessageSender.ViewModel
             using (var smsHttpSender = new SmsHttpSender(ServerIp))
             {
                 var lastSyncTime = await smsHttpSender.GetLastSyncTime();
-                int maxProgress = _contactSource.GetCount() + _smsSource.GetCount(lastSyncTime);
-
-                foreach (var contact in _contactSource.GetAll())
-                {
-                    var contactWithId = await contactHttpSender.Send(contact);
-                    if (!contactNumberToId.ContainsKey(contactWithId.PhoneNumber))
-                        contactNumberToId.Add(contactWithId.PhoneNumber, contactWithId.Id);
-                    UpdateProgress(ref currentSent, maxProgress);
-                }
+                int maxProgress = _smsSource.GetCount(lastSyncTime);
+                var contacts = _contactSource.GetAll().ToList();
 
                 foreach (var sms in _smsSource.GetAll(lastSyncTime))
                 {
                     if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
                     {
-                        var missingContact = await contactHttpSender.Send(new Contact
-                        {
-                            Name = sms.PhoneNumber,
-                            PhoneNumber = sms.PhoneNumber,
-                        });
-                        if (!contactNumberToId.ContainsKey(missingContact.PhoneNumber))
-                            contactNumberToId.Add(missingContact.PhoneNumber, missingContact.Id);
+                        var contact = await contactHttpSender.Send(
+                            contacts.FirstOrDefault(x => x.PhoneNumber == sms.PhoneNumber)
+                            ?? new Contact
+                            {
+                                Name = sms.PhoneNumber,
+                                PhoneNumber = sms.PhoneNumber
+                            });
+
+                        contactNumberToId.Add(contact.PhoneNumber, contact.Id);
                     }
                     sms.ContactId = contactNumberToId[sms.PhoneNumber];
                     await smsHttpSender.Send(sms);
