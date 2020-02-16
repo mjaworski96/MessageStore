@@ -69,18 +69,23 @@ export class SearchComponent implements OnInit {
         this.results = res.results;
       });
   }
-  navigate(result: SearchResultDto): void {
+  navigate(result: SearchResultDto, event: MouseEvent): void {
     this.searchService
       .getOrder(result.messageId, result.aliasId)
       .toPromise()
       .then(order => {
         const messageOnPage = Math.ceil(order.order / MessagesListComponent.pageSize);
-        this.router.navigate(['messages'], {
+        const urlTree = this.router.createUrlTree(['messages'], {
           queryParams: {
             aliasId: result.aliasId,
             page: messageOnPage
           }
         });
+        if (event.ctrlKey) {
+          window.open(this.router.serializeUrl(urlTree));
+        } else {
+          this.router.navigateByUrl(urlTree);
+        }
       });
   }
   writtenByAppUser(result: SearchResultDto): boolean {

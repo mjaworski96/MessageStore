@@ -19,7 +19,7 @@
     </div>
   </div>
   <div *ngIf="results">
-    <div *ngFor="let result of results" (click)="navigate(result)" class="result">
+    <div *ngFor="let result of results" (click)="navigate(result, $event)" class="result">
       <div class="contact-name">
         <span>{{result.contactName}} ({{result.application}}) </span>
         <span *ngIf="writtenByAppUser(result)">written by you</span>
