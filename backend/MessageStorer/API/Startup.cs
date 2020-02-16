@@ -42,6 +42,7 @@ namespace API
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IAliasRepository, AliasRepository>();
             services.AddScoped<IAliasService, AliasService>();
+            services.AddScoped<ISecurityService, SecurityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

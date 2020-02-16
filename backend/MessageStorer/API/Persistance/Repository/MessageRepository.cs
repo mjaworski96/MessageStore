@@ -12,7 +12,7 @@ namespace API.Persistance.Repository
         Task Save();
         Task<Messages> GetNewest(string appUser, string application);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
-        Task<List<Messages>> Find(string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
+        Task<List<Messages>> Find(string username, string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
         Task<long> GetRowNumber(int messageId, int aliasId);
     }
     public class MessageRepository: IMessageRepository
@@ -27,8 +27,8 @@ namespace API.Persistance.Repository
         {
             await _messageStoreContext.AddAsync(message);
         }
-
-        public Task<List<Messages>> Find(string searchFor, List<int> aliasesIds, bool ignoreLetterSize)
+        //TODO
+        public Task<List<Messages>> Find(string username, string searchFor, List<int> aliasesIds, bool ignoreLetterSize)
         {
             var query = _messageStoreContext
                 .Messages
@@ -39,7 +39,10 @@ namespace API.Persistance.Repository
                 .ThenInclude(x => x.AliasesMembers)
                 .ThenInclude(x => x.Alias)
                 .Include(x => x.Attachments)
-                .AsQueryable();
+                .Include(x => x.Contact)
+                .ThenInclude(x => x.AppUser)
+                .Where(x => x.Contact.AppUser.Username == username);
+
 
             if(aliasesIds?.Any() ?? false)
             {
@@ -65,7 +68,6 @@ namespace API.Persistance.Repository
                     x.Contact.AppUser.Username == appUser
                     && x.Contact.Application.Name == application);
         }
-
         public Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize)
         {
             return _messageStoreContext
@@ -82,7 +84,6 @@ namespace API.Persistance.Repository
                 .Take(pageSize)
                 .ToListAsync();
         }
-
         public async Task<long> GetRowNumber(int messageId, int aliasId)
         {
             var queryResult = await _messageStoreContext.GetRowNumber(messageId, aliasId);

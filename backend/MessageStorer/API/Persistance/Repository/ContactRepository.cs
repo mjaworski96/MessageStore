@@ -2,6 +2,7 @@
 using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Persistance.Repository
@@ -10,6 +11,7 @@ namespace API.Persistance.Repository
     {
         Task<Contacts> Get(int id);
         Task<Contacts> Get(string appName, string inAppId, string appUserName);
+        Task<AppUsers> GetOwner(int contactId);
         Task AddIfNotExists(Contacts entity);
         Task Save();
     }
@@ -41,7 +43,6 @@ namespace API.Persistance.Repository
                 x.InApplicationId == inAppId &&
                 x.AppUser.Username == appUserName);
         }
-
         public Task<Contacts> Get(int id)
         {
             try
@@ -54,6 +55,16 @@ namespace API.Persistance.Repository
             {
                 throw new NotFoundException($"Contact with id {id} not found.", e);
             }
+        }
+
+        public Task<AppUsers> GetOwner(int contactId)
+        {
+            return _messageStoreContext
+                .Contacts
+                .Include(x => x.AppUser)
+                .Where(x => x.Id == contactId)
+                .Select(x => x.AppUser)
+                .FirstOrDefaultAsync();
         }
 
         public async Task Save()

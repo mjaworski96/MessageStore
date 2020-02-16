@@ -10,6 +10,7 @@ namespace API.Persistance.Repository
     public interface IAliasRepository
     {
         Task<List<Aliases>> GetAll(string appUser, string app, bool internalOnly);
+        Task<AppUsers> GetOwner(int aliasId);
     }
 
     public class AliasRepository: IAliasRepository
@@ -51,6 +52,17 @@ namespace API.Persistance.Repository
             }
             
             return query.ToListAsync();
+        }
+
+        public Task<AppUsers> GetOwner(int aliasId)
+        {
+            return _messagesStoreContext
+                .Aliases
+                .Where(x => x.Id == aliasId)
+                .SelectMany(x => x.AliasesMembers)
+                .Select(x => x.Contact)
+                .Select(x => x.AppUser)
+                .FirstOrDefaultAsync();
         }
     }
 }

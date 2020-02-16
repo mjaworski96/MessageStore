@@ -17,21 +17,26 @@ namespace API.Service
     }
     public class MessageService : IMessageService
     {
-        private IMessageRepository _messageRepository;
-        private IContactRepository _contactRepository;
-        private IWriterTypeRepository _writerTypeRepository;
-        private IAttachmentService _attachmentService;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IContactRepository _contactRepository;
+        private readonly IWriterTypeRepository _writerTypeRepository;
+        private readonly IAttachmentService _attachmentService;
+        private readonly ISecurityService _securityService;
+        private readonly IHttpMetadataService _httpMetadataService;
 
-        public MessageService(IMessageRepository messageRepository, IContactRepository contactRepository, IWriterTypeRepository writerTypeRepository, IAttachmentService attachmentService)
+        public MessageService(IMessageRepository messageRepository, IContactRepository contactRepository, IWriterTypeRepository writerTypeRepository, IAttachmentService attachmentService, ISecurityService securityService, IHttpMetadataService httpMetadataService)
         {
             _messageRepository = messageRepository;
             _contactRepository = contactRepository;
             _writerTypeRepository = writerTypeRepository;
             _attachmentService = attachmentService;
+            _securityService = securityService;
+            _httpMetadataService = httpMetadataService;
         }
 
         public async Task<MessageDtoWithId> Create(MessageDto messageDto)
         {
+            await _securityService.CheckIfUserIsOwnerOfContact(messageDto.ContactId);
             var message = new Messages
             {
                 Contact = await _contactRepository.Get(messageDto.ContactId),
@@ -58,7 +63,8 @@ namespace API.Service
 
         public async Task<SearchResultDtoList> Find(SearchQueryDto query)
         {
-            var rawMessages = await _messageRepository.Find(query.Query, query.AliasesIds, query.IgnoreLetterSize);
+            var rawMessages = await _messageRepository.Find(_httpMetadataService.Username,
+                query.Query, query.AliasesIds, query.IgnoreLetterSize);
 
             Func<Messages, int> aliasIdSelector = message => 
                 message.Contact.AliasesMembers.FirstOrDefault(y => y.Alias.Internal).AliasId;
@@ -89,6 +95,7 @@ namespace API.Service
 
         public async Task<MessageInAliasOrderDto> GetOrder(int messageId, int aliasId)
         {
+            await _securityService.CheckIfUserIsOwnerOfAlias(aliasId);
             return new MessageInAliasOrderDto
             {
                 Order = await _messageRepository.GetRowNumber(messageId, aliasId)
@@ -97,6 +104,7 @@ namespace API.Service
 
         public async Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize)
         {
+            await _securityService.CheckIfUserIsOwnerOfAlias(aliasId);
             var raw = await _messageRepository.GetPage(aliasId, pageNumber, pageSize);
 
             var list = raw.Select(x => new MessageDtoWithDetails
