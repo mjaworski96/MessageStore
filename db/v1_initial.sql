@@ -49,7 +49,8 @@ CREATE SEQUENCE public.app_users_id_seq
     CACHE 1;
 ALTER SEQUENCE app_users_id_seq OWNED BY app_users.id;
 ALTER TABLE app_users ALTER COLUMN id SET DEFAULT nextval('public.app_users_id_seq'::regclass);
-ALTER TABLE app_users ADD CONSTRAINT app_users_con_unq_name UNIQUE (username);
+CREATE UNIQUE INDEX app_users_con_unq_username on app_users (LOWER(username));
+CREATE UNIQUE INDEX app_users_con_unq_email on app_users (LOWER(email));
 
 CREATE TABLE applications
 (
