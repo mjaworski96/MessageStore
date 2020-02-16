@@ -8,11 +8,11 @@
     </div>
     <div class="aliases-list">
       <div *ngFor="let alias of aliases">
-        <mat-checkbox [(ngModel)]="alias.checked">{{alias.name}}</mat-checkbox>
+        <mat-checkbox [(ngModel)]="alias.checked" color="primary">{{alias.name}}</mat-checkbox>
       </div>
     </div>
     <div class="ignore-letter-size-checkbox">
-      <mat-checkbox [(ngModel)]="ignoreLetterSize" >Ignore letter size</mat-checkbox>
+      <mat-checkbox [(ngModel)]="ignoreLetterSize" color="primary">Ignore letter size</mat-checkbox>
     </div>
     <div class="search-button-container">
       <button class="full-width" mat-button (click)="search()">Search</button>
