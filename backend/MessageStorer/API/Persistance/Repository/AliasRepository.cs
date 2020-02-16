@@ -31,9 +31,7 @@ namespace API.Persistance.Repository
                 .ThenInclude(x => x.Application)
                 .Where(x => x.AliasesMembers
                     .Select(y => y.Contact.AppUser.Username)
-                        .All(z => z == appUser))
-                .Where(x => x.AliasesMembers
-                    .Select(y => y.Contact.Messages.Any()).Contains(true));
+                        .All(z => z == appUser));
 
             if(!string.IsNullOrEmpty(app))
             {
