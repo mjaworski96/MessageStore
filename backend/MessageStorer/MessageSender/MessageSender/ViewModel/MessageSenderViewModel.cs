@@ -122,7 +122,7 @@ namespace MessageSender.ViewModel
 
                 foreach (var sms in _smsSource.GetAll(lastSyncTime))
                 {
-                    if (!contactNumberToId.ContainsKey(sms.PhoneNumber))
+                    if (!contactNumberToId.ContainsKey(GetPhoneNumberDictionaryKey(sms.PhoneNumber)))
                     {
                         var contact = await contactHttpSender.Send(
                             contacts.FirstOrDefault(x => x.PhoneNumber == sms.PhoneNumber)
@@ -132,15 +132,24 @@ namespace MessageSender.ViewModel
                                 PhoneNumber = sms.PhoneNumber
                             });
 
-                        contactNumberToId.Add(contact.PhoneNumber, contact.Id);
+                        contactNumberToId.Add(GetPhoneNumberDictionaryKey(contact.PhoneNumber), contact.Id);
                     }
-                    sms.ContactId = contactNumberToId[sms.PhoneNumber];
+                    sms.ContactId = contactNumberToId[GetPhoneNumberDictionaryKey(sms.PhoneNumber)];
                     await smsHttpSender.Send(sms);
                     UpdateProgress(ref currentSent, maxProgress);
                 }
 
             }
             CurrentProgress = 0;
+        }
+        private string GetPhoneNumberDictionaryKey(string phoneNumber)
+        {
+            if (phoneNumber.StartsWith("+") && phoneNumber.Length > 3 && phoneNumber.ContainsOnlyDigits(1))
+            {
+                return phoneNumber.Substring(3);
+            }
+            else
+                return phoneNumber;
         }
         private void UpdateProgress(ref int current, int max)
         {
