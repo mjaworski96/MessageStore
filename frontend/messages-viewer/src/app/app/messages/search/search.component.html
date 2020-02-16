@@ -18,12 +18,12 @@
       <button class="full-width" mat-button (click)="search()">Search</button>
     </div>
   </div>
-  <div *ngIf="results">
+  <div *ngIf="results else noResults">
     <div *ngFor="let result of results" (click)="navigate(result, $event)" class="result">
       <div class="contact-name">
-        <span>{{result.contactName}} ({{result.application}}) </span>
-        <span *ngIf="writtenByAppUser(result)">written by you</span>
-        <span *ngIf="writtenByContact(result)">written by contact</span>
+        <span>{{result.contactName}} ({{result.application}} </span>
+        <span *ngIf="writtenByAppUser(result)">written by you)</span>
+        <span *ngIf="writtenByContact(result)">written by contact)</span>
         <span class="date">{{result.date | date: 'dd.MM.yyyy HH:mm:ss'}}</span>
         <span class="clear"></span>
       </div>
@@ -37,4 +37,9 @@
       </div>
     </div>
   </div>
+  <ng-template #noResults>
+    <div class="no-results">
+      No results.
+    </div>
+  </ng-template>
 </div>
