@@ -94,4 +94,16 @@ export class SearchComponent implements OnInit {
   writtenByContact(result: SearchResultDto): boolean {
     return result.writerType === 'contact';
   }
+  searchHighlight(text: string): string{
+    if (this.query === '') {
+      return text;
+    }
+    let regex;
+    if (this.ignoreLetterSize) {
+      regex = new RegExp(this.query, 'gi');
+    } else {
+      regex = new RegExp(this.query, 'g');
+    }
+    return text.replace(regex, "<mark>$&</mark>");
+  }
 }

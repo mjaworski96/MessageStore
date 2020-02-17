@@ -27,8 +27,7 @@
         <span class="date">{{result.date | date: 'dd.MM.yyyy HH:mm:ss'}}</span>
         <span class="clear"></span>
       </div>
-      <div class="message-content">
-        {{result.content}}
+      <div class="message-content" [innerHTML]="searchHighlight(result.content)">
       </div>
       <div *ngIf="result.attachments.length > 0">
         <div *ngFor="let attachment of result.attachments" class="attachment">
