@@ -20,12 +20,14 @@ namespace MessageSender.Model.Http
             var json = JsonConvert.SerializeObject(sms);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var result = await _http.PostAsync(URL, data);
+            await CheckResponse(result);
             var body = await result.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<SmsWithId>(body);
         }
         public async Task<DateTime> GetLastSyncTime()
         {
             var result = await _http.GetAsync($"{URL}/{LAST_SYNC_TIME_POSTFIX}");
+            await CheckResponse(result);
             var body = await result.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<LastSyncTime>(body).Time;
         }

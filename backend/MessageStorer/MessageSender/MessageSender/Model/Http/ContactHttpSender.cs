@@ -19,6 +19,7 @@ namespace MessageSender.Model.Http
             var json = JsonConvert.SerializeObject(contact);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var result = await _http.PutAsync(URL, data);
+            await CheckResponse(result);
             var body = await result.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ContactWithId>(body);
         }

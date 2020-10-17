@@ -98,7 +98,21 @@ namespace MessageSender.ViewModel
         }
         public void Handle(Exception e)
         {
-            Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
+            if (e is ApiException apiException)
+            {
+                if (apiException.Code == 401)
+                {
+                    //TODO: Authorization
+                }
+                else
+                {
+                    Error = $"{apiException.Code} - {apiException.Message}";
+                }
+            }
+            else
+            {
+                Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
+            }
         }
 
         public void Clear()
