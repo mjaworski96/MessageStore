@@ -9,10 +9,13 @@ import {Interceptor} from './interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AliasesModule} from './app/aliases/aliases.module';
 import {MessagesModule} from './app/messages/messages.module';
+import { NotFoundComponent } from './not-found/not-found.component';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +23,8 @@ import {MessagesModule} from './app/messages/messages.module';
     BrowserAnimationsModule,
     CoreModule,
     AliasesModule,
-    MessagesModule
+    MessagesModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     {

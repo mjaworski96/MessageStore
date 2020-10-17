@@ -1,0 +1,8 @@
+.not-found-container {
+  width: 80%;
+  margin: 0 auto;
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  font-size: 128px;
+}

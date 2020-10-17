@@ -26,7 +26,7 @@ namespace API.Service
         public async Task CheckIfUserIsOwnerOfAlias(int aliasId)
         {
             var owner = await _aliasRepository.GetOwner(aliasId);
-            if (owner.Username != _httpMetadataService.Username)
+            if (owner?.Username != _httpMetadataService.Username)
                 throw new NotFoundException($"Alias with id = {aliasId} not found.");
         }
 
