@@ -1,3 +1,4 @@
+using API.Exceptions;
 using API.Persistance;
 using API.Persistance.Repository;
 using API.Service;
@@ -43,6 +44,8 @@ namespace API
             services.AddScoped<IAliasRepository, AliasRepository>();
             services.AddScoped<IAliasService, AliasService>();
             services.AddScoped<ISecurityService, SecurityService>();
+            services.AddControllers(options =>
+                options.Filters.Add(new ExceptionHandler()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
