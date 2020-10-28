@@ -30,5 +30,15 @@ namespace API.Controllers
 
             return Ok(result.AppUser);
         }
+        [HttpPost]
+        public async Task<IActionResult> Register(AppUserRegisterDetails registerDetails)
+        {
+            _logger.LogInformation($"Started POST /api/appUser");
+            var result = await _appUserService.Register(registerDetails);
+            Response.Headers["Authorization"] = $"Bearer {result.Token}";
+            _logger.LogInformation($"Ended POST /api/appUser");
+
+            return Ok(result.AppUser);
+        }
     }
 }

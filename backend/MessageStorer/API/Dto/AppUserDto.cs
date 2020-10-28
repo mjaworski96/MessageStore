@@ -7,14 +7,24 @@ namespace API.Dto
 {
     public class UserAndToken
     {
-        public AppUserDto AppUser { get; set; }
+        public AppUserDtoWithId AppUser { get; set; }
         public string Token { get; set; }
     }
-    public class AppUserDto
+    public class AppUserDtoWithId
     {
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
+    }
+    public class AppUserDto
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+    }
+    public class AppUserPasswordChange
+    {
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
     }
     public class AppUserLoginDetails
     {

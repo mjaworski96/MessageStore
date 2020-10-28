@@ -14,6 +14,10 @@ namespace API.Service
     public interface IAppUserService
     {
         Task<UserAndToken> Login(AppUserLoginDetails loginDetails);
+        Task<UserAndToken> Register(AppUserRegisterDetails registerDetails);
+        Task<UserAndToken> Modify(string username, AppUserDto user);
+        Task Remove(string username);
+        Task ChangePassword(AppUserPasswordChange password);
     }
     public class AppUserService : IAppUserService
     {
@@ -30,16 +34,12 @@ namespace API.Service
             _config = config;
         }
 
+
         public async Task<UserAndToken> Login(AppUserLoginDetails loginDetails)
         {
             var user = await _appUserRepository.Get(loginDetails.Username);
             CheckCredentials(user, loginDetails);
-            var loginResponse = new AppUserDto()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-            };
+            var loginResponse = GetAppUserDtoWithId(user);
             return new UserAndToken()
             {
                 AppUser = loginResponse,
@@ -47,6 +47,48 @@ namespace API.Service
             };
         }
 
+        private static AppUserDtoWithId GetAppUserDtoWithId(AppUsers user)
+        {
+            return new AppUserDtoWithId()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+            };
+        }
+
+        public async Task<UserAndToken> Register(AppUserRegisterDetails registerDetails)
+        {
+            ValidateEmail(registerDetails.Email);
+            await CheckIfUserUnique(registerDetails.Username, registerDetails.Email);
+            var userEntity = new AppUsers
+            {
+                Username = registerDetails.Username,
+                Email = registerDetails.Email,
+                Password = EncryptPassword(registerDetails.Password)
+            };
+            await _appUserRepository.Add(userEntity);
+            var appUser = GetAppUserDtoWithId(userEntity);
+            return new UserAndToken()
+            {
+                AppUser = appUser,
+                Token = GenerateToken(userEntity)
+            };
+        }
+
+        public Task<UserAndToken> Modify(string username, AppUserDto user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Remove(string username)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ChangePassword(AppUserPasswordChange password)
+        {
+            throw new NotImplementedException();
+        }
         private void CheckCredentials(AppUsers appUser, AppUserLoginDetails credentials)
         {
             if (appUser == null)
@@ -59,23 +101,57 @@ namespace API.Service
                 throw new UnauthorizedException("Invalid username or password");
             }
         }
+        private string EncryptPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
         private string GenerateToken(AppUsers appUser)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            
+
             var header = new JwtHeader(credentials);
             var payload = new JwtPayload(
-                new Claim[] 
+                new Claim[]
                 {
                     new Claim("sub", appUser.Username),
-                    new Claim("exp", 
+                    new Claim("exp",
                     ((int)(DateTime.UtcNow.AddMinutes(_config.ValidFor) - UnixEpochStart).TotalSeconds).ToString()),
                 });
 
             var token = new JwtSecurityToken(header, payload);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        private async Task CheckIfUserUnique(string username, string email)
+        {
+            try
+            {
+                await _appUserRepository.Get(username);
+                throw new ConflictException("User with this username exists.");
+            }
+            catch (NotFoundException) { }
+            try
+            {
+                await _appUserRepository.GetByEmail(email);
+                throw new ConflictException("User with this email exists.");
+            }
+            catch (NotFoundException) { }
+        }
+        private void ValidateEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                if (addr.Address != email)
+                {
+                    throw new BadRequestException("Invalid email");
+                }
+            }
+            catch
+            {
+                throw new BadRequestException("Invalid email");
+            }
         }
     }
 }
