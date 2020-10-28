@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Security.Claims;
 
 namespace API.Service
 {
@@ -18,7 +20,11 @@ namespace API.Service
         {
             get
             {
-                return _httpContext.Request.Headers["X-MockedAuthority"];
+                return _httpContext
+                    .User
+                    .Claims
+                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
+                    .Value;
             }
         }
 

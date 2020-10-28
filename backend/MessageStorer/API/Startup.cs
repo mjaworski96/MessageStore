@@ -2,15 +2,19 @@ using API.Exceptions;
 using API.Persistance;
 using API.Persistance.Repository;
 using API.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace API
 {
@@ -40,8 +44,7 @@ namespace API
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"Authorization token",
-                    // TODO: Authorization
-                    Name = "X-MockedAuthority",
+                    Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
@@ -65,6 +68,22 @@ namespace API
                     }
                 });
             });
+
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Security:Key"]))
+                    };
+                });
+
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
@@ -78,6 +97,10 @@ namespace API
             services.AddScoped<IAliasRepository, AliasRepository>();
             services.AddScoped<IAliasService, AliasService>();
             services.AddScoped<ISecurityService, SecurityService>();
+            services.AddScoped<IAppUserService, AppUserService>();
+
+            services.AddScoped<ISecurityConfig, SecurityConfig>();
+
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionHandler()));
         }
@@ -94,6 +117,8 @@ namespace API
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -106,7 +131,6 @@ namespace API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Message Storer API v1");
             });
-
         }
     }
 }

@@ -6,9 +6,6 @@ namespace API.Exceptions
     public class NotFoundException : HttpException
     {
         public override int StatusCode => 404;
-        public NotFoundException()
-        {
-        }
 
         public NotFoundException(string message) : base(message)
         {

@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using API.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AliasesController : ControllerBase
     {
         private readonly IAliasService _aliasService;
