@@ -1,4 +1,5 @@
-﻿using API.Dto;
+﻿using API.Controllers;
+using API.Dto;
 using API.Exceptions;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
@@ -17,7 +18,7 @@ namespace API.Service
         Task<UserAndToken> Register(AppUserRegisterDetails registerDetails);
         Task<UserAndToken> Modify(string username, AppUserDto user);
         Task Remove(string username);
-        Task ChangePassword(AppUserPasswordChange password);
+        Task ChangePassword(string username, AppUserPasswordChange password);
     }
     public class AppUserService : IAppUserService
     {
@@ -39,26 +40,13 @@ namespace API.Service
         {
             var user = await _appUserRepository.Get(loginDetails.Username);
             CheckCredentials(user, loginDetails);
-            var loginResponse = GetAppUserDtoWithId(user);
-            return new UserAndToken()
-            {
-                AppUser = loginResponse,
-                Token = GenerateToken(user)
-            };
-        }
-
-        private static AppUserDtoWithId GetAppUserDtoWithId(AppUsers user)
-        {
-            return new AppUserDtoWithId()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-            };
+            return CreateUserAndToken(user);
         }
 
         public async Task<UserAndToken> Register(AppUserRegisterDetails registerDetails)
         {
+            ValidateUsername(registerDetails.Username);
+            ValidatePassword(registerDetails.Password);
             ValidateEmail(registerDetails.Email);
             await CheckIfUserUnique(registerDetails.Username, registerDetails.Email);
             var userEntity = new AppUsers
@@ -68,6 +56,35 @@ namespace API.Service
                 Password = EncryptPassword(registerDetails.Password)
             };
             await _appUserRepository.Add(userEntity);
+            return CreateUserAndToken(userEntity);
+        }
+
+        public async Task<UserAndToken> Modify(string username, AppUserDto user)
+        {
+            ValidateUsername(user.Username);
+            ValidateEmail(user.Email);
+            var userEntity = await _appUserRepository.Get(username);
+            await CheckIfUserUnique(userEntity, user);
+            userEntity.Username = user.Username;
+            userEntity.Email = user.Email;
+            await _appUserRepository.Save();
+            return CreateUserAndToken(userEntity);
+        }
+
+        public async Task Remove(string username)
+        {
+            await _appUserRepository.Remove(username);
+        }
+        public async Task ChangePassword(string username, AppUserPasswordChange password)
+        {
+            var user = await _appUserRepository.Get(username);
+            CheckPassword(user, password.OldPassword, true);
+            ValidatePassword(password.NewPassword);
+            user.Password = EncryptPassword(password.NewPassword);
+            await _appUserRepository.Save();
+        }
+        private UserAndToken CreateUserAndToken(AppUsers userEntity)
+        {
             var appUser = GetAppUserDtoWithId(userEntity);
             return new UserAndToken()
             {
@@ -75,19 +92,14 @@ namespace API.Service
                 Token = GenerateToken(userEntity)
             };
         }
-
-        public Task<UserAndToken> Modify(string username, AppUserDto user)
+        private AppUserDtoWithId GetAppUserDtoWithId(AppUsers user)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task Remove(string username)
-        {
-            throw new NotImplementedException();
-        }
-        public Task ChangePassword(AppUserPasswordChange password)
-        {
-            throw new NotImplementedException();
+            return new AppUserDtoWithId()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+            };
         }
         private void CheckCredentials(AppUsers appUser, AppUserLoginDetails credentials)
         {
@@ -95,10 +107,21 @@ namespace API.Service
             {
                 throw new UnauthorizedException("Invalid username or password");
             }
-            var passwordValid = BCrypt.Net.BCrypt.Verify(credentials.Password, appUser.Password);
+            CheckPassword(appUser, credentials.Password, false);
+        }
+        private void CheckPassword(AppUsers appUser, string password, bool loggedIn)
+        {
+            var passwordValid = BCrypt.Net.BCrypt.Verify(password, appUser.Password);
             if (!passwordValid)
             {
-                throw new UnauthorizedException("Invalid username or password");
+                if (loggedIn)
+                {
+                    throw new ForbiddenException("Password is invalid");
+                }
+                else
+                {
+                    throw new UnauthorizedException("Invalid username or password");
+                }
             }
         }
         private string EncryptPassword(string password)
@@ -138,6 +161,24 @@ namespace API.Service
             }
             catch (NotFoundException) { }
         }
+        private void ValidateUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new BadRequestException("Username can't be empty.");
+            }
+            if (username.Length > 20)
+            {
+                throw new BadRequestException("Username can't be longer than 20 characters.");
+            }
+        }
+        private void ValidatePassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new BadRequestException("Password can't be empty");
+            }
+        }
         private void ValidateEmail(string email)
         {
             try
@@ -151,6 +192,27 @@ namespace API.Service
             catch
             {
                 throw new BadRequestException("Invalid email");
+            }
+        }
+        private async Task CheckIfUserUnique(AppUsers currentData, AppUserDto newData)
+        {
+            if (currentData.Username != newData.Username)
+            {
+                try
+                {
+                    await _appUserRepository.Get(newData.Username);
+                    throw new ConflictException("User with this username exists.");
+                }
+                catch (NotFoundException) { }
+            }
+            if (currentData.Email != newData.Email)
+            {
+                try
+                {
+                    await _appUserRepository.GetByEmail(newData.Email);
+                    throw new ConflictException("User with this email exists.");
+                }
+                catch (NotFoundException) { }
             }
         }
     }

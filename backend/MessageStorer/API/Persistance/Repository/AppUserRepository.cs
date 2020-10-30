@@ -11,6 +11,8 @@ namespace API.Persistance.Repository
         Task<AppUsers> Get(string name);
         Task<AppUsers> GetByEmail(string email);
         Task<AppUsers> Add(AppUsers user);
+        Task Remove(string username);
+        Task Save();
     }
     public class AppUserRepository: IAppUserRepository
     {
@@ -53,6 +55,22 @@ namespace API.Persistance.Repository
             {
                 throw new NotFoundException($"User with email: {email} not found.", e);
             }
+        }
+
+        public async Task Remove(string username)
+        {
+            var userToDelete = await _messageStoreContext.AppUsers
+                    .FirstOrDefaultAsync(x => x.Username == username);
+            if (userToDelete != null)
+            {
+                _messageStoreContext.Remove(userToDelete);
+                await _messageStoreContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task Save()
+        {
+            await _messageStoreContext.SaveChangesAsync();
         }
     }
 }

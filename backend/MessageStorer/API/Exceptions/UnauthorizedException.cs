@@ -8,7 +8,7 @@ namespace API.Exceptions
 {
     public class UnauthorizedException : HttpException
     {
-        public override int StatusCode => 404;
+        public override int StatusCode => 401;
         public UnauthorizedException(string message) : base(message)
         {
         }
