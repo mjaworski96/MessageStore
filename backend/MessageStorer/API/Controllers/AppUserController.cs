@@ -29,17 +29,18 @@ namespace API.Controllers
         {
             _logger.LogInformation($"Started POST /api/appUser/login");
             var result = await _appUserService.Login(loginDetails);
-            Response.Headers["Authorization"] = $"Bearer {result.Token}";
+            Response.Headers["Authorization"] = result.Token;
             _logger.LogInformation($"Ended POST /api/appUser/login");
 
             return Ok(result.AppUser);
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(AppUserRegisterDetails registerDetails)
         {
             _logger.LogInformation($"Started POST /api/appUser");
             var result = await _appUserService.Register(registerDetails);
-            Response.Headers["Authorization"] = $"Bearer {result.Token}";
+            Response.Headers["Authorization"] = result.Token;
             _logger.LogInformation($"Ended POST /api/appUser");
 
             return StatusCode((int)HttpStatusCode.Created, result.AppUser);
@@ -51,7 +52,7 @@ namespace API.Controllers
             _logger.LogInformation($"Started PUT /api/appUser");
             string username = _httpMetadataService.Username;
             var result = await _appUserService.Modify(username, appUser);
-            Response.Headers["Authorization"] = $"Bearer {result.Token}";
+            Response.Headers["Authorization"] = result.Token;
             _logger.LogInformation($"Ended PUT /api/appUser");
 
             return Ok(result.AppUser);

@@ -1,3 +1,4 @@
+using API.Config;
 using API.Exceptions;
 using API.Persistance;
 using API.Persistance.Repository;
@@ -120,6 +121,8 @@ namespace API
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<RefreshTokenMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

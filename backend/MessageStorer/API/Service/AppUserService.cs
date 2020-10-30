@@ -1,4 +1,5 @@
-﻿using API.Controllers;
+﻿using API.Config;
+using API.Controllers;
 using API.Dto;
 using API.Exceptions;
 using API.Persistance.Entity;
@@ -6,6 +7,7 @@ using API.Persistance.Repository;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +21,13 @@ namespace API.Service
         Task<UserAndToken> Modify(string username, AppUserDto user);
         Task Remove(string username);
         Task ChangePassword(string username, AppUserPasswordChange password);
+        string RefreshToken(string oldToken);
     }
     public class AppUserService : IAppUserService
     {
         private static readonly DateTime UnixEpochStart =
                DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc);
-
+        private const string TokenPrefix = "Bearer ";
         private readonly IAppUserRepository _appUserRepository;
         private readonly ISecurityConfig _config;
 
@@ -83,13 +86,36 @@ namespace API.Service
             user.Password = EncryptPassword(password.NewPassword);
             await _appUserRepository.Save();
         }
+        public string RefreshToken(string oldToken)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(oldToken.Substring(TokenPrefix.Length));
+            var expires = jwtToken.Claims.FirstOrDefault(x => x.Type == "exp")?.Value;
+            if (!string.IsNullOrEmpty(expires))
+            {
+                var expirationTime = UnixEpochStart
+                    .Add(TimeSpan.FromSeconds(int.Parse(expires)));
+                if(expirationTime
+                    .AddMinutes(-_config.RefreshBefore)
+                    .CompareTo(DateTime.UtcNow) < 0)
+                {
+                    var username = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+                    if(!string.IsNullOrEmpty(username))
+                    {
+                        return GenerateToken(username);
+                    }
+                }
+            }
+            return "";
+        }
         private UserAndToken CreateUserAndToken(AppUsers userEntity)
         {
             var appUser = GetAppUserDtoWithId(userEntity);
             return new UserAndToken()
             {
                 AppUser = appUser,
-                Token = GenerateToken(userEntity)
+                Token = GenerateToken(userEntity.Username)
             };
         }
         private AppUserDtoWithId GetAppUserDtoWithId(AppUsers user)
@@ -128,7 +154,7 @@ namespace API.Service
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-        private string GenerateToken(AppUsers appUser)
+        private string GenerateToken(string username)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -137,14 +163,14 @@ namespace API.Service
             var payload = new JwtPayload(
                 new Claim[]
                 {
-                    new Claim("sub", appUser.Username),
+                    new Claim("sub", username),
                     new Claim("exp",
                     ((int)(DateTime.UtcNow.AddMinutes(_config.ValidFor) - UnixEpochStart).TotalSeconds).ToString()),
                 });
 
             var token = new JwtSecurityToken(header, payload);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return $"{TokenPrefix}{new JwtSecurityTokenHandler().WriteToken(token)}";
         }
         private async Task CheckIfUserUnique(string username, string email)
         {
