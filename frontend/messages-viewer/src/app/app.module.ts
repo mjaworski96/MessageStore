@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,6 +10,7 @@ import {AliasesModule} from './app/aliases/aliases.module';
 import {MessagesModule} from './app/messages/messages.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import {ToastrModule} from 'ngx-toastr';
+import {AuthorizationModule} from './app/authorization/authorization.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +24,7 @@ import {ToastrModule} from 'ngx-toastr';
     CoreModule,
     AliasesModule,
     MessagesModule,
+    AuthorizationModule,
     ToastrModule.forRoot(),
   ],
   providers: [

@@ -1,0 +1,34 @@
+<div class="authentication-form-wrapper " >
+  <form [formGroup]="loginForm" class="authentication-form">
+    <div>
+      <mat-form-field>
+        <input matInput formControlName="username" placeholder="Username"
+               i18n-placeholder="Username placeholder| Text in username placeholder@@username">
+        <mat-error i18n="Username validation|Shown when username is empty@@username-required-validation"
+                   *ngIf="loginForm.get('username').hasError('required')">
+          Username is required.
+        </mat-error>
+        <mat-error i18n="Username validation|Shown when username is too long@@username-too-long-validation"
+                   *ngIf="loginForm.get('username').hasError('maxlength')">
+          Username must contain a maximum of {{maxUsernameLength}} characters.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput formControlName="password" type="password" placeholder="Password"
+               i18n-placeholder="Password placeholder| Text in password placeholder@@password">
+
+        <mat-error i18n="Password validation|Shown when password is empty@@password-required-validation"
+                   *ngIf="loginForm.get('password').hasError('required')">
+          Password is required.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="authentication-form-button">
+      <button mat-button [disabled]="loginForm.invalid" type="submit" (click)="login()"
+              i18n="Log in button| Text in log in button@@login">Log in</button>
+    </div>
+
+  </form>
+</div>

@@ -1,5 +1,9 @@
 <mat-toolbar [color]="'primary'">
-  <span class="app-title">Messages Viewer</span>
-  <button mat-button [routerLink]="['aliases']">Contacts</button>
-  <button mat-button [routerLink]="['search']">Search</button>
+  <span  [routerLink]="['/']" class="app-title">Messages Viewer</span>
+  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['aliases']">Contacts</button>
+  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['search']">Search</button>
+  <span class="spacer"></span>
+  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['login']">Login</button>
+  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['register']">Register</button>
+  <button mat-button *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
 </mat-toolbar>

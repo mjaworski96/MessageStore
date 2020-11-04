@@ -5,11 +5,11 @@ import {NotFoundComponent} from './not-found/not-found.component';
 
 
 const routes: Routes = [
+  // TODO: Add main page
   {
     path: 'not-found',
     component: NotFoundComponent
   },
-  // TODO: Add main page
   // {
   //   path: '**',
   //   redirectTo: 'not-found'
