@@ -12,3 +12,11 @@ export interface RegisterUserDetails {
   password: string;
   email: string;
 }
+export interface UserUpdateData {
+  username: string;
+  email: string;
+}
+export interface PasswordChange {
+  oldPassword: string;
+  newPassword: string;
+}

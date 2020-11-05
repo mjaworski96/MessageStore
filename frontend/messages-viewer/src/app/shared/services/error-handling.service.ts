@@ -12,7 +12,6 @@ export class ErrorHandlingService {
               private toastr: ToastrService) { }
 
   handle(error: HttpErrorResponse): void {
-    console.log(error);
     if (error.error !== undefined && error.error !== null) {
       const duplicate = this.toastr.findDuplicate(error.error.message, false, false);
       if (duplicate != null) {

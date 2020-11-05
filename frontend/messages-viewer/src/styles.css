@@ -19,4 +19,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .authentication-form .mat-button {
   width: 300px;
 }
+.danger-button .mat-button:not([disabled]) {
+  background-color: red;
+}
+.full-width-form .mat-form-field  {
+  width: 100%;
+}
+.full-width-button .mat-button {
+  width: 100%;
+}
 

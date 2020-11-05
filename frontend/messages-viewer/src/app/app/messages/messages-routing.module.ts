@@ -2,16 +2,19 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {MessagesListComponent} from './messages-list/messages-list.component';
 import {SearchComponent} from './search/search.component';
+import {LoggedUserGuard} from '../shared/guards/logged-user-guard';
 
 
 const routes: Routes = [
   {
     path: 'messages',
-    component: MessagesListComponent
+    component: MessagesListComponent,
+    canActivate: [LoggedUserGuard],
   },
   {
     path: 'search',
-    component: SearchComponent
+    component: SearchComponent,
+    canActivate: [LoggedUserGuard],
   }
 ];
 

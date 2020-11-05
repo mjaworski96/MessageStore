@@ -23,6 +23,17 @@ namespace API.Controllers
             _httpMetadataService = httpMetadataService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            _logger.LogInformation($"Started GET /api/appUser");
+            string username = _httpMetadataService.Username;
+            var result = await _appUserService.GetUser(username);
+            _logger.LogInformation($"Ended GET /api/appUser");
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(AppUserLoginDetails loginDetails)

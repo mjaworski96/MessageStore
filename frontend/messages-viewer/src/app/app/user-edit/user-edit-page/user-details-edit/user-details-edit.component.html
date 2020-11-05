@@ -1,0 +1,42 @@
+<div class="user-details-edit-wrapper full-width-form">
+  <form [formGroup]="userDetailsForm" class="material-form">
+    <div>
+      <mat-form-field>
+        <input matInput formControlName="username" placeholder="Username"
+               i18n-placeholder="Username placeholder| Text in username placeholder@@username">
+        <mat-error i18n="Username validation|Shown when username is empty@@username-required-validation"
+                   *ngIf="userDetailsForm.get('username').hasError('required')">
+          Username is required.
+        </mat-error>
+        <mat-error i18n="Username validation|Shown when username is too short@@username-too-short-validation"
+                   *ngIf="userDetailsForm.get('username').hasError('minlength')">
+          Username must contain at least {{minUsernameLength}} characters.
+        </mat-error>
+        <mat-error i18n="Username validation|Shown when username is too long@@username-too-long-validation"
+                   *ngIf="userDetailsForm.get('username').hasError('maxlength')">
+          Username must contain a maximum of {{maxUsernameLength}} characters.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput email formControlName="email" placeholder="Email"
+               i18n-placeholder="Email placeholder| Text in email placeholder@@email">
+        <mat-error i18n="Email validation|Shown when email is empty@@email-required-validation"
+                   *ngIf="userDetailsForm.get('email').hasError('required')">
+          Email is required.
+        </mat-error>
+        <mat-error i18n="Email validation|Shown when email is invalid@@email-validation"
+                   *ngIf="userDetailsForm.get('email').hasError('email')">
+          Enter valid email address.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="full-width-button">
+      <button mat-button
+              [disabled]="userDetailsForm.invalid || userDetailsForm.errors"
+              type="submit" (click)="update()"
+              i18n="Update button| Text in update account button@@update">Update account data</button>
+    </div>
+  </form>
+</div>

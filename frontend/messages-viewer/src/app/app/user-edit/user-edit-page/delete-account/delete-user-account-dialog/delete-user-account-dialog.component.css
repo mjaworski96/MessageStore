@@ -1,0 +1,9 @@
+.dialog-wrapper {
+  text-align: center;
+}
+.dialog-title {
+  font-weight: bold;
+}
+.dialog-button {
+  margin-left: 10px;
+}

@@ -11,6 +11,7 @@ import {MessagesModule} from './app/messages/messages.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import {ToastrModule} from 'ngx-toastr';
 import {AuthorizationModule} from './app/authorization/authorization.module';
+import {UserEditModule} from './app/user-edit/user-edit.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {AuthorizationModule} from './app/authorization/authorization.module';
     AliasesModule,
     MessagesModule,
     AuthorizationModule,
+    UserEditModule,
     ToastrModule.forRoot(),
   ],
   providers: [

@@ -16,6 +16,7 @@ namespace API.Service
 {
     public interface IAppUserService
     {
+        Task<AppUserDtoWithId> GetUser(string username);
         Task<UserAndToken> Login(AppUserLoginDetails loginDetails);
         Task<UserAndToken> Register(AppUserRegisterDetails registerDetails);
         Task<UserAndToken> Modify(string username, AppUserDto user);
@@ -38,7 +39,11 @@ namespace API.Service
             _config = config;
         }
 
-
+        public async Task<AppUserDtoWithId> GetUser(string username)
+        {
+            var userEntity = await _appUserRepository.Get(username);
+            return GetAppUserDtoWithId(userEntity);
+        }
         public async Task<UserAndToken> Login(AppUserLoginDetails loginDetails)
         {
             var user = await _appUserRepository.Get(loginDetails.Username);

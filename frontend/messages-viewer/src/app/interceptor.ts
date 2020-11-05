@@ -23,13 +23,10 @@ export class Interceptor  implements HttpInterceptor {
       });
     }
     return next.handle(request).pipe(
-      map(result => {
-        this.handleValidResponse(result);
-        return result;
-      }),
-      catchError((error) => {
-        return of(this.handleErrorResponse(error));
-      }) as any);
+      tap(
+        result => this.handleValidResponse(result),
+        error => this.handleErrorResponse(error))
+    );
   }
   handleValidResponse(result: HttpEvent<any>): void {
     if (result instanceof HttpResponse) {
