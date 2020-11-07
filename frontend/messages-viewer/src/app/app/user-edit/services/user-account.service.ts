@@ -7,7 +7,7 @@ import {LoggedUser, PasswordChange, UserUpdateData} from '../../../model/user';
   providedIn: 'root'
 })
 export class UserAccountService {
-  url = '/api/AppUser';
+  url = '/api/AppUsers';
 
   constructor(private httpClient: HttpClient) { }
 

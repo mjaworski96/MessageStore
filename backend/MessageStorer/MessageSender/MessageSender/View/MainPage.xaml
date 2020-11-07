@@ -10,6 +10,7 @@
         <ProgressBar Progress="{Binding CurrentProgress}"></ProgressBar>
         <Entry Text="{Binding ServerIp}" Placeholder="Server address"></Entry>
         <Button Text="Sync SMS" Command="{Binding SyncSmsCommand}"></Button>
+        <Button Text="Logout" Command="{Binding LogoutCommand}"></Button>
         <Label Text="{Binding Error}"/>
     </StackLayout>
 

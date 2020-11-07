@@ -9,6 +9,7 @@ import {LoggedUser, LoginDetails, RegisterUserDetails} from '../../../model/user
   providedIn: 'root'
 })
 export class AuthorizationService {
+  url = '/api/AppUsers';
 
   constructor(private httpClient: HttpClient,
               private sessionStorage: SessionStorageService,
@@ -20,13 +21,13 @@ export class AuthorizationService {
     this.router.navigate(['/', 'aliases']);
   }
   login(loginDetails: LoginDetails): void {
-    this.httpClient.post('/api/AppUser/login', loginDetails, {observe: 'response'})
+    this.httpClient.post(`${this.url}/login`, loginDetails, {observe: 'response'})
       .toPromise().then( (response: HttpResponse <LoggedUser>) => {
       this.handleValidUser(response);
     });
   }
   register(registerDetails: RegisterUserDetails): void {
-    this.httpClient.post('/api/AppUser', registerDetails, {observe: 'response'})
+    this.httpClient.post(this.url, registerDetails, {observe: 'response'})
       .toPromise().then( (response: HttpResponse <LoggedUser>) => {
       this.handleValidUser(response);
     });

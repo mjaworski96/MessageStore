@@ -4,29 +4,32 @@ using MessageSender.ViewModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml.Serialization;
 
 namespace MessageSender.ViewModel
 {
-    public class MessageSenderViewModel : INotifyPropertyChanged, IExceptionHandler
+    public class MessageSenderViewModel : BaseViewModel, INotifyPropertyChanged, IExceptionHandler
     {
         private readonly ISmsSource _smsSource;
         private readonly IContactSource _contactSource;
         private readonly IPermisionsService _permisionsService;
+        private readonly IPageChanger _pageChanger;
+        private bool _canLogout;
         private double _currentProgress;
         private string _error;
 
         public MessageSenderViewModel(ISmsSource smsSource,
             IContactSource contactSource,
-            IPermisionsService permisionsService)
+            IPermisionsService permisionsService,
+            IPageChanger pageChanger)
         {
             _smsSource = smsSource;
             _contactSource = contactSource;
             _permisionsService = permisionsService;
+            _pageChanger = pageChanger;
+            _canLogout = true;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
@@ -34,6 +37,8 @@ namespace MessageSender.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public ICommand SyncSmsCommand { get => new DelegateCommand(Sync, this, true, true); }
+        public ICommand LogoutCommand { get => new DelegateCommand(Logout, this, _canLogout, true); }
+
         public double CurrentProgress
         {
             get => _currentProgress;
@@ -52,57 +57,13 @@ namespace MessageSender.ViewModel
                 NotifyPropertyChanged("Error");
             }
         }
-        private string GetPath(string path)
-        {
-            string basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            return Path.Combine(basePath, path);
-        }
-        public Config Config
-        {
-            get
-            {
-                XmlSerializer deserializer = new XmlSerializer(typeof(Config));
-                try
-                {
-                    using (TextReader reader = new StreamReader(GetPath("./config.xml")))
-                    {
-                        return (Config)deserializer.Deserialize(reader);
-                    }
-                }
-                catch (IOException)
-                {
-                    return new Config { ServerAddress = "" };
-                }
-            }
-            set
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Config));
-                using (TextWriter writer = new StreamWriter(GetPath("./config.xml")))
-                {
-                    serializer.Serialize(writer, value);
-                }
-            }
-        }
-        public string ServerIp
-        {
-            get
-            {
-                return Config.ServerAddress;
-            }
-            set
-            {
-                var config = Config;
-                config.ServerAddress = value;
-                Config = config;
-            }
-        }
         public void Handle(Exception e)
         {
             if (e is ApiException apiException)
             {
                 if (apiException.Code == 401)
                 {
-                    //TODO: Authorization
+                    _pageChanger.ShowLoginPage();
                 }
                 else
                 {
@@ -113,6 +74,7 @@ namespace MessageSender.ViewModel
             {
                 Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
             }
+            UpdateCanLogout(true);
         }
 
         public void Clear()
@@ -121,11 +83,12 @@ namespace MessageSender.ViewModel
         }
         private async Task Sync()
         {
+            UpdateCanLogout(false);
+
             _permisionsService.Request();
             Dictionary<string, int> contactNumberToId = new Dictionary<string, int>();
             CurrentProgress = 0;
             int currentSent = 0;
-
 
             using (var contactHttpSender = new ContactHttpSender(ServerIp))
             using (var smsHttpSender = new SmsHttpSender(ServerIp))
@@ -155,6 +118,21 @@ namespace MessageSender.ViewModel
 
             }
             CurrentProgress = 0;
+            UpdateCanLogout(true);
+        }
+
+        private void UpdateCanLogout(bool canLogout)
+        {
+            _canLogout = canLogout;
+            NotifyPropertyChanged("LogoutCommand");
+        }
+
+        private async Task Logout()
+        {
+            var session = new SessionStorage();
+            session.Clear();
+            _pageChanger.ShowLoginPage();
+            await Task.CompletedTask;
         }
         private string GetPhoneNumberDictionaryKey(string phoneNumber)
         {

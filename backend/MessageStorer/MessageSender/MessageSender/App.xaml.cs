@@ -12,7 +12,8 @@ namespace MessageSender
         {
             InitializeComponent();
 
-            MainPage = new MainPage(smsSource, contactSource, permisionsService);
+            var pageChanger = new PageChanger(this, smsSource, contactSource, permisionsService);
+            pageChanger.ShowInitialPage();
         }
 
         protected override void OnStart()

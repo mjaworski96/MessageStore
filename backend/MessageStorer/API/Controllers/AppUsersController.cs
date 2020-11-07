@@ -10,13 +10,13 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppUserController : ControllerBase
+    public class AppUsersController : ControllerBase
     {
         private readonly IAppUserService _appUserService;
-        private readonly ILogger<AppUserController> _logger;
+        private readonly ILogger<AppUsersController> _logger;
         private readonly IHttpMetadataService _httpMetadataService;
 
-        public AppUserController(IAppUserService appUserService, ILogger<AppUserController> logger, IHttpMetadataService httpMetadataService)
+        public AppUsersController(IAppUserService appUserService, ILogger<AppUsersController> logger, IHttpMetadataService httpMetadataService)
         {
             _appUserService = appUserService;
             _logger = logger;
