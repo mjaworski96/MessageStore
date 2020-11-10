@@ -46,7 +46,15 @@ namespace API.Service
         }
         public async Task<UserAndToken> Login(AppUserLoginDetails loginDetails)
         {
-            var user = await _appUserRepository.Get(loginDetails.Username);
+            AppUsers user;
+            try
+            {
+                user = await _appUserRepository.Get(loginDetails.Username);
+            }
+            catch(NotFoundException)
+            {
+                user = null;
+            }
             CheckCredentials(user, loginDetails);
             return CreateUserAndToken(user);
         }
