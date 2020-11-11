@@ -2,6 +2,7 @@
 using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Persistance.Repository
@@ -64,6 +65,14 @@ namespace API.Persistance.Repository
             if (userToDelete != null)
             {
                 _messageStoreContext.Remove(userToDelete);
+                var aliasMembersToRemove = await _messageStoreContext
+                    .Aliases
+                    .Include(x => x.AliasesMembers)
+                    .ThenInclude(x => x.Contact)
+                    .Where(x => x.AliasesMembers
+                        .All(y => y.Contact.AppUserId == userToDelete.Id))
+                    .ToListAsync();
+                _messageStoreContext.RemoveRange(aliasMembersToRemove);
                 await _messageStoreContext.SaveChangesAsync();
             }
         }

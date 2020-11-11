@@ -6,7 +6,7 @@ import {LoggedUserGuard} from '../shared/guards/logged-user-guard';
 
 const USER_EDIT_PAGE_ROUTES: Route[] = [
   {
-    path: 'user',
+    path: 'account',
     component: UserEditPageComponent,
     resolve: {
       user: UserAccountResolveService
