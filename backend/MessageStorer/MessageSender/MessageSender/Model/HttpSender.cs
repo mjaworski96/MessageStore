@@ -36,12 +36,15 @@ namespace MessageSender.Model.Http
         }
         public async Task CheckResponse(HttpResponseMessage message)
         {
-            if(message.Headers.Contains("Authorization"))
+            if(message.Headers.Contains("Authorization") &&
+               message.Headers.Contains("X-User"))
             {
                 var session = new SessionStorage();
+                var jsonUser = message.Headers.GetValues("X-User").FirstOrDefault();
+                var user = JsonConvert.DeserializeObject<LoggedUser>(jsonUser);
                 await session.StoreSession(
                     message.Headers.GetValues("Authorization").FirstOrDefault(),
-                    null); //TODO
+                    user);
                 await UpdateAuthorization();
             }
             if (!message.IsSuccessStatusCode)

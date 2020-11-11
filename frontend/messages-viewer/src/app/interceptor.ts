@@ -31,8 +31,11 @@ export class Interceptor  implements HttpInterceptor {
   handleValidResponse(result: HttpEvent<any>): void {
     if (result instanceof HttpResponse) {
       const response = result as HttpResponse<any>;
-      if (response.headers.get('Authorization') !== null) {
-        this.sessionStorageService.updateSession(response.headers.get('Authorization'));
+      if (response.headers.get('Authorization') !== null && response.headers.get('X-User') !== null) {
+        const userJson = response.headers.get('X-User');
+        const user = JSON.parse(userJson);
+        this.sessionStorageService.storeSession(user, response.headers.get('Authorization'));
+        console.log(this.sessionStorageService.getUser().username)
       }
     }
   }

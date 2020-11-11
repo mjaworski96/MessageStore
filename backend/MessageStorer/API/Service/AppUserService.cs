@@ -22,7 +22,7 @@ namespace API.Service
         Task<UserAndToken> Modify(string username, AppUserDto user);
         Task Remove(string username);
         Task ChangePassword(string username, AppUserPasswordChange password);
-        string RefreshToken(string oldToken);
+        Task<UserAndToken> Refresh(string oldToken);
     }
     public class AppUserService : IAppUserService
     {
@@ -99,7 +99,7 @@ namespace API.Service
             user.Password = EncryptPassword(password.NewPassword);
             await _appUserRepository.Save();
         }
-        public string RefreshToken(string oldToken)
+        public async Task<UserAndToken> Refresh(string oldToken)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -116,11 +116,12 @@ namespace API.Service
                     var username = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
                     if(!string.IsNullOrEmpty(username))
                     {
-                        return GenerateToken(username);
+                        var user = await _appUserRepository.Get(username);
+                        return CreateUserAndToken(user);
                     }
                 }
             }
-            return "";
+            return null;
         }
         private UserAndToken CreateUserAndToken(AppUsers userEntity)
         {

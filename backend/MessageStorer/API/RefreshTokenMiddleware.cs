@@ -1,6 +1,8 @@
 ﻿using API.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 
@@ -26,11 +28,17 @@ namespace API
                         .TryGetValue("Authorization", out var authorization) &&
                     !httpContext.Response.Headers.ContainsKey("Authorization"))
                 {
-                    var refreshedToken = appUserService
-                        .RefreshToken(authorization.ToString());
-                    if (!string.IsNullOrEmpty(refreshedToken))
+                    var refreshedData = await appUserService
+                        .Refresh(authorization.ToString());
+                    if (refreshedData != null)
                     {
-                        httpContext.Response.Headers.Add("Authorization", refreshedToken);
+                        httpContext.Response.Headers.Add("Authorization", refreshedData.Token);
+                        httpContext.Response.Headers.Add("X-User", 
+                            JsonConvert.SerializeObject(refreshedData.AppUser,
+                            new JsonSerializerSettings
+                            {
+                                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                            }));
                     }
                 }
             }
