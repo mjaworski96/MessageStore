@@ -19,6 +19,7 @@ namespace MessageSender.ViewModel
         private bool _canLogout;
         private double _currentProgress;
         private string _error;
+        private bool _appStoped;
 
         public MessageSenderViewModel(ISmsSource smsSource,
             IContactSource contactSource,
@@ -30,15 +31,17 @@ namespace MessageSender.ViewModel
             _permisionsService = permisionsService;
             _pageChanger = pageChanger;
             _canLogout = true;
+            _appStoped = false;
+            SyncSmsCommand = new DelegateCommand(Sync, this, true, true);
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public ICommand SyncSmsCommand { get => new DelegateCommand(Sync, this, true, true); }
+        public ICommand SyncSmsCommand { get; set; }
         public ICommand LogoutCommand { get => new DelegateCommand(Logout, this, _canLogout, true); }
-
+        
         public double CurrentProgress
         {
             get => _currentProgress;
@@ -81,6 +84,14 @@ namespace MessageSender.ViewModel
         {
             Error = "";
         }
+        public void OnSleep()
+        {
+            _appStoped = true;
+        }
+        public void OnResume()
+        {
+            _appStoped = false;
+        }
         private async Task Sync()
         {
             UpdateCanLogout(false);
@@ -96,9 +107,12 @@ namespace MessageSender.ViewModel
                 var lastSyncTime = await smsHttpSender.GetLastSyncTime();
                 int maxProgress = _smsSource.GetCount(lastSyncTime);
                 var contacts = _contactSource.GetAll().ToList();
-
                 foreach (var sms in _smsSource.GetAll(lastSyncTime))
                 {
+                    if (_appStoped)
+                    {
+                        break;
+                    }
                     if (!contactNumberToId.ContainsKey(GetPhoneNumberDictionaryKey(sms.PhoneNumber)))
                     {
                         var contact = await contactHttpSender.Send(

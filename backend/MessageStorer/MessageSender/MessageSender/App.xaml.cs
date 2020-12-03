@@ -8,12 +8,13 @@ namespace MessageSender
 {
     public partial class App : Application
     {
+        PageChanger _pageChanger;
         public App(ISmsSource smsSource, IContactSource contactSource, IPermisionsService permisionsService)
         {
             InitializeComponent();
 
-            var pageChanger = new PageChanger(this, smsSource, contactSource, permisionsService);
-            pageChanger.ShowInitialPage();
+            _pageChanger = new PageChanger(this, smsSource, contactSource, permisionsService);
+            _pageChanger.ShowInitialPage();
         }
 
         protected override void OnStart()
@@ -22,10 +23,12 @@ namespace MessageSender
 
         protected override void OnSleep()
         {
+            _pageChanger.OnSleep();
         }
 
         protected override void OnResume()
         {
+            _pageChanger.OnResume();
         }
     }
 }

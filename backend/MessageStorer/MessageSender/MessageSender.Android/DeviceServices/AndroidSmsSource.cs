@@ -32,10 +32,10 @@ namespace MessageSender.Droid.DeviceServices
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
             {
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
-                var projection = new[] { "_id", "ct_t" };
+                var projection = new[] { "_id", "ct_t", "normalized_date" };
                 long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-                var selection = $"date>{fromMiliseconds}";
-                using (var cursor = _contentResolver.Query(uri, projection, selection, null, null))
+                var selection = $"normalized_date>{fromMiliseconds}";
+                using (var cursor = _contentResolver.Query(uri, projection, selection, null, "normalized_date"))
                 {
                     if (cursor.MoveToFirst())
                     {
@@ -43,10 +43,15 @@ namespace MessageSender.Droid.DeviceServices
                         {
                             var type = cursor.GetString(cursor.GetColumnIndex("ct_t"));
                             var id = cursor.GetString(cursor.GetColumnIndex("_id"));
+
+                            var normalizedDate = cursor.GetString(cursor.GetColumnIndex("normalized_date"));
+                            var unixTimestamp = long.Parse(normalizedDate);
+                            var smsDate = new DateTime(1970, 1, 1).AddMilliseconds(unixTimestamp);
+
                             if (type == "application/vnd.wap.multipart.related")
-                                yield return GetMms(id);
+                                yield return GetMms(id, smsDate);
                             else
-                                yield return GetSms(id);
+                                yield return GetSms(id, smsDate);
                         } while (cursor.MoveToNext());
                     }
                 }
@@ -59,8 +64,8 @@ namespace MessageSender.Droid.DeviceServices
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
                 var projection = new[] { "_id" };
                 long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-                var selection = $"date>{fromMiliseconds}";
-                using (var cursor = _contentResolver.Query(uri, projection, selection, null, null))
+                var selection = $"normalized_date>{fromMiliseconds}";
+                using (var cursor = _contentResolver.Query(uri, projection, selection, null, "normalized_date"))
                 {
                     return cursor.Count;
                 }
@@ -68,15 +73,13 @@ namespace MessageSender.Droid.DeviceServices
             }
             return 0;
         }
-        private Sms GetSms(string id)
+        private Sms GetSms(string id, DateTime date)
         {
             var uri = Telephony.Sms.ContentUri;
             var selection = "_id = " + id;
             using (var cursor = _contentResolver.Query(uri, null, selection, null, null))
             {
                 cursor.MoveToFirst();
-                var date = long.Parse(cursor.GetString(
-                        cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Date)));
                 var debug = cursor.GetString(
                         cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Address));
 
@@ -84,7 +87,7 @@ namespace MessageSender.Droid.DeviceServices
                 {
                     Content = cursor.GetString(
                         cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Body)),
-                    Date = new DateTime(1970, 1, 1).AddMilliseconds(date).ToLocalTime(),
+                    Date = date,
                     PhoneNumber = TryParsePhoneNumber(cursor.GetString(
                         cursor.GetColumnIndex(Telephony.Sms.InterfaceConsts.Address))),
                     WriterType = cursor.GetString(
@@ -103,15 +106,13 @@ namespace MessageSender.Droid.DeviceServices
             else
                 return address;
         }
-        private Sms GetMms(string id)
+        private Sms GetMms(string id, DateTime date)
         {
             var uri = Telephony.Mms.ContentUri;
             var selection = "_id = " + id;
             var cursor = _contentResolver.Query(uri, null, selection, null, null);
 
             cursor.MoveToFirst();
-            var date = long.Parse(cursor.GetString(
-                        cursor.GetColumnIndex(Telephony.Mms.InterfaceConsts.Date)));
 
             string msgData = "";
             for (int idx = 0; idx < cursor.ColumnCount; idx++)
@@ -131,7 +132,7 @@ namespace MessageSender.Droid.DeviceServices
                 Content = content,
                 PhoneNumber = phoneNumber,
                 Attachments = attachments,
-                Date = new DateTime(1970, 1, 1).AddSeconds(date).ToLocalTime(),
+                Date = date,
                 WriterType = cursor.GetString(
                         cursor.GetColumnIndex("msg_box")) == "2"
                         ? Sms.WRITER_ME : Sms.WRITER_CONTACT
