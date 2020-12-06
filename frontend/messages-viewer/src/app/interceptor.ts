@@ -35,7 +35,6 @@ export class Interceptor  implements HttpInterceptor {
         const userJson = response.headers.get('X-User');
         const user = JSON.parse(userJson);
         this.sessionStorageService.storeSession(user, response.headers.get('Authorization'));
-        console.log(this.sessionStorageService.getUser().username)
       }
     }
   }

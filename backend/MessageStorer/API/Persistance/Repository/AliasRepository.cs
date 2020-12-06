@@ -11,6 +11,9 @@ namespace API.Persistance.Repository
     {
         Task<List<Aliases>> GetAll(string appUser, string app, bool internalOnly);
         Task<AppUsers> GetOwner(int aliasId);
+        Task<List<Aliases>> GetAll(IEnumerable<int> enumerable);
+        Task<Aliases> Add(Aliases aliases);
+        Task Save();
     }
 
     public class AliasRepository: IAliasRepository
@@ -61,6 +64,29 @@ namespace API.Persistance.Repository
                 .Select(x => x.Contact)
                 .Select(x => x.AppUser)
                 .FirstOrDefaultAsync();
+        }
+
+        public Task<List<Aliases>> GetAll(IEnumerable<int> ids)
+        {
+            return _messagesStoreContext
+                .Aliases
+                .Include(x => x.AliasesMembers)
+                .ThenInclude(x => x.Contact)
+                .ThenInclude(x => x.Application)
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+        }
+
+        public async Task<Aliases> Add(Aliases aliases)
+        {
+            var result = await _messagesStoreContext.Aliases.AddAsync(aliases);
+            await Save();
+            return result.Entity;
+        }
+
+        public async Task Save()
+        {
+            await _messagesStoreContext.SaveChangesAsync();
         }
     }
 }

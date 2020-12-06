@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using API.Dto;
 using API.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,14 @@ namespace API.Controllers
             _logger.LogInformation($"Started GET /api/aliases?app={app}&internalOnly={internalOnly}");
             var result = await _aliasService.GetAll(app, internalOnly);
             _logger.LogInformation($"Ended GET /api/aliases?app={app}&internalOnly={internalOnly}");
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateAliasDto createAlias)
+        {
+            _logger.LogInformation($"Started POST /api/aliases");
+            var result = await _aliasService.Create(createAlias);
+            _logger.LogInformation($"Ended POST /api/aliases");
             return Ok(result);
         }
     }
