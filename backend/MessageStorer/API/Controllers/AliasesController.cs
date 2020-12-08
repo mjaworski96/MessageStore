@@ -55,5 +55,13 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove([FromRoute] int id)
+        {
+            _logger.LogInformation($"Started DELETE /api/aliases/{id}");
+            await _aliasService.Remove(id);
+            _logger.LogInformation($"Ended DELETE /api/aliases/{id}");
+            return NoContent();
+        }
     }
 }

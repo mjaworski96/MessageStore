@@ -14,6 +14,7 @@ namespace API.Service
         Task<AliasDtoWithId> Create(CreateAliasDto createAlias);
         Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias);
         Task<AliasDtoWithId> Get(int id);
+        Task Remove(int id);
     }
     public class AliasService : IAliasService
     {
@@ -123,6 +124,11 @@ namespace API.Service
                     InApplicationId = y.Contact.InApplicationId
                 }).ToList()
             };
+        }
+
+        public async Task Remove(int id)
+        {
+            await _aliasRepository.RemoveIfInternal(id);
         }
     }
 }

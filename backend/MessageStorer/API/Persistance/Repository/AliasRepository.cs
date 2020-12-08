@@ -17,6 +17,7 @@ namespace API.Persistance.Repository
         Task<Aliases> Add(Aliases aliases);
         Task Save();
         Task<Aliases> Get(int id);
+        Task RemoveIfInternal(int id);
     }
 
     public class AliasRepository: IAliasRepository
@@ -106,6 +107,21 @@ namespace API.Persistance.Repository
             catch (InvalidOperationException e)
             {
                 throw new NotFoundException($"Alias with id {id} not found.", e);
+            }
+        }
+
+        public async Task RemoveIfInternal(int id)
+        {
+            var aliasToDelete = await _messagesStoreContext.Aliases
+                    .FirstOrDefaultAsync(x => x.Id == id);
+            if (aliasToDelete != null)
+            {
+                if (aliasToDelete.Internal)
+                {
+                    throw new BadRequestException("Raw aliases can't be deleted");
+                }
+                _messagesStoreContext.Remove(aliasToDelete);
+                await _messagesStoreContext.SaveChangesAsync();
             }
         }
     }
