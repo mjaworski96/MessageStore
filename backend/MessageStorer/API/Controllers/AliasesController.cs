@@ -45,5 +45,15 @@ namespace API.Controllers
             _logger.LogInformation($"Ended PUT /api/aliases/{id}");
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            _logger.LogInformation($"Started GET /api/aliases/{id}");
+            var result = await _aliasService.Get(id);
+            _logger.LogInformation($"Ended GET /api/aliases/{id}");
+            return Ok(result);
+        }
+
     }
 }

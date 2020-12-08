@@ -100,6 +100,7 @@ namespace API.Persistance.Repository
                 .Aliases
                 .Include(x => x.AliasesMembers)
                 .ThenInclude(x => x.Contact)
+                .ThenInclude(x => x.Application)
                 .FirstAsync(x => x.Id == id);
             }
             catch (InvalidOperationException e)

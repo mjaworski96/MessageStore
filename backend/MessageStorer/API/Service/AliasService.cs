@@ -13,6 +13,7 @@ namespace API.Service
         Task<AliasDtoWithIdList> GetAll(string app, bool internalOnly);
         Task<AliasDtoWithId> Create(CreateAliasDto createAlias);
         Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias);
+        Task<AliasDtoWithId> Get(int id);
     }
     public class AliasService : IAliasService
     {
@@ -70,7 +71,42 @@ namespace API.Service
             return contacts;
         }
 
-        private static AliasDtoWithId CreateAliasDtoWithId(Aliases alias)
+        public async Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias)
+        {
+            List<Aliases> contacts = await GetValidatedAliasMembers(updateAlias);
+            var alias = await _aliasRepository.Get(id);
+
+            if (alias.Internal)
+            {
+                throw new BadRequestException("Raw aliases can't be modified");
+            }
+            var newContactsId = updateAlias.Members.Select(x => x.Id).ToList();
+            var existingMembersId = alias.AliasesMembers.Select(x => x.Id).ToList();
+            alias.Name = updateAlias.Name;
+
+            alias.AliasesMembers.Where(x => !newContactsId.Contains(x.Id))
+                .ToList()
+                .ForEach(member => alias.AliasesMembers.Remove(member));
+
+            contacts.Where(x => !existingMembersId.Contains(x.Id))
+                .ToList()
+                .ForEach(member => alias.AliasesMembers.Add(new AliasesMembers
+                {
+                    Alias = alias,
+                    Contact = member.AliasesMembers.First().Contact
+                }));
+
+            await _aliasRepository.Save();
+            return CreateAliasDtoWithId(alias);
+        }
+
+        public async Task<AliasDtoWithId> Get(int id)
+        {
+            var alias = await _aliasRepository.Get(id);
+            return CreateAliasDtoWithId(alias);
+        }
+
+        private AliasDtoWithId CreateAliasDtoWithId(Aliases alias)
         {
             return new AliasDtoWithId
             {
@@ -87,38 +123,6 @@ namespace API.Service
                     InApplicationId = y.Contact.InApplicationId
                 }).ToList()
             };
-        }
-
-        public async Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias)
-        {
-            List<Aliases> contacts = await GetValidatedAliasMembers(updateAlias);
-            var alias = await _aliasRepository.Get(id);
-
-            if (alias.Internal)
-            {
-                throw new BadRequestException("Raw aliases can't be modified");
-            }
-            var newContactsId = updateAlias.Members.Select(x => x.Id).ToList();
-            var existingMembersId = alias.AliasesMembers.Select(x => x.Id).ToList();
-            alias.Name = updateAlias.Name;
-
-            var torem = alias.AliasesMembers.Where(x => !newContactsId.Contains(x.Id))
-                .ToList();
-
-            alias.AliasesMembers.Where(x => !newContactsId.Contains(x.Id))
-                .ToList()
-                .ForEach(member => alias.AliasesMembers.Remove(member));
-
-            contacts.Where(x => !existingMembersId.Contains(x.Id))
-                .ToList()
-                .ForEach(member => alias.AliasesMembers.Add(new AliasesMembers
-                {
-                    Alias = alias,
-                    Contact = member.AliasesMembers.First().Contact
-                }));
-
-            await _aliasRepository.Save();
-            return CreateAliasDtoWithId(alias);
         }
     }
 }
