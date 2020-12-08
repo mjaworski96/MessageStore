@@ -2,6 +2,7 @@
 using API.Exceptions;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace API.Service
     {
         Task<AliasDtoWithIdList> GetAll(string app, bool internalOnly);
         Task<AliasDtoWithId> Create(CreateAliasDto createAlias);
+        Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias);
     }
     public class AliasService : IAliasService
     {
@@ -37,15 +39,7 @@ namespace API.Service
         
         public async Task<AliasDtoWithId> Create(CreateAliasDto createAlias)
         {
-            var contacts = await _aliasRepository.GetAll(createAlias.Members.Select(x => x.Id));
-            if (contacts.Count != createAlias.Members.Count)
-            {
-                throw new NotFoundException("Contact not found");
-            }
-            if (contacts.Any(x => !x.Internal))
-            {
-                throw new BadRequestException("Aliases can be created only from contacts (not other aliases)");
-            }
+            List<Aliases> contacts = await GetValidatedAliasMembers(createAlias);
             var alias = new Aliases
             {
                 Name = createAlias.Name,
@@ -61,6 +55,20 @@ namespace API.Service
             return CreateAliasDtoWithId(alias);
         }
 
+        private async Task<List<Aliases>> GetValidatedAliasMembers(CreateAliasDto createAlias)
+        {
+            var contacts = await _aliasRepository.GetAll(createAlias.Members.Select(x => x.Id));
+            if (contacts.Count != createAlias.Members.Count)
+            {
+                throw new NotFoundException("Contact not found");
+            }
+            if (contacts.Any(x => !x.Internal))
+            {
+                throw new BadRequestException("Aliases can be created only from contacts (not other aliases)");
+            }
+
+            return contacts;
+        }
 
         private static AliasDtoWithId CreateAliasDtoWithId(Aliases alias)
         {
@@ -81,5 +89,36 @@ namespace API.Service
             };
         }
 
+        public async Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias)
+        {
+            List<Aliases> contacts = await GetValidatedAliasMembers(updateAlias);
+            var alias = await _aliasRepository.Get(id);
+
+            if (alias.Internal)
+            {
+                throw new BadRequestException("Raw aliases can't be modified");
+            }
+            var newContactsId = updateAlias.Members.Select(x => x.Id).ToList();
+            var existingMembersId = alias.AliasesMembers.Select(x => x.Id).ToList();
+            alias.Name = updateAlias.Name;
+
+            var torem = alias.AliasesMembers.Where(x => !newContactsId.Contains(x.Id))
+                .ToList();
+
+            alias.AliasesMembers.Where(x => !newContactsId.Contains(x.Id))
+                .ToList()
+                .ForEach(member => alias.AliasesMembers.Remove(member));
+
+            contacts.Where(x => !existingMembersId.Contains(x.Id))
+                .ToList()
+                .ForEach(member => alias.AliasesMembers.Add(new AliasesMembers
+                {
+                    Alias = alias,
+                    Contact = member.AliasesMembers.First().Contact
+                }));
+
+            await _aliasRepository.Save();
+            return CreateAliasDtoWithId(alias);
+        }
     }
 }

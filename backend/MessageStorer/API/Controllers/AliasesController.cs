@@ -37,5 +37,13 @@ namespace API.Controllers
             _logger.LogInformation($"Ended POST /api/aliases");
             return Ok(result);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, CreateAliasDto createAlias)
+        {
+            _logger.LogInformation($"Started PUT /api/aliases/{id}");
+            var result = await _aliasService.Update(id, createAlias);
+            _logger.LogInformation($"Ended PUT /api/aliases/{id}");
+            return Ok(result);
+        }
     }
 }

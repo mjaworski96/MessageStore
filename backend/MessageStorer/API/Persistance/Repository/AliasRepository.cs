@@ -1,6 +1,8 @@
 ﻿using API.Dto;
+using API.Exceptions;
 using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ namespace API.Persistance.Repository
         Task<List<Aliases>> GetAll(IEnumerable<int> enumerable);
         Task<Aliases> Add(Aliases aliases);
         Task Save();
+        Task<Aliases> Get(int id);
     }
 
     public class AliasRepository: IAliasRepository
@@ -87,6 +90,22 @@ namespace API.Persistance.Repository
         public async Task Save()
         {
             await _messagesStoreContext.SaveChangesAsync();
+        }
+
+        public Task<Aliases> Get(int id)
+        {
+            try
+            {
+                return _messagesStoreContext
+                .Aliases
+                .Include(x => x.AliasesMembers)
+                .ThenInclude(x => x.Contact)
+                .FirstAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new NotFoundException($"Alias with id {id} not found.", e);
+            }
         }
     }
 }
