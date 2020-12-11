@@ -41,20 +41,12 @@ namespace API.Service
 
         public async Task<AppUserDtoWithId> GetUser(string username)
         {
-            var userEntity = await _appUserRepository.Get(username);
+            var userEntity = await _appUserRepository.Get(username, true);
             return GetAppUserDtoWithId(userEntity);
         }
         public async Task<UserAndToken> Login(AppUserLoginDetails loginDetails)
         {
-            AppUsers user;
-            try
-            {
-                user = await _appUserRepository.Get(loginDetails.Username);
-            }
-            catch(NotFoundException)
-            {
-                user = null;
-            }
+            AppUsers user = await _appUserRepository.Get(loginDetails.Username, false);
             CheckCredentials(user, loginDetails);
             return CreateUserAndToken(user);
         }
@@ -79,7 +71,7 @@ namespace API.Service
         {
             ValidateUsername(user.Username);
             ValidateEmail(user.Email);
-            var userEntity = await _appUserRepository.Get(username);
+            var userEntity = await _appUserRepository.Get(username, true);
             await CheckIfUserUnique(userEntity, user);
             userEntity.Username = user.Username;
             userEntity.Email = user.Email;
@@ -93,7 +85,7 @@ namespace API.Service
         }
         public async Task ChangePassword(string username, AppUserPasswordChange password)
         {
-            var user = await _appUserRepository.Get(username);
+            var user = await _appUserRepository.Get(username, true);
             CheckPassword(user, password.OldPassword, true);
             ValidatePassword(password.NewPassword);
             user.Password = EncryptPassword(password.NewPassword);
@@ -116,7 +108,7 @@ namespace API.Service
                     var username = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
                     if(!string.IsNullOrEmpty(username))
                     {
-                        var user = await _appUserRepository.Get(username);
+                        var user = await _appUserRepository.Get(username, true);
                         return CreateUserAndToken(user);
                     }
                 }
@@ -188,19 +180,15 @@ namespace API.Service
         }
         private async Task CheckIfUserUnique(string username, string email)
         {
-            try
+            if (await _appUserRepository.Get(username, false) != null)
             {
-                await _appUserRepository.Get(username);
                 throw new ConflictException("User with this username exists.");
             }
-            catch (NotFoundException) { }
-            try
+            if (await _appUserRepository.GetByEmail(email, false) != null)
             {
-                await _appUserRepository.GetByEmail(email);
                 throw new ConflictException("User with this email exists.");
-            }
-            catch (NotFoundException) { }
-        }
+            }      
+    }
         private void ValidateUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
@@ -238,21 +226,17 @@ namespace API.Service
         {
             if (currentData.Username != newData.Username)
             {
-                try
+                if (await _appUserRepository.Get(newData.Username, false) != null)
                 {
-                    await _appUserRepository.Get(newData.Username);
                     throw new ConflictException("User with this username exists.");
                 }
-                catch (NotFoundException) { }
             }
             if (currentData.Email != newData.Email)
             {
-                try
+                if (await _appUserRepository.GetByEmail(newData.Email, false) != null)
                 {
-                    await _appUserRepository.GetByEmail(newData.Email);
                     throw new ConflictException("User with this email exists.");
                 }
-                catch (NotFoundException) { }
             }
         }
     }

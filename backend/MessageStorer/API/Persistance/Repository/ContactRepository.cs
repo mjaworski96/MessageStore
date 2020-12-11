@@ -32,12 +32,13 @@ namespace API.Persistance.Repository
             }
         }
 
-        public Task<Contacts> Get(string appName, string inAppId, string appUserName)
+        public async Task<Contacts> Get(string appName, string inAppId, string appUserName)
         {
-            return _messageStoreContext
+            return await _messageStoreContext
                 .Contacts
                 .Include(x => x.AliasesMembers)
                 .ThenInclude(x => x.Alias)
+                .Include(x => x.AppUser)
                 .FirstOrDefaultAsync(x =>
                 x.Application.Name == appName &&
                 x.InApplicationId == inAppId &&

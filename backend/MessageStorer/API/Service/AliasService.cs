@@ -20,12 +20,17 @@ namespace API.Service
     {
         private readonly IAliasRepository _aliasRepository;
         private readonly IHttpMetadataService _httpMetadataService;
+        private readonly ISecurityService _securityService;
 
-        public AliasService(IAliasRepository aliasRepository, IHttpMetadataService httpMetadataService)
+        public AliasService(IAliasRepository aliasRepository, 
+            IHttpMetadataService httpMetadataService,
+            ISecurityService securityService)
         {
             _aliasRepository = aliasRepository;
             _httpMetadataService = httpMetadataService;
+            _securityService = securityService;
         }
+        
         public async Task<AliasDtoWithIdList> GetAll(string app, bool internalOnly)
         {
             var rawEntities = await _aliasRepository.GetAll(
@@ -60,9 +65,10 @@ namespace API.Service
         private async Task<List<Aliases>> GetValidatedAliasMembers(CreateAliasDto createAlias)
         {
             var contacts = await _aliasRepository.GetAll(createAlias.Members.Select(x => x.Id));
+            _securityService.CheckIfUserIsOwnerOfAliases(contacts);
             if (contacts.Count != createAlias.Members.Count)
             {
-                throw new NotFoundException("Contact not found");
+                throw new NotFoundException("Contacts not found");
             }
             if (contacts.Any(x => !x.Internal))
             {
@@ -75,7 +81,8 @@ namespace API.Service
         public async Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias)
         {
             List<Aliases> contacts = await GetValidatedAliasMembers(updateAlias);
-            var alias = await _aliasRepository.Get(id);
+            var alias = await _aliasRepository.Get(id, true);
+            _securityService.CheckIfUserIsOwnerOfAlias(alias);
 
             if (alias.Internal)
             {
@@ -103,8 +110,23 @@ namespace API.Service
 
         public async Task<AliasDtoWithId> Get(int id)
         {
-            var alias = await _aliasRepository.Get(id);
+            var alias = await _aliasRepository.Get(id, true);
+            _securityService.CheckIfUserIsOwnerOfAlias(alias);
             return CreateAliasDtoWithId(alias);
+        }
+
+        public async Task Remove(int id)
+        {
+            var aliasToDelete = await _aliasRepository.Get(id, false);
+            if (aliasToDelete != null)
+            {
+                _securityService.CheckIfUserIsOwnerOfAlias(aliasToDelete);
+                if (aliasToDelete.Internal)
+                {
+                    throw new BadRequestException("Raw aliases can't be deleted");
+                }
+                await _aliasRepository.Remove(aliasToDelete);
+            }
         }
 
         private AliasDtoWithId CreateAliasDtoWithId(Aliases alias)
@@ -124,11 +146,6 @@ namespace API.Service
                     InApplicationId = y.Contact.InApplicationId
                 }).ToList()
             };
-        }
-
-        public async Task Remove(int id)
-        {
-            await _aliasRepository.RemoveIfInternal(id);
         }
     }
 }

@@ -18,13 +18,19 @@ namespace API.Service
         private readonly IHttpMetadataService _httpMetadataService;
         private readonly IApplicationRepository _applicationRepository;
         private readonly IAppUserRepository _appUserRepository;
+        private readonly ISecurityService _securityService;
 
-        public ContactService(IContactRepository contactRepository, IHttpMetadataService httpMetadataService, IApplicationRepository applicationRepository, IAppUserRepository appUserRepository)
+        public ContactService(IContactRepository contactRepository, 
+            IHttpMetadataService httpMetadataService, 
+            IApplicationRepository applicationRepository, 
+            IAppUserRepository appUserRepository,
+            ISecurityService securityService)
         {
             _contactRepository = contactRepository;
             _httpMetadataService = httpMetadataService;
             _applicationRepository = applicationRepository;
             _appUserRepository = appUserRepository;
+            _securityService = securityService;
         }
 
         public async Task<ContactDtoWithId> AddIfNotExists(ContactDto contactDto)
@@ -37,7 +43,7 @@ namespace API.Service
             {
                 entity = new Contacts
                 {
-                    AppUser = await _appUserRepository.Get(_httpMetadataService.Username),
+                    AppUser = await _appUserRepository.Get(_httpMetadataService.Username, true),
                     Application = await _applicationRepository.Get(_httpMetadataService.Application),
                 };
                 entity.AliasesMembers.Add(new AliasesMembers
@@ -47,6 +53,10 @@ namespace API.Service
                         Internal = true
                     }
                 });
+            }
+            else
+            {
+                _securityService.CheckIfUserIsOwnerOfContact(entity);
             }
             entity.Name = contactDto.Name;
             entity.InApplicationId = contactDto.InApplicationId;

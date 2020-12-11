@@ -1,6 +1,9 @@
-﻿using API.Exceptions;
+﻿using API.Controllers;
+using API.Exceptions;
+using API.Persistance.Entity;
 using API.Persistance.Repository;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Service
@@ -8,7 +11,10 @@ namespace API.Service
     public interface ISecurityService
     {
         Task CheckIfUserIsOwnerOfAlias(int aliasId);
+        void CheckIfUserIsOwnerOfAlias(Aliases alias);
+        void CheckIfUserIsOwnerOfAliases(IEnumerable<Aliases> aliases);
         Task CheckIfUserIsOwnerOfContact(int contactId);
+        void CheckIfUserIsOwnerOfContact(Contacts contact);
     }
     public class SecurityService: ISecurityService
     {
@@ -27,16 +33,40 @@ namespace API.Service
         {
             var owner = await _aliasRepository.GetOwner(aliasId);
             if (owner?.Username != _httpMetadataService.Username)
-                throw new NotFoundException($"Alias with id = {aliasId} not found.");
+                throw new ForbiddenException($"You have no access for this alia");
         }
 
+        public void CheckIfUserIsOwnerOfAlias(Aliases alias)
+        {
+            if (alias.AliasesMembers.FirstOrDefault()?.Contact.AppUser.Username != 
+                _httpMetadataService.Username)
+            {
+                throw new ForbiddenException($"You have no access for this alias");
+            }
+        }
+
+        public void CheckIfUserIsOwnerOfAliases(IEnumerable<Aliases> aliases)
+        {
+            foreach (var alias in aliases)
+            {
+                CheckIfUserIsOwnerOfAlias(alias);
+            }
+        }
 
         public async Task CheckIfUserIsOwnerOfContact(int contactId)
         {
             var owner = await _contactRepository.GetOwner(contactId);
             if (owner.Username != _httpMetadataService.Username)
-                throw new NotFoundException($"Contact with id = {contactId} not found.");
+                throw new ForbiddenException($"You have no access for this contact");
         }
 
+        public void CheckIfUserIsOwnerOfContact(Contacts contact)
+        {
+            if (contact.AppUser.Username !=
+                _httpMetadataService.Username)
+            {
+                throw new ForbiddenException($"You have no access for this contact");
+            }
+        }
     }
 }

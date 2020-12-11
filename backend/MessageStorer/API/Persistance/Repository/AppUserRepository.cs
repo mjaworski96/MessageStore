@@ -9,8 +9,8 @@ namespace API.Persistance.Repository
 {
     public interface IAppUserRepository
     {
-        Task<AppUsers> Get(string name);
-        Task<AppUsers> GetByEmail(string email);
+        Task<AppUsers> Get(string name, bool throwExeptionIfNotFound);
+        Task<AppUsers> GetByEmail(string email, bool throwExeptionIfNotFound);
         Task<AppUsers> Add(AppUsers user);
         Task Remove(string username);
         Task Save();
@@ -32,12 +32,16 @@ namespace API.Persistance.Repository
             return entity;
         }
 
-        public async Task<AppUsers> Get(string name)
+        public async Task<AppUsers> Get(string name, bool throwExeptionIfNotFound)
         {
             try
             {
-                return await _messageStoreContext.AppUsers
-                    .FirstAsync(x => x.Username == name);
+                if(throwExeptionIfNotFound)
+                    return await _messageStoreContext.AppUsers
+                        .FirstAsync(x => x.Username == name);
+                else 
+                    return await _messageStoreContext.AppUsers
+                        .FirstOrDefaultAsync(x => x.Username == name);
             }
             catch(InvalidOperationException e)
             {
@@ -45,12 +49,16 @@ namespace API.Persistance.Repository
             }
         }
 
-        public async Task<AppUsers> GetByEmail(string email)
+        public async Task<AppUsers> GetByEmail(string email, bool throwExeptionIfNotFound)
         {
             try
             {
-                return await _messageStoreContext.AppUsers
-                    .FirstAsync(x => x.Email == email);
+                if (throwExeptionIfNotFound)
+                    return await _messageStoreContext.AppUsers
+                        .FirstAsync(x => x.Email == email);
+                else
+                    return await _messageStoreContext.AppUsers
+                        .FirstOrDefaultAsync(x => x.Email == email);
             }
             catch (InvalidOperationException e)
             {

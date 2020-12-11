@@ -16,8 +16,8 @@ namespace API.Persistance.Repository
         Task<List<Aliases>> GetAll(IEnumerable<int> enumerable);
         Task<Aliases> Add(Aliases aliases);
         Task Save();
-        Task<Aliases> Get(int id);
-        Task RemoveIfInternal(int id);
+        Task<Aliases> Get(int id, bool throwExeptionIfNotFound);
+        Task Remove(Aliases alias);
     }
 
     public class AliasRepository: IAliasRepository
@@ -75,8 +75,11 @@ namespace API.Persistance.Repository
             return _messagesStoreContext
                 .Aliases
                 .Include(x => x.AliasesMembers)
-                .ThenInclude(x => x.Contact)
-                .ThenInclude(x => x.Application)
+                    .ThenInclude(x => x.Contact)
+                    .ThenInclude(x => x.Application)
+                .Include(x => x.AliasesMembers)
+                    .ThenInclude(x => x.Contact)
+                    .ThenInclude(x => x.AppUser)
                 .Where(x => ids.Contains(x.Id))
                 .ToListAsync();
         }
@@ -93,16 +96,23 @@ namespace API.Persistance.Repository
             await _messagesStoreContext.SaveChangesAsync();
         }
 
-        public Task<Aliases> Get(int id)
+        public async Task<Aliases> Get(int id, bool throwExeptionIfNotFound)
         {
             try
             {
-                return _messagesStoreContext
+                var query = _messagesStoreContext
                 .Aliases
                 .Include(x => x.AliasesMembers)
-                .ThenInclude(x => x.Contact)
-                .ThenInclude(x => x.Application)
-                .FirstAsync(x => x.Id == id);
+                    .ThenInclude(x => x.Contact)
+                    .ThenInclude(x => x.Application)
+                .Include(x => x.AliasesMembers)
+                    .ThenInclude(x => x.Contact)
+                    .ThenInclude(x => x.AppUser);
+
+                if (throwExeptionIfNotFound)
+                    return await query.FirstAsync(x => x.Id == id);
+                else
+                    return await query.FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (InvalidOperationException e)
             {
@@ -110,19 +120,10 @@ namespace API.Persistance.Repository
             }
         }
 
-        public async Task RemoveIfInternal(int id)
+        public async Task Remove(Aliases alias)
         {
-            var aliasToDelete = await _messagesStoreContext.Aliases
-                    .FirstOrDefaultAsync(x => x.Id == id);
-            if (aliasToDelete != null)
-            {
-                if (aliasToDelete.Internal)
-                {
-                    throw new BadRequestException("Raw aliases can't be deleted");
-                }
-                _messagesStoreContext.Remove(aliasToDelete);
-                await _messagesStoreContext.SaveChangesAsync();
-            }
+            _messagesStoreContext.Remove(alias);
+            await _messagesStoreContext.SaveChangesAsync();
         }
     }
 }
