@@ -1,0 +1,38 @@
+<div class="full-width-form alias-edit-wrapper" *ngIf="allAliases">
+  <form [formGroup]="formGroup">
+    <div>
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Name"
+               i18n-placeholder="Name placeholder|Text in name placeholder@@name">
+        <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
+                   *ngIf="formGroup.get('name').hasError('required')">
+          Name is required.
+        </mat-error>
+        <mat-error i18n="Name validation|Shown when name is too long@@name-too-long-validation"
+                   *ngIf="formGroup.get('name').hasError('maxLength')">
+          Name can be maximum 256 characters long.
+        </mat-error>
+      </mat-form-field>
+      <div *ngFor="let contact of getContactsForm()">
+          <div [formGroup]="contact">
+              <mat-checkbox formControlName="selected">
+                {{contact.get('name').value}} ({{contact.get('application').value}})
+              </mat-checkbox>
+          </div>
+      </div>
+      <div>
+        <mat-error i18n="At least 2 selected items|Shown when not enough contacts are selected@@at-least-two-elements-validation"
+                   *ngIf="formGroup.get('contacts').hasError('atLeastTwoElements')">
+          You must select at least 2 contacts.
+        </mat-error>
+      </div>
+    </div>
+    <div class="full-width-button">
+      <button mat-button [disabled]="formGroup.invalid" type="submit" (click)="send()">
+        <span i18n="Create alias button|Text in create alias button@@create">
+          Create
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

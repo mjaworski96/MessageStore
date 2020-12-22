@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AliasWithIdList} from '../model/alias';
+import {AliasWithId, AliasWithIdList, EditAlias} from '../model/alias';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,10 @@ export class AliasService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<AliasWithIdList> {
-    return this.http.get<AliasWithIdList>(`${this.url}?internalOnly=false`);
+  getAll(internalOnly: boolean = false): Observable<AliasWithIdList> {
+    return this.http.get<AliasWithIdList>(`${this.url}?internalOnly=${internalOnly}`);
+  }
+  create(alias: EditAlias): Observable<AliasWithId> {
+    return this.http.post<AliasWithId>(this.url, alias);
   }
 }

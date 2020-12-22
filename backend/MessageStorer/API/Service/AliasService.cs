@@ -46,6 +46,7 @@ namespace API.Service
         
         public async Task<AliasDtoWithId> Create(CreateAliasDto createAlias)
         {
+            ValidateName(createAlias.Name);
             List<Aliases> contacts = await GetValidatedAliasMembers(createAlias);
             var alias = new Aliases
             {
@@ -80,6 +81,7 @@ namespace API.Service
 
         public async Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias)
         {
+            ValidateName(updateAlias.Name);
             List<Aliases> contacts = await GetValidatedAliasMembers(updateAlias);
             var alias = await _aliasRepository.Get(id, true);
             _securityService.CheckIfUserIsOwnerOfAlias(alias);
@@ -146,6 +148,13 @@ namespace API.Service
                     InApplicationId = y.Contact.InApplicationId
                 }).ToList()
             };
+        }
+        private void ValidateName(string aliasName)
+        {
+            if(string.IsNullOrEmpty(aliasName) || aliasName.Length > 256)
+            {
+                throw new BadRequestException("Invalid alias name.");
+            }
         }
     }
 }

@@ -1,3 +1,5 @@
+import {Id} from './common';
+
 export interface AliasWithId {
   id: number;
   name: string;
@@ -7,4 +9,9 @@ export interface AliasWithId {
 }
 export interface AliasWithIdList {
   aliases: AliasWithId[];
+}
+
+export interface EditAlias {
+  name: string;
+  members: Id[];
 }

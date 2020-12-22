@@ -26,7 +26,7 @@ namespace API.Persistance.Repository
 
         public async Task AddIfNotExists(Contacts entity)
         {
-            if(entity.Id == 0)
+            if (entity.Id == 0)
             {
                 await _messageStoreContext.Contacts.AddAsync(entity);
             }
@@ -44,11 +44,11 @@ namespace API.Persistance.Repository
                 x.InApplicationId == inAppId &&
                 x.AppUser.Username == appUserName);
         }
-        public Task<Contacts> Get(int id)
+        public async Task<Contacts> Get(int id)
         {
             try
             {
-                return _messageStoreContext
+                return await _messageStoreContext
                 .Contacts
                 .FirstAsync(x => x.Id == id);
             }
@@ -58,9 +58,9 @@ namespace API.Persistance.Repository
             }
         }
 
-        public Task<AppUsers> GetOwner(int contactId)
+        public async Task<AppUsers> GetOwner(int contactId)
         {
-            return _messageStoreContext
+            return await _messageStoreContext
                 .Contacts
                 .Include(x => x.AppUser)
                 .Where(x => x.Id == contactId)
