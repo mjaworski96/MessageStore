@@ -1,4 +1,4 @@
-<div class="full-width-form alias-edit-wrapper" *ngIf="allAliases">
+<div class="full-width-form alias-edit-wrapper" *ngIf="formGroup">
   <form [formGroup]="formGroup">
     <div>
       <mat-form-field>
@@ -29,9 +29,14 @@
     </div>
     <div class="full-width-button">
       <button mat-button [disabled]="formGroup.invalid" type="submit" (click)="send()">
-        <span i18n="Create alias button|Text in create alias button@@create">
+        <span *ngIf="!originalAlias else updateAlias" i18n="Create button|Text in create button@@create">
           Create
         </span>
+        <ng-template  #updateAlias>
+          <span i18n="Update button|Text in update button@@update">
+            Update
+          </span>
+        </ng-template>
       </button>
     </div>
   </form>

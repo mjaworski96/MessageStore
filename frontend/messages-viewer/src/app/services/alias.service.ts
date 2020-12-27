@@ -17,4 +17,10 @@ export class AliasService {
   create(alias: EditAlias): Observable<AliasWithId> {
     return this.http.post<AliasWithId>(this.url, alias);
   }
+  get(id: number): Observable<AliasWithId> {
+    return this.http.get<AliasWithId>(`${this.url}/${id}`);
+  }
+  edit(id: number, alias: EditAlias): Observable<AliasWithId> {
+    return this.http.put<AliasWithId>(`${this.url}/${id}`, alias);
+  }
 }

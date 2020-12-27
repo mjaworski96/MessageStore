@@ -17,7 +17,7 @@ const routes: Routes = [
     canActivate: [LoggedUserGuard],
   },
   {
-    path: 'aliases/edit/{id}',
+    path: 'aliases/edit/:id',
     component: AliasEditorComponent,
     canActivate: [LoggedUserGuard],
   }

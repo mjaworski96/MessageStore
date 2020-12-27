@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AliasService} from '../../../services/alias.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {AliasWithId} from '../../../model/alias';
 import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -11,16 +11,23 @@ import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@a
 })
 export class AliasEditorComponent implements OnInit {
   formGroup: FormGroup;
+  originalAlias: AliasWithId;
   constructor(private aliasService: AliasService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) { }
 
-  ngOnInit() {
-    this.aliasService
+  async ngOnInit() {
+    const aliases = await this.aliasService
       .getAll(true)
-      .toPromise()
-      .then((result) => {
-        this.buildForm(result.aliases);
-      });
+      .toPromise();
+    const id = +this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.originalAlias = await this.aliasService.get(id).toPromise();
+      if (this.originalAlias.internal) {
+        await this.router.navigate(['aliases', 'new']);
+      }
+    }
+    this.buildForm(aliases.aliases);
   }
   buildForm(allAliases: AliasWithId[]) {
     const contactsForm = new FormArray([], [this.atLeastTwoElements]);
@@ -31,12 +38,12 @@ export class AliasEditorComponent implements OnInit {
         id: new FormControl(element.id),
         name: new FormControl(element.name),
         application: new FormControl(element.application),
-        selected: new FormControl(false)
+        selected: new FormControl(this.isSelected(element.id))
       }));
     }
 
     this.formGroup = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl(this.getName(), [Validators.required]),
       contacts: contactsForm
     });
   }
@@ -63,12 +70,31 @@ export class AliasEditorComponent implements OnInit {
       .map(x => {
         return {id: x.get('id').value};
       });
-    this.aliasService.create(
-      {
-        name: this.formGroup.get('name').value,
-        members: contacts
-      }
-    ).toPromise()
+
+    const alias = {
+      name: this.formGroup.get('name').value,
+      members: contacts
+    };
+    const edit = !this.originalAlias ?
+      this.aliasService.create(alias) : this.aliasService.edit(this.originalAlias.id, alias);
+
+    edit.toPromise()
       .then(() => this.router.navigate(['aliases']));
+  }
+  getName(): string {
+    if (this.originalAlias) {
+      return this.originalAlias.name;
+    } else {
+      return '';
+    }
+  }
+  isSelected(id: number): boolean {
+    if (this.originalAlias) {
+      const filtered = this.originalAlias.members.filter(x => x.id === id);
+      if (filtered.length > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }
