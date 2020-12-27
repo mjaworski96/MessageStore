@@ -23,4 +23,7 @@ export class AliasService {
   edit(id: number, alias: EditAlias): Observable<AliasWithId> {
     return this.http.put<AliasWithId>(`${this.url}/${id}`, alias);
   }
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
 }

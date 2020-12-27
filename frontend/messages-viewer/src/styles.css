@@ -28,3 +28,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .full-width-button .mat-button {
   width: 100%;
 }
+.dialog-wrapper {
+  text-align: center;
+}
+.dialog-title {
+  font-weight: bold;
+}
+.dialog-button {
+  margin-left: 10px;
+}
