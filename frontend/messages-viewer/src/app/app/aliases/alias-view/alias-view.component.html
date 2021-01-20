@@ -5,6 +5,13 @@
         Add new alias
       </button>
     </div>
+    <div>
+      <mat-form-field>
+        <input matInput [(ngModel)]="filterBy" (ngModelChange)="filterByChange($event)"
+        placeholder="Search" i18n-placeholder="Search aliases| Text in search alias input@@search-input">
+      </mat-form-field>
+
+    </div>
     <table class="table-wrapper">
       <thead>
         <tr>
@@ -16,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let alias of aliases" class="alias">
+        <tr *ngFor="let alias of filtered" class="alias" (click)="navigate(alias)">
           <td>{{alias.name}}</td>
           <td>{{alias.application}}</td>
           <td>{{alias.inApplicationId}}</td>

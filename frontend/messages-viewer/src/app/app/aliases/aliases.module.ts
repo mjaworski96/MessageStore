@@ -4,7 +4,7 @@ import { AliasesRoutingModule } from './aliases-routing.module';
 import { AliasViewComponent } from './alias-view/alias-view.component';
 import { AliasEditorComponent } from './alias-editor/alias-editor.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatInputModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { DeleteAliasDialogComponent } from './alias-view/delete-alias-dialog/delete-alias-dialog.component';
 
@@ -21,7 +21,8 @@ import { DeleteAliasDialogComponent } from './alias-view/delete-alias-dialog/del
     MatButtonModule,
     BrowserAnimationsModule,
     MatCheckboxModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule
   ],
   entryComponents: [
     DeleteAliasDialogComponent

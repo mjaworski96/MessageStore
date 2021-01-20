@@ -14,7 +14,8 @@ import {DeleteAliasDialogComponent} from './delete-alias-dialog/delete-alias-dia
 export class AliasViewComponent implements OnInit {
 
   aliases: AliasWithId[];
-
+  filtered: AliasWithId[];
+  filterBy = '';
   constructor(private aliasService: AliasService,
               private router: Router,
               private dialog: MatDialog) { }
@@ -25,7 +26,19 @@ export class AliasViewComponent implements OnInit {
       .toPromise()
       .then((result) => {
         this.aliases = result.aliases;
+        this.filtered = this.aliases;
       });
+
+  }
+  filterByChange(event) {
+    this.filter();
+  }
+  filter() {
+    if (this.filterBy) {
+      this.filtered = this.aliases.filter(x => x.name.includes(this.filterBy));
+    } else {
+      this.filtered = this.aliases;
+    }
   }
   navigate(alias: AliasWithId): void {
     this.router.navigate(['messages'], {
