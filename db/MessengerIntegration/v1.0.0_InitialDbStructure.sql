@@ -20,7 +20,8 @@ CREATE TABLE imports
 	status_id INTEGER NOT NULL,
 	filename VARCHAR(256),
 	start_date TIMESTAMP,
-	end_date TIMESTAMP
+	end_date TIMESTAMP,
+	user_id INT NOT NULL
 );
 ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);
 ALTER TABLE imports ADD CONSTRAINT fk_imports_statuses FOREIGN KEY (status_id) REFERENCES statuses(id);

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageSender.Android", "MessageSender\MessageSender.Android\MessageSender.Android.csproj", "{DFDFE3B5-00E5-41B2-B4A5-3D62068B7A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageSender", "MessageSender\MessageSender\MessageSender.csproj", "{93989423-23A6-47FB-BB25-FD00A4C1BE8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageSender", "MessageSender\MessageSender\MessageSender.csproj", "{93989423-23A6-47FB-BB25-FD00A4C1BE8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacebookMessengerIntegration", "FacebookMessengerIntegration\FacebookMessengerIntegration.csproj", "{89F9A062-840C-4A93-8978-7AB3177E15D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{93989423-23A6-47FB-BB25-FD00A4C1BE8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93989423-23A6-47FB-BB25-FD00A4C1BE8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93989423-23A6-47FB-BB25-FD00A4C1BE8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89F9A062-840C-4A93-8978-7AB3177E15D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89F9A062-840C-4A93-8978-7AB3177E15D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89F9A062-840C-4A93-8978-7AB3177E15D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89F9A062-840C-4A93-8978-7AB3177E15D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

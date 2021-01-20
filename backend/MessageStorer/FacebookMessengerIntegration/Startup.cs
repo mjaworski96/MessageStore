@@ -1,23 +1,18 @@
-using API.Config;
-using API.Exceptions;
-using API.Persistance;
-using API.Persistance.Repository;
-using API.Service;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FacebookMessengerIntegration.Persistance;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
-namespace API
+namespace FacebookMessengerIntegration
 {
     public class Startup
     {
@@ -32,13 +27,10 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<MessagesStoreContext>(options =>
+            services.AddDbContext<MessengerIntegrationContext>(options =>
             {
-                options.UseNpgsql(Configuration["ConnectionStrings:MessagesStore"]);
+                options.UseNpgsql(Configuration["ConnectionStrings:MessengerIntegration"]);
             });
-
-            services.AddHttpContextAccessor();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Message Storer API", Version = "v1" });
@@ -83,26 +75,6 @@ namespace API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Security:Key"]))
                     };
                 });
-
-            services.AddScoped<IApplicationRepository, ApplicationRepository>();
-            services.AddScoped<IAppUserRepository, AppUserRepository>();
-            services.AddScoped<IContactRepository, ContactRepository>();
-            services.AddScoped<IContactService, ContactService>();
-            services.AddScoped<IHttpMetadataService, HttpMetadataService>();
-            services.AddScoped<IMessageRepository, MessageRepository>();
-            services.AddScoped<IWriterTypeRepository, WriterTypeRepository>();
-            services.AddScoped<IMessageService, MessageService>();
-            services.AddScoped<ILastSyncService, LastSyncService>();
-            services.AddScoped<IAttachmentService, AttachmentService>();
-            services.AddScoped<IAliasRepository, AliasRepository>();
-            services.AddScoped<IAliasService, AliasService>();
-            services.AddScoped<ISecurityService, SecurityService>();
-            services.AddScoped<IAppUserService, AppUserService>();
-
-            services.AddScoped<ISecurityConfig, SecurityConfig>();
-
-            services.AddControllers(options =>
-                options.Filters.Add(new ExceptionHandler()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,8 +92,6 @@ namespace API
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-            app.UseMiddleware<RefreshTokenMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
