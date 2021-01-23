@@ -11,7 +11,7 @@ namespace API.Persistance.Repository
 {
     public interface IAliasRepository
     {
-        Task<List<Aliases>> GetAll(string appUser, string app, bool internalOnly);
+        Task<List<Aliases>> GetAll(int userId, string app, bool internalOnly);
         Task<AppUsers> GetOwner(int aliasId);
         Task<List<Aliases>> GetAll(IEnumerable<int> enumerable);
         Task<Aliases> Add(Aliases aliases);
@@ -29,7 +29,7 @@ namespace API.Persistance.Repository
             _messagesStoreContext = messagesStoreContext;
         }
 
-        public Task<List<Aliases>> GetAll(string appUser, string app, bool internalOnly)
+        public Task<List<Aliases>> GetAll(int userId, string app, bool internalOnly)
         {
             var query = _messagesStoreContext
                 .Aliases
@@ -37,8 +37,8 @@ namespace API.Persistance.Repository
                 .ThenInclude(x => x.Contact)
                 .ThenInclude(x => x.Application)
                 .Where(x => x.AliasesMembers
-                    .Select(y => y.Contact.AppUser.Username)
-                        .All(z => z == appUser));
+                    .Select(y => y.Contact.AppUserId)
+                        .All(z => z == userId));
 
             if(!string.IsNullOrEmpty(app))
             {

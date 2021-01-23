@@ -38,12 +38,12 @@ namespace API.Service
             Contacts entity = await _contactRepository.Get(
                 _httpMetadataService.Application,
                 contactDto.InApplicationId,
-                _httpMetadataService.Username);
+                _httpMetadataService.UserId);
             if (entity == null)
             {
                 entity = new Contacts
                 {
-                    AppUser = await _appUserRepository.Get(_httpMetadataService.Username, true),
+                    AppUser = await _appUserRepository.Get(_httpMetadataService.UserId, true),
                     Application = await _applicationRepository.Get(_httpMetadataService.Application),
                 };
                 entity.AliasesMembers.Add(new AliasesMembers

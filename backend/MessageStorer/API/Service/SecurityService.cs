@@ -32,14 +32,14 @@ namespace API.Service
         public async Task CheckIfUserIsOwnerOfAlias(int aliasId)
         {
             var owner = await _aliasRepository.GetOwner(aliasId);
-            if (owner?.Username != _httpMetadataService.Username)
+            if (owner?.Id != _httpMetadataService.UserId)
                 throw new ForbiddenException($"You have no access for this alia");
         }
 
         public void CheckIfUserIsOwnerOfAlias(Aliases alias)
         {
-            if (alias.AliasesMembers.FirstOrDefault()?.Contact.AppUser.Username != 
-                _httpMetadataService.Username)
+            if (alias.AliasesMembers.FirstOrDefault()?.Contact.AppUserId != 
+                _httpMetadataService.UserId)
             {
                 throw new ForbiddenException($"You have no access for this alias");
             }
@@ -56,14 +56,14 @@ namespace API.Service
         public async Task CheckIfUserIsOwnerOfContact(int contactId)
         {
             var owner = await _contactRepository.GetOwner(contactId);
-            if (owner.Username != _httpMetadataService.Username)
+            if (owner.Id != _httpMetadataService.UserId)
                 throw new ForbiddenException($"You have no access for this contact");
         }
 
         public void CheckIfUserIsOwnerOfContact(Contacts contact)
         {
-            if (contact.AppUser.Username !=
-                _httpMetadataService.Username)
+            if (contact.AppUserId !=
+                _httpMetadataService.UserId)
             {
                 throw new ForbiddenException($"You have no access for this contact");
             }

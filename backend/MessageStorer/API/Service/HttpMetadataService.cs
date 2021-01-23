@@ -6,7 +6,7 @@ namespace API.Service
 {
     public interface IHttpMetadataService
     {
-        string Username { get; }
+        int UserId { get; }
         string Application { get; }
     }
     public class HttpMetadataService : IHttpMetadataService
@@ -16,15 +16,15 @@ namespace API.Service
         {
             _httpContext = httpContextAccessor.HttpContext;
         }
-        public string Username
+        public int UserId
         {
             get
             {
-                return _httpContext
+                return int.Parse(_httpContext
                     .User
                     .Claims
                     .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
-                    .Value;
+                    .Value);
             }
         }
 

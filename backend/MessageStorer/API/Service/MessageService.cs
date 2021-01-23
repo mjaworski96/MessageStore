@@ -63,7 +63,7 @@ namespace API.Service
 
         public async Task<SearchResultDtoList> Find(SearchQueryDto query)
         {
-            var rawMessages = await _messageRepository.Find(_httpMetadataService.Username,
+            var rawMessages = await _messageRepository.Find(_httpMetadataService.UserId,
                 query.Query, query.AliasesIds, query.IgnoreLetterSize);
 
             Func<Messages, int> aliasIdSelector = message => 

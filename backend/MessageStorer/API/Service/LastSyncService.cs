@@ -23,7 +23,7 @@ namespace API.Service
         public async Task<LastSyncTime> Get()
         {
             var newestMessage = await _messageRepository.GetNewest(
-                _httpMetadataService.Username,
+                _httpMetadataService.UserId,
                 _httpMetadataService.Application);
             var date = newestMessage?.Date ?? new DateTime(1970, 1, 1);
             return new LastSyncTime

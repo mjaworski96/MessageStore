@@ -27,8 +27,8 @@ namespace API.Controllers
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation($"Started GET /api/appUser");
-            string username = _httpMetadataService.Username;
-            var result = await _appUserService.GetUser(username);
+            int userId = _httpMetadataService.UserId;
+            var result = await _appUserService.GetUser(userId);
             _logger.LogInformation($"Ended GET /api/appUser");
 
             return Ok(result);
@@ -61,8 +61,8 @@ namespace API.Controllers
         public async Task<IActionResult> Modify(AppUserDto appUser)
         {
             _logger.LogInformation($"Started PUT /api/appUser");
-            string username = _httpMetadataService.Username;
-            var result = await _appUserService.Modify(username, appUser);
+            int userId = _httpMetadataService.UserId;
+            var result = await _appUserService.Modify(userId, appUser);
             Response.Headers["Authorization"] = result.Token;
             _logger.LogInformation($"Ended PUT /api/appUser");
 
@@ -73,8 +73,8 @@ namespace API.Controllers
         public async Task<IActionResult> Delete()
         {
             _logger.LogInformation($"Started DELETE /api/appUser");
-            string username = _httpMetadataService.Username;
-            await _appUserService.Remove(username);
+            int userId = _httpMetadataService.UserId;
+            await _appUserService.Remove(userId);
             _logger.LogInformation($"Ended DELETE /api/appUser");
 
             return NoContent();
@@ -85,8 +85,8 @@ namespace API.Controllers
         public async Task<IActionResult> PasswordChange(AppUserPasswordChange appUserPasswordChange)
         {
             _logger.LogInformation($"Started POST /api/appUser/passwordChange");
-            string username = _httpMetadataService.Username;
-            await _appUserService.ChangePassword(username, appUserPasswordChange);
+            int userId = _httpMetadataService.UserId;
+            await _appUserService.ChangePassword(userId, appUserPasswordChange);
             _logger.LogInformation($"Ended POST /api/appUser/passwordChange");
 
             return NoContent();

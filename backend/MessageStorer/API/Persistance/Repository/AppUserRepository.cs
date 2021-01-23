@@ -9,10 +9,11 @@ namespace API.Persistance.Repository
 {
     public interface IAppUserRepository
     {
-        Task<AppUsers> Get(string name, bool throwExeptionIfNotFound);
+        Task<AppUsers> Get(int id, bool throwExeptionIfNotFound);
+        Task<AppUsers> GetByUsername(string name, bool throwExeptionIfNotFound);
         Task<AppUsers> GetByEmail(string email, bool throwExeptionIfNotFound);
         Task<AppUsers> Add(AppUsers user);
-        Task Remove(string username);
+        Task Remove(int userId);
         Task Save();
     }
     public class AppUserRepository: IAppUserRepository
@@ -32,7 +33,24 @@ namespace API.Persistance.Repository
             return entity;
         }
 
-        public async Task<AppUsers> Get(string name, bool throwExeptionIfNotFound)
+        public async Task<AppUsers> Get(int id, bool throwExeptionIfNotFound)
+        {
+            try
+            {
+                if (throwExeptionIfNotFound)
+                    return await _messageStoreContext.AppUsers
+                        .FirstAsync(x => x.Id == id);
+                else
+                    return await _messageStoreContext.AppUsers
+                        .FirstOrDefaultAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new NotFoundException($"User with id: {id} not found.", e);
+            }
+        }
+
+        public async Task<AppUsers> GetByUsername(string name, bool throwExeptionIfNotFound)
         {
             try
             {
@@ -66,10 +84,10 @@ namespace API.Persistance.Repository
             }
         }
 
-        public async Task Remove(string username)
+        public async Task Remove(int userId)
         {
             var userToDelete = await _messageStoreContext.AppUsers
-                    .FirstOrDefaultAsync(x => x.Username == username);
+                    .FirstOrDefaultAsync(x => x.Id == userId);
             if (userToDelete != null)
             {
                 _messageStoreContext.Remove(userToDelete);

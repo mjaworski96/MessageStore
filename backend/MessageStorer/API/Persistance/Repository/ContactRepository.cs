@@ -10,7 +10,7 @@ namespace API.Persistance.Repository
     public interface IContactRepository
     {
         Task<Contacts> Get(int id);
-        Task<Contacts> Get(string appName, string inAppId, string appUserName);
+        Task<Contacts> Get(string appName, string inAppId, int userId);
         Task<AppUsers> GetOwner(int contactId);
         Task AddIfNotExists(Contacts entity);
         Task Save();
@@ -32,7 +32,7 @@ namespace API.Persistance.Repository
             }
         }
 
-        public async Task<Contacts> Get(string appName, string inAppId, string appUserName)
+        public async Task<Contacts> Get(string appName, string inAppId, int userId)
         {
             return await _messageStoreContext
                 .Contacts
@@ -42,7 +42,7 @@ namespace API.Persistance.Repository
                 .FirstOrDefaultAsync(x =>
                 x.Application.Name == appName &&
                 x.InApplicationId == inAppId &&
-                x.AppUser.Username == appUserName);
+                x.AppUserId == userId);
         }
         public async Task<Contacts> Get(int id)
         {

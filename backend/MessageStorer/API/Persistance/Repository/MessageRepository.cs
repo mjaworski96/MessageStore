@@ -10,9 +10,9 @@ namespace API.Persistance.Repository
     {
         Task Add(Messages message);
         Task Save();
-        Task<Messages> GetNewest(string appUser, string application);
+        Task<Messages> GetNewest(int userId, string application);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
-        Task<List<Messages>> Find(string username, string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
+        Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
         Task<long> GetRowNumber(int messageId, int aliasId);
     }
     public class MessageRepository: IMessageRepository
@@ -28,7 +28,7 @@ namespace API.Persistance.Repository
             await _messageStoreContext.AddAsync(message);
         }
         //TODO
-        public Task<List<Messages>> Find(string username, string searchFor, List<int> aliasesIds, bool ignoreLetterSize)
+        public Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize)
         {
             var query = _messageStoreContext
                 .Messages
@@ -41,7 +41,7 @@ namespace API.Persistance.Repository
                 .Include(x => x.Attachments)
                 .Include(x => x.Contact)
                 .ThenInclude(x => x.AppUser)
-                .Where(x => x.Contact.AppUser.Username == username);
+                .Where(x => x.Contact.AppUserId == userId);
 
 
             if(aliasesIds?.Any() ?? false)
@@ -59,13 +59,13 @@ namespace API.Persistance.Repository
             return query.ToListAsync();
         }
 
-        public Task<Messages> GetNewest(string appUser, string application)
+        public Task<Messages> GetNewest(int userId, string application)
         {
             return _messageStoreContext
                 .Messages
                 .OrderByDescending(x => x.Date)
                 .FirstOrDefaultAsync(x =>
-                    x.Contact.AppUser.Username == appUser
+                    x.Contact.AppUserId == userId
                     && x.Contact.Application.Name == application);
         }
         public Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize)

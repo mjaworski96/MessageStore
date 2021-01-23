@@ -34,7 +34,7 @@ namespace API.Service
         public async Task<AliasDtoWithIdList> GetAll(string app, bool internalOnly)
         {
             var rawEntities = await _aliasRepository.GetAll(
-                _httpMetadataService.Username, app, internalOnly);
+                _httpMetadataService.UserId, app, internalOnly);
 
             var list = rawEntities
                 .Select(x => CreateAliasDtoWithId(x)).ToList();

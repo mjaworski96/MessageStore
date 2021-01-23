@@ -16,12 +16,12 @@ namespace API.Service
 {
     public interface IAppUserService
     {
-        Task<AppUserDtoWithId> GetUser(string username);
+        Task<AppUserDtoWithId> GetUser(int userId);
         Task<UserAndToken> Login(AppUserLoginDetails loginDetails);
         Task<UserAndToken> Register(AppUserRegisterDetails registerDetails);
-        Task<UserAndToken> Modify(string username, AppUserDto user);
-        Task Remove(string username);
-        Task ChangePassword(string username, AppUserPasswordChange password);
+        Task<UserAndToken> Modify(int userId, AppUserDto user);
+        Task Remove(int userId);
+        Task ChangePassword(int userId, AppUserPasswordChange password);
         Task<UserAndToken> Refresh(string oldToken);
     }
     public class AppUserService : IAppUserService
@@ -39,14 +39,14 @@ namespace API.Service
             _config = config;
         }
 
-        public async Task<AppUserDtoWithId> GetUser(string username)
+        public async Task<AppUserDtoWithId> GetUser(int userId)
         {
-            var userEntity = await _appUserRepository.Get(username, true);
+            var userEntity = await _appUserRepository.Get(userId, true);
             return GetAppUserDtoWithId(userEntity);
         }
         public async Task<UserAndToken> Login(AppUserLoginDetails loginDetails)
         {
-            AppUsers user = await _appUserRepository.Get(loginDetails.Username, false);
+            AppUsers user = await _appUserRepository.GetByUsername(loginDetails.Username, false);
             CheckCredentials(user, loginDetails);
             return CreateUserAndToken(user);
         }
@@ -67,11 +67,11 @@ namespace API.Service
             return CreateUserAndToken(userEntity);
         }
 
-        public async Task<UserAndToken> Modify(string username, AppUserDto user)
+        public async Task<UserAndToken> Modify(int userId, AppUserDto user)
         {
             ValidateUsername(user.Username);
             ValidateEmail(user.Email);
-            var userEntity = await _appUserRepository.Get(username, true);
+            var userEntity = await _appUserRepository.Get(userId, true);
             await CheckIfUserUnique(userEntity, user);
             userEntity.Username = user.Username;
             userEntity.Email = user.Email;
@@ -79,13 +79,13 @@ namespace API.Service
             return CreateUserAndToken(userEntity);
         }
 
-        public async Task Remove(string username)
+        public async Task Remove(int userId)
         {
-            await _appUserRepository.Remove(username);
+            await _appUserRepository.Remove(userId);
         }
-        public async Task ChangePassword(string username, AppUserPasswordChange password)
+        public async Task ChangePassword(int userId, AppUserPasswordChange password)
         {
-            var user = await _appUserRepository.Get(username, true);
+            var user = await _appUserRepository.Get(userId, true);
             CheckPassword(user, password.OldPassword, true);
             ValidatePassword(password.NewPassword);
             user.Password = EncryptPassword(password.NewPassword);
@@ -105,10 +105,10 @@ namespace API.Service
                     .AddMinutes(-_config.RefreshBefore)
                     .CompareTo(DateTime.UtcNow) < 0)
                 {
-                    var username = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-                    if(!string.IsNullOrEmpty(username))
+                    var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+                    if(!string.IsNullOrEmpty(userId))
                     {
-                        var user = await _appUserRepository.Get(username, true);
+                        var user = await _appUserRepository.Get(int.Parse(userId), true);
                         return CreateUserAndToken(user);
                     }
                 }
@@ -121,7 +121,7 @@ namespace API.Service
             return new UserAndToken()
             {
                 AppUser = appUser,
-                Token = GenerateToken(userEntity.Username)
+                Token = GenerateToken(userEntity.Id)
             };
         }
         private AppUserDtoWithId GetAppUserDtoWithId(AppUsers user)
@@ -160,7 +160,7 @@ namespace API.Service
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-        private string GenerateToken(string username)
+        private string GenerateToken(int userId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -169,7 +169,7 @@ namespace API.Service
             var payload = new JwtPayload(
                 new Claim[]
                 {
-                    new Claim("sub", username),
+                    new Claim("sub", userId.ToString()),
                     new Claim("exp",
                     ((int)(DateTime.UtcNow.AddMinutes(_config.ValidFor) - UnixEpochStart).TotalSeconds).ToString()),
                 });
@@ -180,7 +180,7 @@ namespace API.Service
         }
         private async Task CheckIfUserUnique(string username, string email)
         {
-            if (await _appUserRepository.Get(username, false) != null)
+            if (await _appUserRepository.GetByUsername(username, false) != null)
             {
                 throw new ConflictException("User with this username exists.");
             }
@@ -226,7 +226,7 @@ namespace API.Service
         {
             if (currentData.Username != newData.Username)
             {
-                if (await _appUserRepository.Get(newData.Username, false) != null)
+                if (await _appUserRepository.GetByUsername(newData.Username, false) != null)
                 {
                     throw new ConflictException("User with this username exists.");
                 }
