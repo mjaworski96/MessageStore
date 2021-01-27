@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace API.Exceptions
+namespace Common.Exceptions
 {
     public class UnauthorizedException : HttpException
     {

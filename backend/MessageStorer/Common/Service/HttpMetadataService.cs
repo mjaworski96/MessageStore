@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace API.Service
+namespace Common.Service
 {
     public interface IHttpMetadataService
     {

@@ -1,5 +1,5 @@
 using API.Config;
-using API.Exceptions;
+using Common.Exceptions;
 using API.Persistance;
 using API.Persistance.Repository;
 using API.Service;
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Common.Service;
 
 namespace API
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace API.Exceptions
+namespace Common.Exceptions
 {
     public class ConflictException : HttpException
     {

@@ -11,6 +11,12 @@ using System;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using Common.Exceptions;
+using FacebookMessengerIntegration.Persistance.Repository;
+using FacebookMessengerIntegration.Service;
+using FacebookMessengerIntegration.Config;
+using Common.Service;
+using FacebookMessengerIntegration.Infrastructure;
 
 namespace FacebookMessengerIntegration
 {
@@ -31,6 +37,8 @@ namespace FacebookMessengerIntegration
             {
                 options.UseNpgsql(Configuration["ConnectionStrings:MessengerIntegration"]);
             });
+            services.AddHttpContextAccessor();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Message Storer API", Version = "v1" });
@@ -75,6 +83,16 @@ namespace FacebookMessengerIntegration
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Security:Key"]))
                     };
                 });
+
+            services.AddControllers(options =>
+                options.Filters.Add(new ExceptionHandler()));
+
+            services.AddTransient<IStatusRepository, StatusRepository>();
+            services.AddTransient<IImportRepository, ImportRepository>();
+            services.AddTransient<IImportService, ImportService>();
+            services.AddTransient<IImportFileConfig, ImportFileConfig>();
+            services.AddTransient<IHttpMetadataService, HttpMetadataService>();
+            services.AddTransient<IFileUpload, FileUpload>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

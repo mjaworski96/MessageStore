@@ -11,10 +11,10 @@ namespace FacebookMessengerIntegration.Persistance.Entity
     {
         public string Id { get; set; }
         public int StatusId { get; set; }
-        public string Filename { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int UserId { get; set; }
+        public string FbUsername { get; set; }
 
         public virtual Statuses Status { get; set; }
     }

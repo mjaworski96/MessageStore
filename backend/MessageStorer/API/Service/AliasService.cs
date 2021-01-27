@@ -1,10 +1,11 @@
 ﻿using API.Dto;
-using API.Exceptions;
+using Common.Exceptions;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Service;
 
 namespace API.Service
 {

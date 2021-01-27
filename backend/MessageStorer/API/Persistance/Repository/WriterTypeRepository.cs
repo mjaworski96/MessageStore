@@ -1,4 +1,4 @@
-﻿using API.Exceptions;
+﻿using Common.Exceptions;
 using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;

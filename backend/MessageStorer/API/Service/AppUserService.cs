@@ -1,7 +1,7 @@
 ﻿using API.Config;
 using API.Controllers;
 using API.Dto;
-using API.Exceptions;
+using Common.Exceptions;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
 using Microsoft.IdentityModel.Tokens;

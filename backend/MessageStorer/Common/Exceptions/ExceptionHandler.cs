@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace API.Exceptions
+namespace Common.Exceptions
 {
     public class ExceptionHandler : IActionFilter, IOrderedFilter
     {

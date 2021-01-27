@@ -1,11 +1,8 @@
 INSERT INTO statuses(name) VALUES
 ('Created'),
-('FileImported'),
-('Err_InvalidFileExtension'),
-('FileUncompresed'),
-('Err_InvalidFormat'),
-('Err_NoMessages'),
 ('Queued'),
-('Processed'),
+('Error_InvalidFile'),
+('Error_NoMessages'),
+('Processing'),
 ('Completed'),
-('Err_UnknownError')
+('Error_UnknownError')
