@@ -17,8 +17,8 @@ namespace FacebookMessengerIntegration.Dto
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
-    public class ImportListDto
+    public class ImportDtoWithIdList
     {
-        public List<ImportDto> Imports { get; set; }
+        public List<ImportDtoWithId> Imports { get; set; }
     }
 }

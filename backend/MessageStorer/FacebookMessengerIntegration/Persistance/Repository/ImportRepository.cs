@@ -2,6 +2,8 @@
 using FacebookMessengerIntegration.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FacebookMessengerIntegration.Persistance.Repository
@@ -11,6 +13,7 @@ namespace FacebookMessengerIntegration.Persistance.Repository
         Task Add(Imports importEntity);
         Task Save();
         Task<Imports> Get(string importId);
+        Task<List<Imports>> GetAll(int userId);
     }
     public class ImportRepository : IImportRepository
     {
@@ -38,6 +41,15 @@ namespace FacebookMessengerIntegration.Persistance.Repository
             {
                 throw new NotFoundException($"Import with id: {importId} not found", e);
             }
+        }
+
+        public async Task<List<Imports>> GetAll(int userId)
+        {
+            return await _messengerIntegrationContext
+                .Imports
+                .Include(x => x.Status)
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task Save()

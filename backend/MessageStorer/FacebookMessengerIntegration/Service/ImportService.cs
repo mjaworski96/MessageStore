@@ -7,6 +7,7 @@ using FacebookMessengerIntegration.Persistance.Entity;
 using FacebookMessengerIntegration.Persistance.Repository;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FacebookMessengerIntegration.Service
@@ -16,6 +17,7 @@ namespace FacebookMessengerIntegration.Service
         Task<ImportDtoWithId> StartProcess(ImportDto importDto);
         Task UploadFile(string importId, FileDto fileDto);
         Task FinishUpload(string importId);
+        Task<ImportDtoWithIdList> GetAllForUser();
     }
     public class ImportService: IImportService
     {
@@ -50,7 +52,7 @@ namespace FacebookMessengerIntegration.Service
             };
             await _importRepository.Add(importEntity);
             await _importRepository.Save();
-            return GetImportDtoWithId(importEntity);
+            return CreateImportDtoWithId(importEntity);
         }
 
         public async Task UploadFile(string importId, FileDto fileDto)
@@ -104,7 +106,7 @@ namespace FacebookMessengerIntegration.Service
                 throw new ForbiddenException($"You can't acces this import");
             }
         }
-        private ImportDtoWithId GetImportDtoWithId(Imports importEntity)
+        private ImportDtoWithId CreateImportDtoWithId(Imports importEntity)
         {
             return new ImportDtoWithId
             {
@@ -113,6 +115,15 @@ namespace FacebookMessengerIntegration.Service
                 StartDate = importEntity.StartDate,
                 EndDate = importEntity.EndDate,
                 Status = importEntity.Status.Name
+            };
+        }
+
+        public async Task<ImportDtoWithIdList> GetAllForUser()
+        {
+            var entities = await _importRepository.GetAll(_httpMetadataService.UserId);
+            return new ImportDtoWithIdList
+            {
+                Imports = entities.Select(x => CreateImportDtoWithId(x)).ToList()
             };
         }
     }

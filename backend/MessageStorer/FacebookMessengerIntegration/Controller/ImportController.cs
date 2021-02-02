@@ -21,6 +21,14 @@ namespace FacebookMessengerIntegration.Controller
             _logger = logger;
         }
 
+        [HttpGet()]
+        public async Task<IActionResult> GetAllForUser()
+        {
+            _logger.LogInformation($"Started GET /api/import");
+            var result = await _importService.GetAllForUser();
+            _logger.LogInformation($"Ended GET /api/import");
+            return Ok(result);
+        }
         [HttpPost()]
         public async Task<IActionResult> StartImport(ImportDto importDto)
         {
