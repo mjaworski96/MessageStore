@@ -42,7 +42,7 @@ namespace API.Service
         public async Task<AppUserDtoWithId> GetUser(int userId)
         {
             var userEntity = await _appUserRepository.Get(userId, true);
-            return GetAppUserDtoWithId(userEntity);
+            return CreateAppUserDtoWithId(userEntity);
         }
         public async Task<UserAndToken> Login(AppUserLoginDetails loginDetails)
         {
@@ -117,14 +117,14 @@ namespace API.Service
         }
         private UserAndToken CreateUserAndToken(AppUsers userEntity)
         {
-            var appUser = GetAppUserDtoWithId(userEntity);
+            var appUser = CreateAppUserDtoWithId(userEntity);
             return new UserAndToken()
             {
                 AppUser = appUser,
                 Token = GenerateToken(userEntity.Id)
             };
         }
-        private AppUserDtoWithId GetAppUserDtoWithId(AppUsers user)
+        private AppUserDtoWithId CreateAppUserDtoWithId(AppUsers user)
         {
             return new AppUserDtoWithId()
             {

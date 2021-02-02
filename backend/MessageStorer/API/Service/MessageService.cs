@@ -58,7 +58,7 @@ namespace API.Service
                 Date = message.Date,
                 WriterType = message.WriterType.Name,
                 ContactId = message.Contact.Id,
-                Attachments = message.Attachments.Select(x => _attachmentService.Map(x)).ToList()
+                Attachments = message.Attachments.Select(x => CreateAttachemtDtoWithId(x)).ToList()
             };
         }
 
@@ -75,7 +75,7 @@ namespace API.Service
                 {
                     MessageId = x.Id,
                     Content = x.Content,
-                    Attachments = x.Attachments.Select(y => _attachmentService.Map(y)).ToList(),
+                    Attachments = x.Attachments.Select(y => CreateAttachemtDtoWithId(y)).ToList(),
                     Date = x.Date.Value,
                     Application = x.Contact.Application.Name,
                     ContactName = x.Contact.Name,
@@ -111,7 +111,7 @@ namespace API.Service
             var list = raw.Select(x => new MessageDtoWithDetails
             {
                 Id = x.Id,
-                Attachments = x.Attachments.Select(y => _attachmentService.Map(y)).ToList(),
+                Attachments = x.Attachments.Select(y => CreateAttachemtDtoWithId(y)).ToList(),
                 ContactName = x.Contact.Name,
                 Application = x.Contact.Application.Name,
                 Content = x.Content,
@@ -122,6 +122,15 @@ namespace API.Service
             return new MessageDtoWithDetailsList
             {
                 Messages = list
+            };
+        }
+        private AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment)
+        {
+            return new AttachmentDtoWithId
+            {
+                Id = attachment.Id,
+                Content = attachment.Content,
+                ContentType = attachment.ContentType
             };
         }
     }
