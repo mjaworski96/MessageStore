@@ -1,10 +1,18 @@
 <mat-toolbar [color]="'primary'">
-  <span  [routerLink]="['/']" class="app-title">Messages Viewer</span>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['aliases']">Contacts</button>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['search']">Search</button>
+  <span  [routerLink]="['/']" class="app-title"
+         i18n="App title|App title@@app-title">Messages Viewer</span>
+  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['aliases']"
+          i18n="Contacts|Contacts link@@contacts-link">Contacts</button>
+  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['search']"
+          i18n="Search|Search link@@search-link">Search</button>
+
   <span class="spacer"></span>
-  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['login']">Login</button>
-  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['register']">Register</button>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['account']">Account</button>
-  <button mat-button *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
+  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['login']"
+          i18n="Login|Login link@@login-link">Login</button>
+  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['register']"
+          i18n="Register|Register link@@register-link">Register</button>
+  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['account']"
+          i18n="Account|Account link@@account-link">Account</button>
+  <button mat-button *ngIf="isLoggedIn()" (click)="logout()"
+          i18n="Logout|Logout link@@logout-button">Logout</button>
 </mat-toolbar>
