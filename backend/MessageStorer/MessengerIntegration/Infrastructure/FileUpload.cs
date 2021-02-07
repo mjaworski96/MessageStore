@@ -1,9 +1,9 @@
-﻿using FacebookMessengerIntegration.Config;
+﻿using MessengerIntegration.Config;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FacebookMessengerIntegration.Infrastructure
+namespace MessengerIntegration.Infrastructure
 {
     public interface IFileUpload
     {

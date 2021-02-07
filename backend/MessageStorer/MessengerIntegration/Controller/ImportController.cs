@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using FacebookMessengerIntegration.Dto;
-using FacebookMessengerIntegration.Service;
+using MessengerIntegration.Dto;
+using MessengerIntegration.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace FacebookMessengerIntegration.Controller
+namespace MessengerIntegration.Controller
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,5 +1,5 @@
 .vs
 bin
 obj
-MessageSender.Android.csproj.user
+*.csproj.user
 Import Files

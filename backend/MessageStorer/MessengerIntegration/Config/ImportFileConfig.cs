@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace FacebookMessengerIntegration.Config
+namespace MessengerIntegration.Config
 {
     public interface IImportFileConfig
     {

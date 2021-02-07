@@ -1,4 +1,4 @@
-﻿namespace FacebookMessengerIntegration.Dto
+﻿namespace MessengerIntegration.Dto
 {
     public class FileDto
     {

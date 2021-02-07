@@ -1,4 +1,4 @@
-using FacebookMessengerIntegration.Persistance;
+using MessengerIntegration.Persistance;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +12,13 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using Common.Exceptions;
-using FacebookMessengerIntegration.Persistance.Repository;
-using FacebookMessengerIntegration.Service;
-using FacebookMessengerIntegration.Config;
+using MessengerIntegration.Persistance.Repository;
+using MessengerIntegration.Service;
+using MessengerIntegration.Config;
 using Common.Service;
-using FacebookMessengerIntegration.Infrastructure;
+using MessengerIntegration.Infrastructure;
 
-namespace FacebookMessengerIntegration
+namespace MessengerIntegration
 {
     public class Startup
     {

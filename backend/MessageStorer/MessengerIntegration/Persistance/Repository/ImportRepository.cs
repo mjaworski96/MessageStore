@@ -1,12 +1,12 @@
 ﻿using Common.Exceptions;
-using FacebookMessengerIntegration.Persistance.Entity;
+using MessengerIntegration.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FacebookMessengerIntegration.Persistance.Repository
+namespace MessengerIntegration.Persistance.Repository
 {
     public interface IImportRepository
     {

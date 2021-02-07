@@ -1,16 +1,16 @@
 ﻿using Common.Exceptions;
 using Common.Service;
-using FacebookMessengerIntegration.Config;
-using FacebookMessengerIntegration.Dto;
-using FacebookMessengerIntegration.Infrastructure;
-using FacebookMessengerIntegration.Persistance.Entity;
-using FacebookMessengerIntegration.Persistance.Repository;
+using MessengerIntegration.Config;
+using MessengerIntegration.Dto;
+using MessengerIntegration.Infrastructure;
+using MessengerIntegration.Persistance.Entity;
+using MessengerIntegration.Persistance.Repository;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FacebookMessengerIntegration.Service
+namespace MessengerIntegration.Service
 {
     public interface IImportService
     {

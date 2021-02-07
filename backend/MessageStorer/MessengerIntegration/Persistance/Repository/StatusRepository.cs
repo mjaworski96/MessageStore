@@ -1,10 +1,10 @@
 ﻿using Common.Exceptions;
-using FacebookMessengerIntegration.Persistance.Entity;
+using MessengerIntegration.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace FacebookMessengerIntegration.Persistance.Repository
+namespace MessengerIntegration.Persistance.Repository
 {
     public interface IStatusRepository
     {

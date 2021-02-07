@@ -1,4 +1,4 @@
-﻿namespace FacebookMessengerIntegration.Persistance.Entity
+﻿namespace MessengerIntegration.Persistance.Entity
 {
     public partial class Statuses
     {

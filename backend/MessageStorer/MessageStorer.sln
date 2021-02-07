@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageSender.Android", "Me
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageSender", "MessageSender\MessageSender\MessageSender.csproj", "{93989423-23A6-47FB-BB25-FD00A4C1BE8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FacebookMessengerIntegration", "FacebookMessengerIntegration\FacebookMessengerIntegration.csproj", "{89F9A062-840C-4A93-8978-7AB3177E15D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessengerIntegration", "MessengerIntegration\MessengerIntegration.csproj", "{89F9A062-840C-4A93-8978-7AB3177E15D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{5A89AFBD-3015-4A1F-9920-10347556EF41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{5A89AFBD-3015-4A1F-9920-10347556EF41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
