@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./messenger-import-info.component.css']
 })
 export class MessengerImportInfoComponent implements OnInit {
-
+  expand = false;
   constructor() { }
 
   ngOnInit() {
   }
-
+  changeExpand() {
+    this.expand = !this.expand;
+  }
 }

@@ -1,0 +1,13 @@
+.messenger-import-info-wrapper {
+  margin-top: 20px;
+}
+.show {
+  transition: max-height 2s;
+  overflow: hidden;
+  max-height: 350px;
+}
+.hide {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 2s;
+}

@@ -1,1 +1,39 @@
-<p>messenger-import-info works!</p>
+<div class="messenger-import-info-wrapper full-width-button">
+  <button mat-button (click)="changeExpand()" i18n="Messenger instructions|Messenger import instructions@@messenger-instructions">
+    How to import messenger data?
+  </button>
+  <div [ngClass]="{'show': expand, 'hide': !this.expand}">
+    <ol>
+      <li i18n="Messenger import step 1|Messenger import step 1@@messenger-step-1">
+        Login to your <a href="http://facebook.com">Facebook</a> account.
+      </li>
+      <li i18n="Messenger import step 2|Messenger import step 2@@messenger-step-2">
+        Go to <b>Settings & Privacy</b> > <b>Settings</b> > <b>Your Facebook information</b> > <b>Download your data</b>.
+      </li>
+      <li i18n="Messenger import step 3|Messenger import step 3@@messenger-step-3">
+        Select range, format <b>JSON</b> and media quality. In your information section select <b>Messages</b>.
+      </li>
+      <li i18n="Messenger import step 4|Messenger import step 4@@messenger-step-4">
+        Press <b>Create file</b> button.
+      </li>
+      <li i18n="Messenger import step 5|Messenger import step 5@@messenger-step-5">
+        Wait until file is generated (may took a long time).
+      </li>
+      <li i18n="Messenger import step 6|Messenger import step 6@@messenger-step-6">
+        Download file.
+      </li>
+      <li i18n="Messenger import step 7|Messenger import step 7@@messenger-step-7">
+        Go to this page.
+      </li>
+      <li i18n="Messenger import step 8|Messenger import step 6@@messenger-step-8">
+        Type your Facebook/Messenger name (not pseudonym).
+      </li>
+      <li i18n="Messenger import step 9|Messenger import step 9@@messenger-step-9">
+        Add previously created and downloaded file (Choose file).
+      </li>
+      <li i18n="Messenger import step 10|Messenger import step 10@@messenger-step-10">
+        Press start import button.
+      </li>
+    </ol>
+  </div>
+</div>
