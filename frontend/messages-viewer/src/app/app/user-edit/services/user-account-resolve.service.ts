@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {SessionStorageService} from '../../../services/session-storage.service';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {LoggedUser} from '../../../model/user';
 import {Observable} from 'rxjs';

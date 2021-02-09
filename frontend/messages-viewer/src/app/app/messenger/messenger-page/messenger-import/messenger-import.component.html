@@ -1,0 +1,37 @@
+<div class="half-width-form">
+  <form [formGroup]="formGroup">
+    <div>
+      <mat-form-field>
+        <input matInput formControlName="fbUsername" placeholder="Facebook username"
+               i18n-placeholder="Facebook name placeholder|Text in facebook name placeholder@@fb-name">
+        <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
+                   *ngIf="formGroup.get('fbUsername').hasError('required')">
+          Facebook name is required.
+        </mat-error>
+        <mat-error i18n="Facebook name validation|Shown when facebook name is too long@@fb-name-too-long-validation"
+                   *ngIf="formGroup.get('fbUsername').hasError('maxLength')">
+          Facebook name can be maximum 256 characters long.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="full-width-button">
+      <input #fileInput hidden="true" type="file" accept=".zip"
+             formControlName="file" (change)="onFileChange($event)"/>
+      <button mat-button (click)="fileInput.click()"
+        i18n="File upload|Text in file upload@@choose-file">Choose file</button>
+      <mat-error i18n="File validation|Shown file name is empty@@file-required-validation"
+                 *ngIf="formGroup.get('file').dirty && formGroup.get('file').hasError('required')">
+        You must select file to import.
+      </mat-error>
+    </div>
+    {{formGroup.get('file').touched}}
+    {{formGroup.get('file').dirty}}
+    {{formGroup.get('file').invalid}}
+  </form>
+  <mat-progress-bar class="progress-bar" [value]="progressBarValue" ></mat-progress-bar>
+  <div class="full-width-button">
+    <button mat-button [disabled]="formGroup.invalid || blockButton" type="submit" (click)="startImport()"
+            i18n="Start import button|Text in start import button@@start-import">Start import</button>
+  </div>
+</div>
+
