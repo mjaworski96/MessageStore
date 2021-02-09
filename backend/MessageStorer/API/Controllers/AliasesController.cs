@@ -22,7 +22,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string app, [FromQuery] bool internalOnly = true)
+        public async Task<ActionResult<AliasDtoWithIdList>> GetAll([FromQuery] string app, [FromQuery] bool internalOnly = true)
         {
             _logger.LogInformation($"Started GET /api/aliases?app={app}&internalOnly={internalOnly}");
             var result = await _aliasService.GetAll(app, internalOnly);
@@ -30,7 +30,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAliasDto createAlias)
+        public async Task<ActionResult<AliasDtoWithId>> Create(CreateAliasDto createAlias)
         {
             _logger.LogInformation($"Started POST /api/aliases");
             var result = await _aliasService.Create(createAlias);
@@ -38,7 +38,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, CreateAliasDto createAlias)
+        public async Task<ActionResult<AliasDtoWithId>> Update([FromRoute] int id, CreateAliasDto createAlias)
         {
             _logger.LogInformation($"Started PUT /api/aliases/{id}");
             var result = await _aliasService.Update(id, createAlias);
@@ -47,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] int id)
+        public async Task<ActionResult<AliasDtoWithId>> Get([FromRoute] int id)
         {
             _logger.LogInformation($"Started GET /api/aliases/{id}");
             var result = await _aliasService.Get(id);

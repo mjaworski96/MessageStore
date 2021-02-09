@@ -22,7 +22,7 @@ namespace MessengerIntegration.Controller
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAllForUser()
+        public async Task<ActionResult<ImportDtoWithIdList>> GetAllForUser()
         {
             _logger.LogInformation($"Started GET /api/import");
             var result = await _importService.GetAllForUser();
@@ -30,7 +30,7 @@ namespace MessengerIntegration.Controller
             return Ok(result);
         }
         [HttpPost()]
-        public async Task<IActionResult> StartImport(ImportDto importDto)
+        public async Task<ActionResult<ImportDtoWithId>> StartImport(ImportDto importDto)
         {
             _logger.LogInformation($"Started POST /api/import");
             var result = await _importService.StartProcess(importDto);
