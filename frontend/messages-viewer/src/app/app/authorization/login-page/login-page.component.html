@@ -2,7 +2,7 @@
   <form [formGroup]="loginForm" class="authentication-form">
     <div>
       <mat-form-field>
-        <input matInput formControlName="username" placeholder="Username"
+        <input matInput formControlName="username" placeholder="Username" [required]="true"
                i18n-placeholder="Username placeholder| Text in username placeholder@@username">
         <mat-error i18n="Username validation|Shown when username is empty@@username-required-validation"
                    *ngIf="loginForm.get('username').hasError('required')">
@@ -16,7 +16,7 @@
     </div>
     <div>
       <mat-form-field>
-        <input matInput formControlName="password" type="password" placeholder="Password"
+        <input matInput formControlName="password" type="password" placeholder="Password" [required]="true"
                i18n-placeholder="Password placeholder| Text in password placeholder@@password">
 
         <mat-error i18n="Password validation|Shown when password is empty@@password-required-validation"

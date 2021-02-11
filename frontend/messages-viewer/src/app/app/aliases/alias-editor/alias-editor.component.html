@@ -2,7 +2,7 @@
   <form [formGroup]="formGroup">
     <div>
       <mat-form-field>
-        <input matInput formControlName="name" placeholder="Name"
+        <input matInput formControlName="name" placeholder="Name" [required]="true"
                i18n-placeholder="Name placeholder|Text in name placeholder@@name">
         <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
                    *ngIf="formGroup.get('name').hasError('required')">

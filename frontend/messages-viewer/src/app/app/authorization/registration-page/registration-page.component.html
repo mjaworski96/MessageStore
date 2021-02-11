@@ -2,7 +2,7 @@
   <form [formGroup]="registerForm" class="authentication-form">
     <div>
       <mat-form-field>
-        <input matInput formControlName="username" placeholder="Username"
+        <input matInput formControlName="username" placeholder="Username" [required]="true"
                i18n-placeholder="Username placeholder| Text in username placeholder@@username">
         <mat-error i18n="Username validation|Shown when username is empty@@username-required-validation"
                    *ngIf="registerForm.get('username').hasError('required')">
@@ -16,7 +16,7 @@
     </div>
     <div>
       <mat-form-field>
-        <input matInput email formControlName="email" placeholder="Email"
+        <input matInput email formControlName="email" placeholder="Email" [required]="true"
                i18n-placeholder="Email placeholder| Text in email placeholder@@email">
         <mat-error i18n="Email validation|Shown when email is empty@@email-required-validation"
                    *ngIf="registerForm.get('email').hasError('required')">
@@ -30,26 +30,18 @@
     </div>
     <div>
       <mat-form-field>
-        <input matInput formControlName="password" type="password" placeholder="Password"
+        <input matInput formControlName="password" type="password" placeholder="Password" [required]="true"
                i18n-placeholder="Password placeholder| Text in password placeholder@@password">
 
         <mat-error i18n="Password validation|Shown when password is empty@@password-required-validation"
                    *ngIf="registerForm.get('password').hasError('required')">
           Password is required.
         </mat-error>
-        <mat-error i18n="Password validation|Shown when password is too short@@password-too-short-validation"
-                   *ngIf="registerForm.get('password').hasError('minlength')">
-          Password must contains at least {{minPasswordLength}} characters.
-        </mat-error>
-        <mat-error i18n="Password validation|Shown when password is too long@@password-too-long-validation"
-                   *ngIf="registerForm.get('password').hasError('maxlength')">
-          Password must contain a maximum of {{maxPasswordLength}} characters.
-        </mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <input matInput formControlName="confirmPassword" type="password"
+        <input matInput formControlName="confirmPassword" type="password" [required]="true"
                placeholder="Confirm password" [errorStateMatcher]="errorMatcher"
                i18n-placeholder="Confirm password placeholder| Text in confirm password placeholder@@confirm-password">
 

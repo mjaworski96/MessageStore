@@ -3,7 +3,7 @@
     <form [formGroup]="formGroup">
       <div>
         <mat-form-field>
-          <input matInput formControlName="fbUsername" placeholder="Facebook username"
+          <input matInput formControlName="fbUsername" placeholder="Facebook username" [required]="true"
                  i18n-placeholder="Facebook name placeholder|Text in facebook name placeholder@@fb-name">
           <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
                      *ngIf="formGroup.get('fbUsername').dirty &&  formGroup.get('fbUsername').hasError('required')">
