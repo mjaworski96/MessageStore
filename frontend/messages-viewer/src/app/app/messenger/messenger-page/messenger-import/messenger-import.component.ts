@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ImportService} from '../../../../services/import.service';
 
@@ -9,6 +9,10 @@ import {ImportService} from '../../../../services/import.service';
 })
 export class MessengerImportComponent implements OnInit {
   fileChunkSize = 4 * 1024 * 1024; // 4MB
+
+  @Output()
+  importAdded = new EventEmitter<void>();
+
   formGroup: FormGroup;
   blockButton = false;
   progressBarValue = 0;
@@ -22,6 +26,10 @@ export class MessengerImportComponent implements OnInit {
       selectedFile: ['', Validators.required],
     });
   }
+  onFileSelection(fileInput) {
+    fileInput.click();
+    this.formGroup.get('file').markAsTouched();
+  }
   onFileChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -33,6 +41,7 @@ export class MessengerImportComponent implements OnInit {
         file: '',
         selectedFile: ''
       });
+      console.log('missing')
     }
   }
   async startImport() {
@@ -66,6 +75,7 @@ export class MessengerImportComponent implements OnInit {
     } finally {
        this.blockButton = false;
        this.progressBarValue = 0;
+       this.importAdded.emit();
     }
   }
 }

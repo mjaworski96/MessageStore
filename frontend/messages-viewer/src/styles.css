@@ -45,3 +45,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .dialog-button {
   margin-left: 10px;
 }
+.table-wrapper {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table-wrapper thead tr {
+  padding: 10px;
+  font-weight: bold;
+}
+.table-wrapper tbody td {
+  padding: 5px 0;
+}

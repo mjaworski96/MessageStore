@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {ImportsList} from '../../../../model/import';
 
 @Component({
   selector: 'app-messenger-imports-list',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./messenger-imports-list.component.css']
 })
 export class MessengerImportsListComponent implements OnInit {
+  @Input()
+  imports: ImportsList;
 
   constructor() { }
 

@@ -8,6 +8,9 @@ export class Import {
   startDate: string;
   endDate: string;
 }
+export class ImportsList {
+  imports: Import[];
+}
 export class FileUpload {
   content: string;
 }

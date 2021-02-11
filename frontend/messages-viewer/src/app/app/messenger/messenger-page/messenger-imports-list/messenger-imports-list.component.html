@@ -1,1 +1,30 @@
-<p>messenger-imports-list works!</p>
+<div>
+  <table class="table-wrapper">
+    <thead>
+      <tr>
+        <td i18n="Id|Import id@@id">Id</td>
+        <td i18n="Facebook username|Facebook username table header@@fb-username">Facebook username</td>
+        <td i18n="Status|Status header@@status">Status</td>
+        <td i18n="Start date|Start date header@@start-date">Start date</td>
+        <td i18n="End date|End date header@@end-date">End date</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let import of imports.imports">
+        <td>{{import.id}}</td>
+        <td>{{import.fbUsername}}</td>
+        <td>
+          <span *ngIf="import.status === 'Created'" i18n="Created status|Created status@@status-created">Created</span>
+          <span *ngIf="import.status === 'Queued'" i18n="Queued status|Queued status@@status-queued">Queued</span>
+          <span *ngIf="import.status === 'Error_InvalidFile'" i18n="Error invalid file status|Error invalid file status@@error-status-invalid-file">Error - Invalid file</span>
+          <span *ngIf="import.status === 'Error_NoMessages'" i18n="Error no messages status|Error no messages status@@error-status-no-messages">Error - No messages in imported file</span>
+          <span *ngIf="import.status === 'Processing'" i18n="Processing status|Processing status@@status-processing">Processing</span>
+          <span *ngIf="import.status === 'Completed'" i18n="Completed status|Completed status@@status-completed">Completed</span>
+          <span *ngIf="import.status === 'Error_UnknownError'" i18n="Unknown error status|Unknown error status@@error-status-unknown error">Unknown error</span>
+        </td>
+        <td>{{import.startDate | date: 'dd.MM.yyyy HH:mm'}}</td>
+        <td>{{import.endDate | date: 'dd.MM.yyyy HH:mm'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

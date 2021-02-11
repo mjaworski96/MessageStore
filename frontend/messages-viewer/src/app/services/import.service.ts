@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {FileUpload, Import, StartImport} from '../model/import';
-import {Observable} from 'rxjs';
+import {FileUpload, Import, ImportsList, StartImport} from '../model/import';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +10,10 @@ export class ImportService {
 
   constructor(private httpClient: HttpClient) { }
 
+  getAll(): Promise<ImportsList> {
+    return this.httpClient.get<ImportsList>(this.url)
+      .toPromise();
+  }
   start(startImport: StartImport): Promise<Import> {
     return this.httpClient.post<Import>(this.url, startImport)
       .toPromise();

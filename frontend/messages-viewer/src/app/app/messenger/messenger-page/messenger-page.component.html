@@ -1,8 +1,8 @@
 <div>
   <div>
-    <app-messenger-import></app-messenger-import>
+    <app-messenger-import (importAdded)="refresh()"></app-messenger-import>
   </div>
   <div>
-    <app-messenger-imports-list></app-messenger-imports-list>
+    <app-messenger-imports-list [imports]="imports"></app-messenger-imports-list>
   </div>
 </div>

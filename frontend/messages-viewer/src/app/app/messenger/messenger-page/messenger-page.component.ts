@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ImportsList} from '../../../model/import';
+import {ImportService} from '../../../services/import.service';
 
 @Component({
   selector: 'app-messenger-page',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessengerPageComponent implements OnInit {
 
-  constructor() { }
+  imports: ImportsList;
+  constructor(private route: ActivatedRoute,
+              private importService: ImportService) { }
 
   ngOnInit() {
+    this.imports = this.route.snapshot.data.imports;
   }
-
+  async refresh() {
+    this.imports = await this.importService.getAll();
+  }
 }
