@@ -5,13 +5,9 @@
   <mat-dialog-content mat-dialog-title i18n="Cannot undone|Cannot undone operation@@cannot-undone">
     This operation cannot be undone!
   </mat-dialog-content>
-  <mat-dialog-actions>
-    <div class="danger-button">
-      <button class="dialog-button" mat-button [mat-dialog-close]="true" mat-dialog-title
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" mat-dialog-close i18n="No|No@@No">No</button>
+      <button mat-flat-button color="warn" [mat-dialog-close]="true"
               i18n="Yes|Yes@@yes">Yes</button>
-    </div>
-    <div>
-      <button class="dialog-button" mat-button mat-dialog-close i18n="No|No@@No">No</button>
-    </div>
   </mat-dialog-actions>
 </div>

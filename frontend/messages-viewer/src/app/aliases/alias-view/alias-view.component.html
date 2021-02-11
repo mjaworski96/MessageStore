@@ -1,7 +1,7 @@
 <div>
   <div *ngIf="aliases">
     <div class="full-width-button add-alias-button">
-      <button mat-button (click)="addNew()" i18n="Add alias|Add alias button@@add-alias">
+      <button mat-flat-button color="primary" (click)="addNew()" i18n="Add alias|Add alias button@@add-alias">
         Add new alias
       </button>
     </div>
@@ -28,13 +28,13 @@
           <td>{{alias.application}}</td>
           <td>{{alias.inApplicationId}}</td>
           <td>
-            <button *ngIf="!alias.internal" mat-button (click)="edit(alias.id, $event)" i18n="Edit alias|Edit alias button@@edit-alias">
+            <button *ngIf="!alias.internal" mat-flat-button color="accent" (click)="edit(alias.id, $event)" i18n="Edit alias|Edit alias button@@edit-alias">
               Edit alias
             </button>
           </td>
 
-          <td class="danger-button">
-            <button *ngIf="!alias.internal" mat-button (click)="delete(alias.id, $event)" i18n="Delete alias|Delete alias button@@delete-alias">
+          <td>
+            <button *ngIf="!alias.internal" mat-flat-button color="warn" (click)="delete(alias.id, $event)" i18n="Delete alias|Delete alias button@@delete-alias">
               Delete
             </button>
           </td>

@@ -18,7 +18,7 @@
       <div class="full-width-button">
         <input #fileInput hidden="true" type="file" accept=".zip"
                formControlName="file" (change)="onFileChange($event)"/>
-        <button mat-button (click)="onFileSelection(fileInput)" type="button"
+        <button mat-flat-button color="primary" (click)="onFileSelection(fileInput)" type="button"
                 i18n="File upload|Text in file upload@@choose-file">Choose file</button>
         <mat-error i18n="File validation|Shown file name is empty@@file-required-validation"
                    *ngIf="formGroup.get('file').touched && formGroup.get('file').hasError('required')">
@@ -28,7 +28,7 @@
     </form>
     <mat-progress-bar class="progress-bar" [value]="progressBarValue" ></mat-progress-bar>
     <div class="full-width-button">
-      <button mat-button [disabled]="formGroup.invalid || blockButton" type="submit" (click)="startImport()"
+      <button mat-flat-button color="primary" [disabled]="formGroup.invalid || blockButton" type="submit" (click)="startImport()"
               i18n="Start import button|Text in start import button@@start-import">Start import</button>
     </div>
   </div>

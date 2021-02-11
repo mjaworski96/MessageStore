@@ -15,7 +15,7 @@
       <mat-checkbox [(ngModel)]="ignoreLetterSize" color="primary">Ignore letter size</mat-checkbox>
     </div>
     <div class="search-button-container">
-      <button class="full-width" mat-button (click)="search()">Search</button>
+      <button class="full-width" mat-flat-button color="primary" (click)="search()">Search</button>
     </div>
   </div>
   <div *ngIf="results else noResults">

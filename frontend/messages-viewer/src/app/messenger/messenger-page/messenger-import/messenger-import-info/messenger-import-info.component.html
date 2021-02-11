@@ -1,5 +1,5 @@
 <div class="messenger-import-info-wrapper full-width-button">
-  <button mat-button (click)="changeExpand()" i18n="Messenger instructions|Messenger import instructions@@messenger-instructions">
+  <button mat-flat-button color="accent" (click)="changeExpand()" i18n="Messenger instructions|Messenger import instructions@@messenger-instructions">
     How to import messenger data?
   </button>
   <div [ngClass]="{'show': expand, 'hide': !this.expand}">

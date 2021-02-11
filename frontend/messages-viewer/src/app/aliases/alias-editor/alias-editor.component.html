@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="full-width-button">
-      <button mat-button [disabled]="formGroup.invalid" type="submit" (click)="send()">
+      <button mat-flat-button color="primary" [disabled]="formGroup.invalid" type="submit" (click)="send()">
         <span *ngIf="!originalAlias else updateAlias" i18n="Create button|Text in create button@@create">
           Create
         </span>
