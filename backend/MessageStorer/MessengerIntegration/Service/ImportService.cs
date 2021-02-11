@@ -39,6 +39,10 @@ namespace MessengerIntegration.Service
 
         public async Task<ImportDtoWithId> StartProcess(ImportDto importDto)
         {
+            if (string.IsNullOrEmpty(importDto.FbUsername))
+            {
+                throw new BadRequestException("Facebook usernname must be provided");
+            }
             if (importDto.FbUsername.Length > 256)
             {
                 throw new BadRequestException("Facebook usernname length must be less than 256");
