@@ -3,7 +3,7 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from
 import {SessionStorageService} from './services/session-storage.service';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map, tap} from 'rxjs/operators';
-import {ErrorHandlingService} from './shared/services/error-handling.service';
+import {ErrorHandlingService} from './services/error-handling.service';
 
 @Injectable({
   providedIn: 'root'
