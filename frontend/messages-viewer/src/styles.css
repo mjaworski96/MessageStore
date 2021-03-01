@@ -16,7 +16,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .authentication-form .mat-form-field  {
   width: 300px;
 }
-.authentication-form .mat-button {
+.authentication-form .mat-flat-button {
   width: 300px;
 }
 .full-width-form .mat-form-field  {

@@ -17,7 +17,6 @@ export class MessagesListComponent implements OnInit, AfterViewChecked {
   mustScrollDown = false;
   whenScrollUp = 1;
   whenScrollDown = 1.5;
-  wasScrollUpDebugged = false;
 
   messages: MessageWithId[];
   aliasId: number;

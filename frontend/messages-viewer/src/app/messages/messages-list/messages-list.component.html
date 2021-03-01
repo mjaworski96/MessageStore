@@ -12,8 +12,13 @@
               <img [src]="'data:' + attachment.contentType + ';charset=utf-8;base64, ' + attachment.content | safeImage">
             </div>
           </div>
-          <div class="date">
+          <div class="message-data">
+            <span *ngIf="writtenByContact(message) else you">{{message.contactName}}</span>
             {{message.date | date: 'dd.MM.yyyy HH:mm:ss'}}
+            <span *ngIf="message.application">({{message.application}})</span>
+            <ng-template #you>
+              <span i18n="You|You (message written by you)@@you">You</span>
+            </ng-template>
           </div>
           <div class="message-spacing"></div>
         </div>

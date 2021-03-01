@@ -6,7 +6,8 @@ export interface MessageWithId {
   attachments: AttachmentWithID[];
   date: string;
   writerType: string;
-  contactId: number;
+  contactName: string;
+  application: string;
 }
 export interface MessageWithIdList {
   messages: MessageWithId[];
