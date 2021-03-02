@@ -2,7 +2,7 @@ import {Route, RouterModule} from '@angular/router';
 import {RegistrationPageComponent} from './registration-page/registration-page.component';
 import {LoginPageComponent} from './login-page/login-page.component';
 import {NgModule} from '@angular/core';
-import {NotLoggedUserGuard} from '../shared/guards/not-logged-user-guard';
+import {NotLoggedUserGuard} from '../guards/not-logged-user-guard';
 
 const AUTHENTICATION_PAGE_ROUTES: Route[] = [
   {

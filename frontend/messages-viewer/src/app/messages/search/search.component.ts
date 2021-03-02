@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AliasService} from '../../services/alias.service';
 import {SearchService} from '../../services/search.service';
 import {SearchResultDto} from '../../model/search';
 import {Router} from '@angular/router';
 import {MessagesListComponent} from '../messages-list/messages-list.component';
+import {ToastrService} from 'ngx-toastr';
 
 interface Checkbox {
   aliasId: number;
@@ -18,6 +19,9 @@ interface Checkbox {
 })
 export class SearchComponent implements OnInit {
 
+  @ViewChild('cantSearchMessage', {static: false})
+  translatedMessage: ElementRef;
+
   query = '';
   aliases: Checkbox[];
   ignoreLetterSize = true;
@@ -26,7 +30,8 @@ export class SearchComponent implements OnInit {
 
   constructor(private aliasService: AliasService,
               private searchService: SearchService,
-              private router: Router) { }
+              private router: Router,
+              private toastr: ToastrService) { }
 
   ngOnInit() {
     this.getAliases();
@@ -56,6 +61,11 @@ export class SearchComponent implements OnInit {
     return ids;
   }
   search() {
+    if (this.query.length === 0) {
+      this.toastr.warning(this.translatedMessage.nativeElement.innerHTML);
+      return;
+    }
+
     this.results = [];
     this.searchService.search(
       {
@@ -94,7 +104,7 @@ export class SearchComponent implements OnInit {
   writtenByContact(result: SearchResultDto): boolean {
     return result.writerType === 'contact';
   }
-  searchHighlight(text: string): string{
+  searchHighlight(text: string): string {
     if (this.query === '') {
       return text;
     }
@@ -104,6 +114,6 @@ export class SearchComponent implements OnInit {
     } else {
       regex = new RegExp(this.query, 'g');
     }
-    return text.replace(regex, "<mark>$&</mark>");
+    return text.replace(regex, '<mark>$&</mark>');
   }
 }

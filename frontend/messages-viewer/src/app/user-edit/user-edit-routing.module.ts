@@ -2,7 +2,7 @@ import {UserAccountResolveService} from '../services/user-account-resolve.servic
 import {Route, RouterModule} from '@angular/router';
 import {UserEditPageComponent} from './user-edit-page/user-edit-page.component';
 import {NgModule} from '@angular/core';
-import {LoggedUserGuard} from '../shared/guards/logged-user-guard';
+import {LoggedUserGuard} from '../guards/logged-user-guard';
 
 const USER_EDIT_PAGE_ROUTES: Route[] = [
   {

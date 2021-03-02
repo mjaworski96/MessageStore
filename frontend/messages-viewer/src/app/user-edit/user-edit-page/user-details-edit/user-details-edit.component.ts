@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LoggedUser} from '../../../model/user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserAccountService} from '../../../services/user-account.service';
@@ -14,6 +14,9 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./user-details-edit.component.css']
 })
 export class UserDetailsEditComponent implements OnInit {
+
+  @ViewChild('accountUpdatedMsg', {static: false})
+  translatedMessage: ElementRef;
 
   user: LoggedUser;
   userDetailsForm: FormGroup;
@@ -43,7 +46,7 @@ export class UserDetailsEditComponent implements OnInit {
     this.userAccountService.updateAccount(
       this.userDetailsForm.value
     ).toPromise().then((result: HttpResponse <LoggedUser>) => {
-      this.toastr.success('Account updated');
+      this.toastr.success(this.translatedMessage.nativeElement.innerHTML);
       this.router.navigated = false;
       this.router.navigate(['/', 'user']);
     });

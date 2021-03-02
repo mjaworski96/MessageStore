@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserEditConfirmPassword} from './user-edit-confirm-password';
 import {SessionStorageService} from '../../../services/session-storage.service';
@@ -12,6 +12,9 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./user-password-change.component.css']
 })
 export class UserPasswordChangeComponent implements OnInit {
+
+  @ViewChild('passwordChangedMsg', {static: false})
+  translatedMessage: ElementRef;
 
   passwordChangeForm: FormGroup;
   confirmPassword = new UserEditConfirmPassword();
@@ -42,7 +45,7 @@ export class UserPasswordChangeComponent implements OnInit {
     this.passwordChangeService.changePassword(
       this.passwordChangeForm.value
     ).toPromise().then((response) => {
-        this.toastr.success('Password changed');
+        this.toastr.success(this.translatedMessage.nativeElement.innerHTML);
     });
   }
 

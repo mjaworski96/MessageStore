@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoggedUserGuard } from '../shared/guards/logged-user-guard';
+import { LoggedUserGuard } from '../guards/logged-user-guard';
 import { MessengerPageComponent } from './messenger-page/messenger-page.component';
 import {ImportResolveService} from '../services/import-resolve.service';
 

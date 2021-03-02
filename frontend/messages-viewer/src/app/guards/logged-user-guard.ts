@@ -1,6 +1,6 @@
 import {CanActivate, Router} from '@angular/router';
 import {Injectable} from '@angular/core';
-import {SessionStorageService} from '../../services/session-storage.service';
+import {SessionStorageService} from '../services/session-storage.service';
 
 @Injectable({
   providedIn: 'root'

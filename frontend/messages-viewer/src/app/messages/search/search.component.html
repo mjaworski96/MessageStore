@@ -2,7 +2,7 @@
   <div>
     <div class="query">
       <mat-form-field class="full-width">
-        <input matInput placeholder="Search for" [(ngModel)]="query">
+        <input matInput placeholder="Search for" i18n-placeholder="Search for|Search for input@@search-for" [(ngModel)]="query">
       </mat-form-field>
 
     </div>
@@ -12,10 +12,11 @@
       </div>
     </div>
     <div class="ignore-letter-size-checkbox">
-      <mat-checkbox [(ngModel)]="ignoreLetterSize" color="primary">Ignore letter size</mat-checkbox>
+      <mat-checkbox [(ngModel)]="ignoreLetterSize" color="primary" i18n="Ignore letter size|Ignore letter size checkbox|@@ignore-letter-size">Ignore letter size</mat-checkbox>
     </div>
     <div class="search-button-container">
-      <button class="full-width" mat-flat-button color="primary" (click)="search()">Search</button>
+      <button class="full-width" mat-flat-button color="primary" (click)="search()"
+      i18n="Search|Search button@@search">Search</button>
     </div>
   </div>
   <div *ngIf="results else noResults">
@@ -42,3 +43,5 @@
     </div>
   </ng-template>
 </div>
+<span [hidden]="true" #cantSearchMessage
+      i18n="Can't search|Can't search message@@cant-search">You can't search without providing "Search for"</span>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {AliasViewComponent} from './alias-view/alias-view.component';
-import {LoggedUserGuard} from '../shared/guards/logged-user-guard';
+import {LoggedUserGuard} from '../guards/logged-user-guard';
 import {AliasEditorComponent} from './alias-editor/alias-editor.component';
 
 
