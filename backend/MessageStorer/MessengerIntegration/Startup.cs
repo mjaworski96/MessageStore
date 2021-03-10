@@ -17,6 +17,7 @@ using MessengerIntegration.Service;
 using MessengerIntegration.Config;
 using Common.Service;
 using MessengerIntegration.Infrastructure;
+using MessengerIntegration.HostedService;
 
 namespace MessengerIntegration
 {
@@ -90,9 +91,14 @@ namespace MessengerIntegration
             services.AddTransient<IStatusRepository, StatusRepository>();
             services.AddTransient<IImportRepository, ImportRepository>();
             services.AddTransient<IImportService, ImportService>();
-            services.AddTransient<IImportFileConfig, ImportFileConfig>();
+            services.AddSingleton<IImportFileConfig, ImportFileConfig>();
             services.AddTransient<IHttpMetadataService, HttpMetadataService>();
             services.AddTransient<IFileUpload, FileUpload>();
+            services.AddTransient<IApiClient, ApiClient>();
+            services.AddTransient<IZipFile, ZipFile>();
+            services.AddSingleton<IImportConfig, ImportConfig>();
+
+            services.AddHostedService<HostedImportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
