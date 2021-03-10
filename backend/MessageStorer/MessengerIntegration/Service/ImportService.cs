@@ -39,11 +39,11 @@ namespace MessengerIntegration.Service
 
         public async Task<ImportDtoWithId> StartProcess(ImportDto importDto)
         {
-            if (string.IsNullOrEmpty(importDto.FbUsername))
+            if (string.IsNullOrEmpty(importDto.FacebookName))
             {
                 throw new BadRequestException("Facebook usernname must be provided");
             }
-            if (importDto.FbUsername.Length > 256)
+            if (importDto.FacebookName.Length > 256)
             {
                 throw new BadRequestException("Facebook usernname length must be less than 256");
             }
@@ -52,7 +52,7 @@ namespace MessengerIntegration.Service
                 Id = Guid.NewGuid().ToString(),
                 Status = await _statusRepository.GetStatusByName(Statuses.Created),
                 UserId = _httpMetadataService.UserId,
-                FbUsername = importDto.FbUsername
+                FacebookName = importDto.FacebookName
             };
             await _importRepository.Add(importEntity);
             await _importRepository.Save();
@@ -115,7 +115,7 @@ namespace MessengerIntegration.Service
             return new ImportDtoWithId
             {
                 Id = importEntity.Id,
-                FbUsername = importEntity.FbUsername,
+                FacebookName = importEntity.FacebookName,
                 StartDate = importEntity.StartDate,
                 EndDate = importEntity.EndDate,
                 Status = importEntity.Status.Name

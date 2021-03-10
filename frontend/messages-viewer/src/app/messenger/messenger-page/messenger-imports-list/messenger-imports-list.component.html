@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <td i18n="Id|Import id@@id">Id</td>
-        <td i18n="Facebook username|Facebook username table header@@fb-username">Facebook username</td>
+        <td i18n="Facebook name|Facebook name table header@@fb-name">Facebook name</td>
         <td i18n="Status|Status header@@status">Status</td>
         <td i18n="Start date|Start date header@@start-date">Start date</td>
         <td i18n="End date|End date header@@end-date">End date</td>
@@ -12,7 +12,7 @@
     <tbody>
       <tr *ngFor="let import of imports.imports">
         <td>{{import.id}}</td>
-        <td>{{import.fbUsername}}</td>
+        <td>{{import.facebookName}}</td>
         <td>
           <span *ngIf="import.status === 'Created'" i18n="Created status|Created status@@status-created">Created</span>
           <span *ngIf="import.status === 'Queued'" i18n="Queued status|Queued status@@status-queued">Queued</span>

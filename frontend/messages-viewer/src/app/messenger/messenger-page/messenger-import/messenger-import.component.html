@@ -3,14 +3,14 @@
     <form [formGroup]="formGroup">
       <div>
         <mat-form-field>
-          <input matInput formControlName="fbUsername" placeholder="Facebook username" [required]="true"
+          <input matInput formControlName="facebookName" placeholder="Facebook name" [required]="true"
                  i18n-placeholder="Facebook name placeholder|Text in facebook name placeholder@@fb-name">
           <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
-                     *ngIf="formGroup.get('fbUsername').dirty &&  formGroup.get('fbUsername').hasError('required')">
+                     *ngIf="formGroup.get('facebookName').dirty &&  formGroup.get('facebookName').hasError('required')">
             Facebook name is required.
           </mat-error>
           <mat-error i18n="Facebook name validation|Shown when facebook name is too long@@fb-name-too-long-validation"
-                     *ngIf="formGroup.get('fbUsername').dirty && formGroup.get('fbUsername').hasError('maxLength')">
+                     *ngIf="formGroup.get('facebookName').dirty && formGroup.get('facebookName').hasError('maxLength')">
             Facebook name can be maximum 256 characters long.
           </mat-error>
         </mat-form-field>

@@ -1,9 +1,9 @@
 export class StartImport {
-  fbUsername: string;
+  facebookName: string;
 }
 export class Import {
   id: string;
-  fbUsername: string;
+  facebookName: string;
   status: string;
   startDate: string;
   endDate: string;

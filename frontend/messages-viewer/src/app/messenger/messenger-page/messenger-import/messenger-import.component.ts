@@ -21,7 +21,7 @@ export class MessengerImportComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      fbUsername: ['', Validators.required],
+      facebookName: ['', Validators.required],
       file: ['', Validators.required],
       selectedFile: ['', Validators.required],
     });
@@ -48,7 +48,7 @@ export class MessengerImportComponent implements OnInit {
     this.blockButton = true;
     try {
       const importData = await this.importService.start({
-        fbUsername: this.formGroup.value.fbUsername,
+        facebookName: this.formGroup.value.facebookName,
       });
       const file = this.formGroup.value.selectedFile as File;
 
@@ -69,7 +69,7 @@ export class MessengerImportComponent implements OnInit {
 
       await this.importService.finish(importData.id);
       this.formGroup.reset();
-      this.formGroup.get('fbUsername').markAsPristine();
+      this.formGroup.get('facebookName').markAsPristine();
       this.formGroup.get('file').markAsPristine();
       this.formGroup.get('selectedFile').markAsPristine();
     } finally {

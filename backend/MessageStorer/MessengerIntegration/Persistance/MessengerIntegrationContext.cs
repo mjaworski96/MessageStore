@@ -44,9 +44,9 @@ namespace MessengerIntegration.Persistance
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
-                entity.Property(e => e.FbUsername)
+                entity.Property(e => e.FacebookName)
                     .IsRequired()
-                    .HasColumnName("fb_username")
+                    .HasColumnName("facebook_name")
                     .HasMaxLength(256);
 
                 entity.Property(e => e.StartDate).HasColumnName("start_date");
