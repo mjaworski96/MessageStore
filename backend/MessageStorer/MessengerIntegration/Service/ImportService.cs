@@ -119,7 +119,8 @@ namespace MessengerIntegration.Service
                 FacebookName = importEntity.FacebookName,
                 StartDate = importEntity.StartDate,
                 EndDate = importEntity.EndDate,
-                Status = importEntity.Status.Name
+                Status = importEntity.Status.Name,
+                CreatedAt = importEntity.CreatedAt,
             };
         }
 

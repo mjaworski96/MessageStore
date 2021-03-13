@@ -18,7 +18,8 @@
       <div class="full-width-button">
         <input #fileInput hidden="true" type="file" accept=".zip"
                formControlName="file" (change)="onFileChange($event)"/>
-        <button mat-flat-button color="primary" (click)="onFileSelection(fileInput)" type="button"
+        <button mat-flat-button color="primary" [disabled]="blockButton"
+                (click)="onFileSelection(fileInput)" type="button"
                 i18n="File upload|Text in file upload@@choose-file">Choose file</button>
         <mat-error i18n="File validation|Shown file name is empty@@file-required-validation"
                    *ngIf="formGroup.get('file').touched && formGroup.get('file').hasError('required')">

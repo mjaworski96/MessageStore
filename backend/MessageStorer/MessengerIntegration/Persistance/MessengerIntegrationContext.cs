@@ -42,6 +42,10 @@ namespace MessengerIntegration.Persistance
                     .HasColumnName("id")
                     .HasMaxLength(64);
 
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("created_at")
+                    .HasDefaultValueSql("now()");
+
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
 
                 entity.Property(e => e.FacebookName)

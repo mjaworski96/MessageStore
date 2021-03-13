@@ -50,6 +50,7 @@ namespace MessengerIntegration.Persistance.Repository
                 .Imports
                 .Include(x => x.Status)
                 .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
 
@@ -59,6 +60,7 @@ namespace MessengerIntegration.Persistance.Repository
                .Imports
                .Include(x => x.Status)
                .Where(x => x.Status.Name == Statuses.Queued)
+               .OrderBy(x => x.CreatedAt)
                .Take(parallelImportsCount)
                .ToListAsync();
         }

@@ -15,6 +15,7 @@ namespace MessengerIntegration.Persistance.Entity
         public DateTime? EndDate { get; set; }
         public int UserId { get; set; }
         public string FacebookName { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         public virtual Statuses Status { get; set; }
     }

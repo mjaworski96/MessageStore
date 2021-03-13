@@ -4,6 +4,7 @@ export class StartImport {
 export class Import {
   id: string;
   facebookName: string;
+  createdAt: string;
   status: string;
   startDate: string;
   endDate: string;
