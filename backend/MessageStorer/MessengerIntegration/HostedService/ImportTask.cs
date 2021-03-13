@@ -20,18 +20,20 @@ namespace MessengerIntegration.HostedService
         private readonly IImportConfig _config;
         private readonly IImportRepository _importRepository;
         private readonly IImportService _importService;
+        private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
         private readonly IApiClient _apiClient;
         private readonly ILogger<ImportTask> _logger;
         private Imports _import;
 
-        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> logger)
+        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IFileUtils fileUtils, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> logger)
         {
             Completed = true;
             _syncObject = syncObject;
             _config = config;
             _importRepository = importRepository;
             _importService = importService;
+            _fileUtils = fileUtils;
             _zipFile = zipFile;
             _apiClient = apiClient;
             _logger = logger;
@@ -69,6 +71,10 @@ namespace MessengerIntegration.HostedService
             }
             finally
             {
+                if (_config.DeleteFileAfterImport && _import != null)
+                {
+                    _fileUtils.Delete(_import.Id);
+                }
                 lock(_syncObject)
                 {
                     Completed = true;

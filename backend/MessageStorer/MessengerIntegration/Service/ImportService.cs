@@ -25,17 +25,17 @@ namespace MessengerIntegration.Service
         private readonly IImportRepository _importRepository;
         private readonly IStatusRepository _statusRepository;
         private readonly IHttpMetadataService _httpMetadataService;
-        private readonly IFileUpload _fileUpload;
+        private readonly IFileUtils _fileUtils;
 
         public ImportService(IImportRepository importRepository, 
             IStatusRepository statusRepository,
             IHttpMetadataService httpMetadataService,
-            IFileUpload fileUpload)
+            IFileUtils fileUtils)
         {
             _importRepository = importRepository;
             _statusRepository = statusRepository;
             _httpMetadataService = httpMetadataService;
-            _fileUpload = fileUpload;
+            _fileUtils = fileUtils;
         }
 
         public async Task<ImportDtoWithId> StartProcess(ImportDto importDto)
@@ -67,7 +67,7 @@ namespace MessengerIntegration.Service
             CheckStatus(import, Statuses.Created);
             try
             {
-                await _fileUpload.Upload(import.Id, fileDto.Content);
+                await _fileUtils.Upload(import.Id, fileDto.Content);
             } 
             catch(Exception e)
             {

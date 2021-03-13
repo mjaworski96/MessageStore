@@ -93,7 +93,7 @@ namespace MessengerIntegration
             services.AddTransient<IImportService, ImportService>();
             services.AddSingleton<IImportFileConfig, ImportFileConfig>();
             services.AddTransient<IHttpMetadataService, HttpMetadataService>();
-            services.AddTransient<IFileUpload, FileUpload>();
+            services.AddTransient<IFileUtils, FileUtils>();
             services.AddTransient<IApiClient, ApiClient>();
             services.AddTransient<IZipFile, ZipFile>();
             services.AddSingleton<IImportConfig, ImportConfig>();

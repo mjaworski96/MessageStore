@@ -5,16 +5,17 @@ using System.Threading.Tasks;
 
 namespace MessengerIntegration.Infrastructure
 {
-    public interface IFileUpload
+    public interface IFileUtils
     {
         string GetFilename(string importId);
         Task Upload(string importId, string base64content);
+        void Delete(string importId);
     }
-    public class FileUpload: IFileUpload
+    public class FileUtils: IFileUtils
     {
         private readonly IImportFileConfig _importFileConfig;
 
-        public FileUpload(IImportFileConfig importFileConfig)
+        public FileUtils(IImportFileConfig importFileConfig)
         {
             _importFileConfig = importFileConfig;
         }
@@ -31,6 +32,11 @@ namespace MessengerIntegration.Infrastructure
                 var content = Convert.FromBase64String(base64content);
                 await file.WriteAsync(content, 0, content.Length);
             }
+        }
+        public void Delete(string importId)
+        {
+            var filename = GetFilename(importId);
+            File.Delete(filename);
         }
     }
 }

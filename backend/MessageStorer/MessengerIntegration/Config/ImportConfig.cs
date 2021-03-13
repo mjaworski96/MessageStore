@@ -10,12 +10,13 @@ namespace MessengerIntegration.Config
     {
         int SecondsToWaitBeforeCheckForNewImports { get; }
         int ParallelImportsCount { get; }
+        bool DeleteFileAfterImport { get; }
     }
     public class ImportConfig: IImportConfig
     {
         public int SecondsToWaitBeforeCheckForNewImports { get; set; }
-
         public int ParallelImportsCount { get; set; }
+        public bool DeleteFileAfterImport { get; set; }
 
         public ImportConfig(IConfiguration configuration)
         {

@@ -1,10 +1,13 @@
-﻿namespace MessengerIntegration.Infrastructure
+﻿using System.IO;
+
+namespace MessengerIntegration.Infrastructure
 {
     public interface IZipFile
     {
-
+        
     }
-    public class ZipFile: IZipFile
+    public class ZipFile : IZipFile
     {
+        
     }
 }

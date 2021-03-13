@@ -18,6 +18,7 @@ namespace MessengerIntegration.HostedService
         private readonly IImportConfig _config;
         private readonly IImportRepository _importRepository;
         private readonly IImportService _importService;
+        private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
         private readonly IApiClient _apiClient;
         private readonly ILogger<ImportTask> _helperLogger;
@@ -27,14 +28,15 @@ namespace MessengerIntegration.HostedService
         private object _syncObject;
         private IServiceScope _serviceScope;
 
-        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> helperLogger)
+        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider, IFileUtils fileUtils, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> helperLogger)
         {
             _config = config;
             _serviceScope = serviceScopeProvider.CreateScope();
             
             _importRepository = _serviceScope.ServiceProvider.GetService<IImportRepository>();
             _importService = _serviceScope.ServiceProvider.GetService<IImportService>();
-            
+
+            _fileUtils = fileUtils;
             _zipFile = zipFile;
             _apiClient = apiClient;
             _syncObject = new object();
@@ -46,7 +48,8 @@ namespace MessengerIntegration.HostedService
             _importTasks = new List<ImportTask>(_config.ParallelImportsCount);
             for (int i = 0; i < _config.ParallelImportsCount; i++)
             {
-                _importTasks.Add(new ImportTask(_syncObject, _config, _importRepository, _importService, _zipFile, _apiClient, _helperLogger));
+                _importTasks.Add(new ImportTask(_syncObject, _config, _importRepository, _importService, _fileUtils,
+                    _zipFile, _apiClient, _helperLogger));
             }
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
