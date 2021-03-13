@@ -9,10 +9,13 @@ namespace MessengerIntegration.Config
     public interface IImportConfig
     {
         int SecondsToWaitBeforeCheckForNewImports { get; }
+        int ParallelImportsCount { get; }
     }
     public class ImportConfig: IImportConfig
     {
         public int SecondsToWaitBeforeCheckForNewImports { get; set; }
+
+        public int ParallelImportsCount { get; set; }
 
         public ImportConfig(IConfiguration configuration)
         {

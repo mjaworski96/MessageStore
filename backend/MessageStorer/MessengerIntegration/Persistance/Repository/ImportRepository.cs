@@ -14,6 +14,7 @@ namespace MessengerIntegration.Persistance.Repository
         Task Save();
         Task<Imports> Get(string importId);
         Task<List<Imports>> GetAll(int userId);
+        Task<List<Imports>> GetQueued(int parallelImportsCount);
     }
     public class ImportRepository : IImportRepository
     {
@@ -50,6 +51,16 @@ namespace MessengerIntegration.Persistance.Repository
                 .Include(x => x.Status)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
+        }
+
+        public async Task<List<Imports>> GetQueued(int parallelImportsCount)
+        {
+            return await _messengerIntegrationContext
+               .Imports
+               .Include(x => x.Status)
+               .Where(x => x.Status.Name == Statuses.Queued)
+               .Take(parallelImportsCount)
+               .ToListAsync();
         }
 
         public async Task Save()

@@ -18,6 +18,7 @@ namespace MessengerIntegration.Service
         Task UploadFile(string importId, FileDto fileDto);
         Task FinishUpload(string importId);
         Task<ImportDtoWithIdList> GetAllForUser();
+        Task SetStatus(Imports import, string statusName);
     }
     public class ImportService: IImportService
     {
@@ -89,7 +90,7 @@ namespace MessengerIntegration.Service
                 throw e;
             }
         }
-        private async Task SetStatus(Imports import, string statusName)
+        public async Task SetStatus(Imports import, string statusName)
         {
             import.Status = await _statusRepository.GetStatusByName(statusName);
             await _importRepository.Save();

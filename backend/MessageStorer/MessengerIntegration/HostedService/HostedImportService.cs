@@ -1,8 +1,10 @@
 ﻿using MessengerIntegration.Config;
 using MessengerIntegration.Infrastructure;
 using MessengerIntegration.Persistance.Repository;
+using MessengerIntegration.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,44 +17,74 @@ namespace MessengerIntegration.HostedService
     {
         private readonly IImportConfig _config;
         private readonly IImportRepository _importRepository;
-        private readonly IStatusRepository _statusRepository;
+        private readonly IImportService _importService;
         private readonly IZipFile _zipFile;
         private readonly IApiClient _apiClient;
+        private readonly ILogger<ImportTask> _helperLogger;
 
         private Timer _timer;
+        private List<ImportTask> _importTasks;
+        private object _syncObject;
+        private IServiceScope _serviceScope;
 
-        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider, IZipFile zipFile, IApiClient apiClient)
+        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> helperLogger)
         {
             _config = config;
-            using (var scope = serviceScopeProvider.CreateScope())
-            {
-                _importRepository = scope.ServiceProvider.GetService<IImportRepository>();
-                _statusRepository = scope.ServiceProvider.GetService<IStatusRepository>();
-            }
+            _serviceScope = serviceScopeProvider.CreateScope();
+            
+            _importRepository = _serviceScope.ServiceProvider.GetService<IImportRepository>();
+            _importService = _serviceScope.ServiceProvider.GetService<IImportService>();
+            
             _zipFile = zipFile;
             _apiClient = apiClient;
+            _syncObject = new object();
+            _helperLogger = helperLogger;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
+            _importTasks = new List<ImportTask>(_config.ParallelImportsCount);
+            for (int i = 0; i < _config.ParallelImportsCount; i++)
+            {
+                _importTasks.Add(new ImportTask(_syncObject, _config, _importRepository, _importService, _zipFile, _apiClient, _helperLogger));
+            }
+
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(_config.SecondsToWaitBeforeCheckForNewImports));
 
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
+        public void DoWork(object state)
         {
-            Console.WriteLine("TODO");
+            List<ImportTask> freeTasks;
+            lock (_syncObject)
+            {
+                freeTasks = _importTasks.Where(x => x.Completed).ToList();
+
+                if (freeTasks.Any())
+                {
+                    var queuedImportsTask = _importRepository.GetQueued(_config.ParallelImportsCount);
+                    queuedImportsTask.Wait();
+                    var queuedImports = queuedImportsTask.Result;
+                    for (int i = 0; i < queuedImports.Count; i++)
+                    {
+                        freeTasks[i].StartImport(queuedImports[i]);
+                    }
+                }
+            }
         }
+
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await _timer.DisposeAsync();
+            _importTasks.ForEach(async item => await item.Cancel());
         }
 
         public void Dispose()
         {
             _timer.Dispose();
+            _serviceScope.Dispose();
         }
     }
 }
