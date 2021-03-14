@@ -9,7 +9,7 @@ namespace MessageSender.Model.Http
     public class SmsHttpSender : HttpSender
     {
         private const string URL = "api/messages";
-        private const string LAST_SYNC_TIME_POSTFIX = "lastSyncTime";
+        private const string SYNC_DATE_TIME_POSTFIX = "syncDateTime";
 
         public SmsHttpSender(string baseAddress) : base(baseAddress)
         {
@@ -24,12 +24,12 @@ namespace MessageSender.Model.Http
             var body = await result.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<SmsWithId>(body);
         }
-        public async Task<DateTime> GetLastSyncTime()
+        public async Task<SyncDateTime> GetLastSyncTime()
         {
-            var result = await _http.GetAsync($"{URL}/{LAST_SYNC_TIME_POSTFIX}");
+            var result = await _http.GetAsync($"{URL}/{SYNC_DATE_TIME_POSTFIX}");
             await CheckResponse(result);
             var body = await result.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<LastSyncTime>(body).Time;
+            return JsonConvert.DeserializeObject<SyncDateTime>(body);
         }
     }
 }

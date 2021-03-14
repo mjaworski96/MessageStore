@@ -27,14 +27,15 @@ namespace MessageSender.Droid.DeviceServices
             _context = context;
         }
 
-        public IEnumerable<Sms> GetAll(DateTime from)
+        public IEnumerable<Sms> GetAll(DateTime from, DateTime to)
         {
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
             {
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
                 var projection = new[] { "_id", "ct_t", "normalized_date" };
                 long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-                var selection = $"normalized_date>{fromMiliseconds}";
+                long toMiliseconds = (long)to.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                var selection = $"normalized_date<{fromMiliseconds} OR normalized_date>{toMiliseconds}";
                 using (var cursor = _contentResolver.Query(uri, projection, selection, null, "normalized_date"))
                 {
                     if (cursor.MoveToFirst())
@@ -57,14 +58,15 @@ namespace MessageSender.Droid.DeviceServices
                 }
             }
         }
-        public int GetCount(DateTime from)
+        public int GetCount(DateTime from, DateTime to)
         {
             if (ContextCompat.CheckSelfPermission(_context, Manifest.Permission.ReadSms) == (int)Permission.Granted)
             {
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
                 var projection = new[] { "_id" };
                 long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-                var selection = $"normalized_date>{fromMiliseconds}";
+                long toMiliseconds = (long)to.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                var selection = $"normalized_date<{fromMiliseconds} OR normalized_date>{toMiliseconds}";
                 using (var cursor = _contentResolver.Query(uri, projection, selection, null, "normalized_date"))
                 {
                     return cursor.Count;

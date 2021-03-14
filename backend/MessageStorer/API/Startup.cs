@@ -93,7 +93,7 @@ namespace API
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IWriterTypeRepository, WriterTypeRepository>();
             services.AddScoped<IMessageService, MessageService>();
-            services.AddScoped<ILastSyncService, LastSyncService>();
+            services.AddScoped<ISyncDateTimeService, SyncDateTimeService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IAliasRepository, AliasRepository>();
             services.AddScoped<IAliasService, AliasService>();

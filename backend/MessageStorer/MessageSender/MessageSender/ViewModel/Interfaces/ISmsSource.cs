@@ -7,7 +7,7 @@ namespace MessageSender.ViewModel.Interfaces
 {
     public interface ISmsSource
     {
-        IEnumerable<Sms> GetAll(DateTime from);
-        int GetCount(DateTime from);
+        IEnumerable<Sms> GetAll(DateTime from, DateTime to);
+        int GetCount(DateTime from, DateTime to);
     }
 }

@@ -11,6 +11,7 @@ namespace API.Persistance.Repository
         Task Add(Messages message);
         Task Save();
         Task<Messages> GetNewest(int userId, string application);
+        Task<Messages> GetOldest(int userId, string application);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
         Task<long> GetRowNumber(int messageId, int aliasId);
@@ -68,6 +69,17 @@ namespace API.Persistance.Repository
                     x.Contact.AppUserId == userId
                     && x.Contact.Application.Name == application);
         }
+
+        public Task<Messages> GetOldest(int userId, string application)
+        {
+            return _messageStoreContext
+                .Messages
+                .OrderBy(x => x.Date)
+                .FirstOrDefaultAsync(x =>
+                    x.Contact.AppUserId == userId
+                    && x.Contact.Application.Name == application);
+        }
+
         public Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize)
         {
             return _messageStoreContext

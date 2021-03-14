@@ -14,11 +14,11 @@ namespace API.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly IMessageService _messageService;
-        private readonly ILastSyncService _lastSyncService;
+        private readonly ISyncDateTimeService _lastSyncService;
         private readonly ILogger<MessagesController> _logger;
 
         public MessagesController(IMessageService messageService,
-           ILastSyncService lastSyncService,
+           ISyncDateTimeService lastSyncService,
            ILogger<MessagesController> logger)
         {
             _messageService = messageService;
@@ -35,12 +35,12 @@ namespace API.Controllers
 
             return Ok(result);
         }
-        [HttpGet("lastSyncTime")]
-        public async Task<IActionResult> Create()
+        [HttpGet("syncDateTime")]
+        public async Task<IActionResult> GetSyncDateTime()
         {
-            _logger.LogInformation($"Started GET /api/messages/lastSyncTime");
+            _logger.LogInformation($"Started GET /api/messages/syncDateTime");
             var result = await _lastSyncService.Get();
-            _logger.LogInformation($"Ended GET /api/messages/lastSyncTime");
+            _logger.LogInformation($"Ended GET /api/messages/syncDateTime");
             return Ok(result);
         }
         [HttpGet]

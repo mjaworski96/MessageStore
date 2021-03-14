@@ -105,9 +105,9 @@ namespace MessageSender.ViewModel
             using (var smsHttpSender = new SmsHttpSender(ServerIp))
             {
                 var lastSyncTime = await smsHttpSender.GetLastSyncTime();
-                int maxProgress = _smsSource.GetCount(lastSyncTime);
+                int maxProgress = _smsSource.GetCount(lastSyncTime.From, lastSyncTime.To);
                 var contacts = _contactSource.GetAll().ToList();
-                foreach (var sms in _smsSource.GetAll(lastSyncTime))
+                foreach (var sms in _smsSource.GetAll(lastSyncTime.From, lastSyncTime.To))
                 {
                     if (_appStoped)
                     {
