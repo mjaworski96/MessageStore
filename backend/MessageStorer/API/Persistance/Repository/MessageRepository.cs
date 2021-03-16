@@ -10,8 +10,8 @@ namespace API.Persistance.Repository
     {
         Task Add(Messages message);
         Task Save();
-        Task<Messages> GetNewest(int userId, string application);
-        Task<Messages> GetOldest(int userId, string application);
+        Task<Messages> GetNewest(int userId, string application, int? contactId);
+        Task<Messages> GetOldest(int userId, string application, int? contactId);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
         Task<long> GetRowNumber(int messageId, int aliasId);
@@ -60,24 +60,34 @@ namespace API.Persistance.Repository
             return query.ToListAsync();
         }
 
-        public Task<Messages> GetNewest(int userId, string application)
+        public Task<Messages> GetNewest(int userId, string application, int? contactId)
         {
-            return _messageStoreContext
-                .Messages
+            return GetUserApplicationContactQuery(userId, application, contactId)
                 .OrderByDescending(x => x.Date)
-                .FirstOrDefaultAsync(x =>
-                    x.Contact.AppUserId == userId
-                    && x.Contact.Application.Name == application);
+                .FirstOrDefaultAsync();
         }
 
-        public Task<Messages> GetOldest(int userId, string application)
+        public Task<Messages> GetOldest(int userId, string application, int? contactId)
         {
-            return _messageStoreContext
+            return GetUserApplicationContactQuery(userId, application, contactId)
+                .OrderBy(x =>x.Date)
+                .FirstOrDefaultAsync();
+        }
+
+        private IQueryable<Messages> GetUserApplicationContactQuery(int userId, string application, int? contactId)
+        {
+            var query = _messageStoreContext
                 .Messages
-                .OrderBy(x => x.Date)
-                .FirstOrDefaultAsync(x =>
+                .Where(x =>
                     x.Contact.AppUserId == userId
                     && x.Contact.Application.Name == application);
+
+            if (contactId.HasValue)
+            {
+                query = query.Where(x => x.ContactId == contactId);
+            }
+
+            return query;
         }
 
         public Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize)

@@ -36,11 +36,11 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpGet("syncDateTime")]
-        public async Task<IActionResult> GetSyncDateTime()
+        public async Task<IActionResult> GetSyncDateTime([FromQuery] int? contactId)
         {
-            _logger.LogInformation($"Started GET /api/messages/syncDateTime");
-            var result = await _lastSyncService.Get();
-            _logger.LogInformation($"Ended GET /api/messages/syncDateTime");
+            _logger.LogInformation($"Started GET /api/messages/syncDateTime/{contactId}");
+            var result = await _lastSyncService.Get(contactId);
+            _logger.LogInformation($"Ended GET /api/messages/syncDateTime/{contactId}");
             return Ok(result);
         }
         [HttpGet]
