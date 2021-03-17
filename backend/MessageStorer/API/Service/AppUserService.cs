@@ -11,6 +11,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Common.Service;
 
 namespace API.Service
 {
@@ -23,20 +25,24 @@ namespace API.Service
         Task Remove(int userId);
         Task ChangePassword(int userId, AppUserPasswordChange password);
         Task<UserAndToken> Refresh(string oldToken);
+        Task<InternalTokenDto> CreateInternalToken(int userId);
     }
     public class AppUserService : IAppUserService
     {
         private static readonly DateTime UnixEpochStart =
                DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc);
         private const string TokenPrefix = "Bearer ";
+
         private readonly IAppUserRepository _appUserRepository;
         private readonly ISecurityConfig _config;
+        private readonly IHttpMetadataService _httpMetadataService;
 
         public AppUserService(IAppUserRepository appUserRepository,
-            ISecurityConfig config)
+            ISecurityConfig config, IHttpMetadataService httpMetadataService)
         {
             _appUserRepository = appUserRepository;
             _config = config;
+            _httpMetadataService = httpMetadataService;
         }
 
         public async Task<AppUserDtoWithId> GetUser(int userId)
@@ -48,7 +54,7 @@ namespace API.Service
         {
             AppUsers user = await _appUserRepository.GetByUsername(loginDetails.Username, false);
             CheckCredentials(user, loginDetails);
-            return CreateUserAndToken(user);
+            return CreateUserAndToken(user, false);
         }
 
         public async Task<UserAndToken> Register(AppUserRegisterDetails registerDetails)
@@ -64,7 +70,7 @@ namespace API.Service
                 Password = EncryptPassword(registerDetails.Password)
             };
             await _appUserRepository.Add(userEntity);
-            return CreateUserAndToken(userEntity);
+            return CreateUserAndToken(userEntity, false);
         }
 
         public async Task<UserAndToken> Modify(int userId, AppUserDto user)
@@ -76,7 +82,7 @@ namespace API.Service
             userEntity.Username = user.Username;
             userEntity.Email = user.Email;
             await _appUserRepository.Save();
-            return CreateUserAndToken(userEntity);
+            return CreateUserAndToken(userEntity, false);
         }
 
         public async Task Remove(int userId)
@@ -101,27 +107,50 @@ namespace API.Service
             {
                 var expirationTime = UnixEpochStart
                     .Add(TimeSpan.FromSeconds(int.Parse(expires)));
-                if(expirationTime
-                    .AddMinutes(-_config.RefreshBefore)
+                var refreshBefore = _httpMetadataService.InternalToken ? _config.InternalRefreshBefore : _config.RefreshBefore;
+                if (expirationTime
+                    .AddMinutes(-refreshBefore)
                     .CompareTo(DateTime.UtcNow) < 0)
                 {
                     var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-                    if(!string.IsNullOrEmpty(userId))
+                    if (!string.IsNullOrEmpty(userId))
                     {
                         var user = await _appUserRepository.Get(int.Parse(userId), true);
-                        return CreateUserAndToken(user);
+                        return CreateUserAndToken(user, _httpMetadataService.InternalToken);
                     }
                 }
             }
             return null;
         }
-        private UserAndToken CreateUserAndToken(AppUsers userEntity)
+        public async Task<InternalTokenDto> CreateInternalToken(int userId)
+        {
+            var authorization = _httpMetadataService.Authorization;
+            if (string.IsNullOrEmpty(authorization))
+            {
+                throw new UnauthorizedException("You are not authorized");
+            }
+            if (authorization != _config.InternalToken)
+            {
+                throw new ForbiddenException("You can't acces this resource");
+            }
+            var appUser = await _appUserRepository.Get(userId, false);
+            if (appUser == null)
+            {
+                throw new UnauthorizedException("Invalid username or password");
+            }
+
+            return new InternalTokenDto
+            {
+                Token = GenerateToken(appUser, true)
+            };      
+        }
+        private UserAndToken CreateUserAndToken(AppUsers userEntity, bool internalToken)
         {
             var appUser = CreateAppUserDtoWithId(userEntity);
             return new UserAndToken()
             {
                 AppUser = appUser,
-                Token = GenerateToken(userEntity.Id)
+                Token = GenerateToken(userEntity, internalToken)
             };
         }
         private AppUserDtoWithId CreateAppUserDtoWithId(AppUsers user)
@@ -160,18 +189,19 @@ namespace API.Service
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-        private string GenerateToken(int userId)
+        private string GenerateToken(AppUsers user, bool internalToken)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
+            var validFor = internalToken ? _config.InternalValidFor : _config.ValidFor;
             var header = new JwtHeader(credentials);
             var payload = new JwtPayload(
                 new Claim[]
                 {
-                    new Claim("sub", userId.ToString()),
+                    new Claim("sub", user.Id.ToString()),
                     new Claim("exp",
-                    ((int)(DateTime.UtcNow.AddMinutes(_config.ValidFor) - UnixEpochStart).TotalSeconds).ToString()),
+                    ((int)(DateTime.UtcNow.AddMinutes(validFor) - UnixEpochStart).TotalSeconds).ToString()),
+                    new Claim("int", internalToken.ToString())
                 });
 
             var token = new JwtSecurityToken(header, payload);
@@ -187,8 +217,8 @@ namespace API.Service
             if (await _appUserRepository.GetByEmail(email, false) != null)
             {
                 throw new ConflictException("User with this email exists.");
-            }      
-    }
+            }
+        }
         private void ValidateUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))

@@ -8,19 +8,21 @@ namespace Common.Service
     {
         int UserId { get; }
         string Application { get; }
+        string Authorization { get; }
+        bool InternalToken { get; }
     }
     public class HttpMetadataService : IHttpMetadataService
     {
-        private HttpContext _httpContext;
+        private IHttpContextAccessor _httpContextAccessor;
         public HttpMetadataService(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContext = httpContextAccessor.HttpContext;
+            _httpContextAccessor = httpContextAccessor;
         }
         public int UserId
         {
             get
             {
-                return int.Parse(_httpContext
+                return int.Parse(_httpContextAccessor.HttpContext
                     .User
                     .Claims
                     .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
@@ -32,7 +34,31 @@ namespace Common.Service
         {
             get
             {
-                return _httpContext.Request.Headers["X-Application"];
+                return _httpContextAccessor.HttpContext.Request.Headers["X-Application"];
+            }
+        }
+
+        public string Authorization
+        {
+            get
+            {
+                if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("Authorization"))
+                {
+                    return _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                }
+                return string.Empty;
+            }
+        }
+
+        public bool InternalToken
+        {
+            get
+            {
+                return bool.Parse(_httpContextAccessor.HttpContext
+                    .User
+                    .Claims
+                    .FirstOrDefault(x => x.Type == "int")
+                    .Value);
             }
         }
     }

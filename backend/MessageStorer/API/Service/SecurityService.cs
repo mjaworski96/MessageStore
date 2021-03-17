@@ -33,7 +33,7 @@ namespace API.Service
         {
             var owner = await _aliasRepository.GetOwner(aliasId);
             if (owner?.Id != _httpMetadataService.UserId)
-                throw new ForbiddenException($"You have no access for this alia");
+                throw new ForbiddenException($"You have no access for this alias");
         }
 
         public void CheckIfUserIsOwnerOfAlias(Aliases alias)

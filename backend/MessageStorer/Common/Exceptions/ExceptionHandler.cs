@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.Dto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
@@ -35,21 +36,6 @@ namespace Common.Exceptions
                 }
                 context.ExceptionHandled = true;
             }               
-        }
-    }
-    public class ApiError
-    {
-        public int Code { get; set; }
-        public string Message { get; set; }
-        public ApiError()
-        {
-            Code = 500;
-            Message = "Unknown error";
-        }
-        public ApiError(HttpException httpException)
-        {
-            Code = httpException.StatusCode;
-            Message = httpException.Message;
         }
     }
 }

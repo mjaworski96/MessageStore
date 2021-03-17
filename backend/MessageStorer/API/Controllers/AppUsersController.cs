@@ -1,4 +1,5 @@
 ﻿using API.Dto;
+using API.Security;
 using API.Service;
 using Common.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [NoInternalAccess]
     public class AppUsersController : ControllerBase
     {
         private readonly IAppUserService _appUserService;

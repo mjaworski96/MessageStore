@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using API.Dto;
+using API.Security;
 using API.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,14 +37,16 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpGet("syncDateTime")]
+        [NoInternalAccess]
         public async Task<IActionResult> GetSyncDateTime([FromQuery] int? contactId)
         {
-            _logger.LogInformation($"Started GET /api/messages/syncDateTime/{contactId}");
+            _logger.LogInformation($"Started GET /api/messages/syncDateTime?contactId={contactId}");
             var result = await _lastSyncService.Get(contactId);
-            _logger.LogInformation($"Ended GET /api/messages/syncDateTime/{contactId}");
+            _logger.LogInformation($"Ended GET /api/messages/syncDateTime?contactId={contactId}");
             return Ok(result);
         }
         [HttpGet]
+        [NoInternalAccess]
         public async Task<IActionResult> GetPage([FromQuery] int aliasId, [FromQuery] int pageNumber = 1, int pageSize = 10)
         {
             _logger.LogInformation($"Started GET /api/messages");
@@ -53,6 +56,7 @@ namespace API.Controllers
         }
         [HttpGet("search")]
         [HttpPost("search")]
+        [NoInternalAccess]
         public async Task<IActionResult> Find([FromBody] SearchQueryDto query)
         {
             _logger.LogInformation($"Started GET /api/messages/search");
@@ -61,6 +65,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpGet("order")]
+        [NoInternalAccess]
         public async Task<IActionResult> GetOrder([FromQuery] int messageId, [FromQuery] int aliasId)
         {
             _logger.LogInformation($"Started GET /api/messages/order?messageId={messageId}&aliasId={aliasId}");
