@@ -6,6 +6,8 @@ using MessengerIntegration.Service;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,8 +63,27 @@ namespace MessengerIntegration.HostedService
                 await SetStatus(Statuses.Processing);
                 cancellationToken.ThrowIfCancellationRequested();
 
+                using var stream = _zipFile.Open(_import);
+                using var zip = _zipFile.Open(stream);
+                var messages = _zipFile.GetMessages(zip);
+                if (!messages.Any())
+                {
+                    _logger.LogError($"No messages for import: {_import.Id}");
+                    await SetStatus(Statuses.ErrorNoMessages);
+                }
+                foreach (var conversation in messages)
+                {
+                    await ImportConversation(conversation.Key, conversation.Value);
+                }
+                
+
                 await SetStatus(Statuses.Completed);
                 _logger.LogInformation($"Finished import {_import.Id}");
+            }
+            catch (InvalidDataException e)
+            {
+                _logger.LogError($"Corrupted file for import: {_import.Id}: {e.Message}\n{e.StackTrace}");
+                await SetStatus(Statuses.ErrorInvalidFile);
             }
             catch(Exception e)
             {
@@ -81,6 +102,16 @@ namespace MessengerIntegration.HostedService
                 }
             }
             
+        }
+        private async Task ImportConversation(string name, List<ZipArchiveEntry> conversationData)
+        {
+            using var conversationStream = _zipFile.GetConversationStream(conversationData);
+            if (conversationStream == null)
+            {
+                _logger.LogWarning($"Empty converstion {name} in import {_import.Id}");
+                return;
+            }
+            var conversationDocument = await _zipFile.GetConversation(conversationStream);
         }
         private async Task SetStatus(string statusName)
         {
