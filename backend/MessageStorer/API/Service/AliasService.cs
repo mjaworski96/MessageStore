@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Service;
+using System;
 
 namespace API.Service
 {
@@ -137,7 +138,7 @@ namespace API.Service
             return new AliasDtoWithId
             {
                 Id = alias.Id,
-                Name = alias.Name,
+                Name = GetName(alias),
                 Internal = alias.Internal,
                 Application = alias.Internal ? alias.AliasesMembers.First().Contact.Application.Name : "",
                 InApplicationId = alias.Internal ? alias.AliasesMembers.First().Contact.InApplicationId : "",
@@ -146,10 +147,25 @@ namespace API.Service
                     Id = y.Contact.Id,
                     Name = y.Contact.Name,
                     Application = y.Contact.Application.Name,
-                    InApplicationId = y.Contact.InApplicationId
+                    InApplicationId = y.Contact.InApplicationId,
+                    ContactMembers = y.Contact.ContactsMembers
+                        .Select(z => new ContactMemberWithIdDto { Id =  z.Id, Name = z.Name}).ToList()
                 }).ToList()
             };
         }
+
+        private string GetName(Aliases alias)
+        {
+            if (alias.Internal)
+            {
+                if (alias.AliasesMembers.FirstOrDefault().Contact.ContactsMembers.Any())
+                {
+                    return string.Join(" ", alias.AliasesMembers.FirstOrDefault().Contact.ContactsMembers.Select(x => x.Name));
+                }
+            } 
+            return alias.Name;
+        }
+
         private void ValidateName(string aliasName)
         {
             if(string.IsNullOrEmpty(aliasName) || aliasName.Length > 256)

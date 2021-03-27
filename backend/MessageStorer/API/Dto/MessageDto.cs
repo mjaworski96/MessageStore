@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Dto
 {
@@ -13,6 +11,7 @@ namespace API.Dto
         //"app_user" or "contact"
         public string WriterType { get; set; }
         public int ContactId { get; set; }
+        public int? ContactMemberId { get; set; }
     }
     public class MessageDtoWithId
     {
@@ -22,19 +21,12 @@ namespace API.Dto
         public DateTime? Date { get; set; }
         public string WriterType { get; set; }
         public int ContactId { get; set; }
-    }
-    public class MessageDtoWithDetails
-    {
-        public int Id { get; set; }
-        public string Content { get; set; }
-        public List<AttachmentDtoWithId> Attachments { get; set; }
-        public DateTime? Date { get; set; }
-        public string WriterType { get; set; }
+        public int? ContactMemberId { get; set; }
         public string ContactName { get; set; }
         public string Application { get; set; }
     }
-    public class MessageDtoWithDetailsList
+    public class MessageDtoWithIdList
     {
-        public List<MessageDtoWithDetails> Messages { get; set; }
+        public List<MessageDtoWithId> Messages { get; set; }
     }
 }

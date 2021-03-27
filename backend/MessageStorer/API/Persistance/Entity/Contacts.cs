@@ -8,6 +8,7 @@ namespace API.Persistance.Entity
         public Contacts()
         {
             AliasesMembers = new HashSet<AliasesMembers>();
+            ContactsMembers = new HashSet<ContactsMembers>();
             Messages = new HashSet<Messages>();
         }
 
@@ -20,6 +21,7 @@ namespace API.Persistance.Entity
         public virtual AppUsers AppUser { get; set; }
         public virtual Applications Application { get; set; }
         public virtual ICollection<AliasesMembers> AliasesMembers { get; set; }
+        public virtual ICollection<ContactsMembers> ContactsMembers { get; set; }
         public virtual ICollection<Messages> Messages { get; set; }
     }
 }

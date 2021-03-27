@@ -35,13 +35,14 @@ namespace API.Persistance.Repository
                 .Messages
                 .Include(x => x.WriterType)
                 .Include(x => x.Contact)
-                .ThenInclude(x => x.Application)
+                    .ThenInclude(x => x.Application)
                 .Include(x => x.Contact)
-                .ThenInclude(x => x.AliasesMembers)
-                .ThenInclude(x => x.Alias)
+                    .ThenInclude(x => x.AliasesMembers)
+                        .ThenInclude(x => x.Alias)
                 .Include(x => x.Attachments)
                 .Include(x => x.Contact)
-                .ThenInclude(x => x.AppUser)
+                    .ThenInclude(x => x.AppUser)
+                .Include(x => x.ContactMember)
                 .Where(x => x.Contact.AppUserId == userId);
 
 
@@ -96,8 +97,9 @@ namespace API.Persistance.Repository
                 .Messages
                 .Include(x => x.WriterType)
                 .Include(x => x.Contact)
-                .ThenInclude(x => x.Application)
+                    .ThenInclude(x => x.Application)
                 .Include(x => x.Attachments)
+                .Include(x => x.ContactMember)
                 .Where(x => x.Contact.AliasesMembers
                     .Select(y => y.Alias.Id)
                         .Any(z => z == aliasId))

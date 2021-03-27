@@ -15,8 +15,10 @@ namespace API.Persistance.Entity
         public DateTime? Date { get; set; }
         public int WriterTypeId { get; set; }
         public int ContactId { get; set; }
+        public int? ContactMemberId { get; set; }
 
         public virtual Contacts Contact { get; set; }
+        public virtual ContactsMembers ContactMember { get; set; }
         public virtual WriterTypes WriterType { get; set; }
         public virtual ICollection<Attachments> Attachments { get; set; }
     }

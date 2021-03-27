@@ -12,7 +12,6 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [NoInternalAccess]
     public class AppUsersController : ControllerBase
     {
         private readonly IAppUserService _appUserService;
@@ -27,6 +26,8 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [NoInternalAccess]
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation($"Started GET /api/appUser");
@@ -61,6 +62,7 @@ namespace API.Controllers
         }
         [HttpPut]
         [Authorize]
+        [NoInternalAccess]
         public async Task<IActionResult> Modify(AppUserDto appUser)
         {
             _logger.LogInformation($"Started PUT /api/appUser");
@@ -73,6 +75,7 @@ namespace API.Controllers
         }
         [HttpDelete]
         [Authorize]
+        [NoInternalAccess]
         public async Task<IActionResult> Delete()
         {
             _logger.LogInformation($"Started DELETE /api/appUser");
@@ -85,6 +88,7 @@ namespace API.Controllers
         [HttpPost]
         [Route("passwordChange")]
         [Authorize]
+        [NoInternalAccess]
         public async Task<IActionResult> PasswordChange(AppUserPasswordChange appUserPasswordChange)
         {
             _logger.LogInformation($"Started POST /api/appUser/passwordChange");

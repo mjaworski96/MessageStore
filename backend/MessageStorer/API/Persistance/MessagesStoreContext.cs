@@ -22,6 +22,7 @@ namespace API.Persistance
         public virtual DbSet<Applications> Applications { get; set; }
         public virtual DbSet<Attachments> Attachments { get; set; }
         public virtual DbSet<Contacts> Contacts { get; set; }
+        public virtual DbSet<ContactsMembers> ContactsMembers { get; set; }
         public virtual DbSet<Messages> Messages { get; set; }
         public virtual DbSet<WriterTypes> WriterTypes { get; set; }
 
@@ -47,7 +48,7 @@ namespace API.Persistance
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(100);
+                    .HasMaxLength(256);
             });
 
             modelBuilder.Entity<AliasesMembers>(entity =>
@@ -74,10 +75,6 @@ namespace API.Persistance
             modelBuilder.Entity<AppUsers>(entity =>
             {
                 entity.ToTable("app_users");
-
-                entity.HasIndex(e => e.Username)
-                    .HasName("app_users_con_unq_name")
-                    .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -145,7 +142,7 @@ namespace API.Persistance
 
                 entity.Property(e => e.InApplicationId)
                     .HasColumnName("in_application_id")
-                    .HasMaxLength(100);
+                    .HasMaxLength(256);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -163,6 +160,26 @@ namespace API.Persistance
                     .HasConstraintName("fk_contacts_applications");
             });
 
+            modelBuilder.Entity<ContactsMembers>(entity =>
+            {
+                entity.ToTable("contacts_members");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ContactId).HasColumnName("contact_id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(256);
+
+                entity.HasOne(d => d.Contact)
+                    .WithMany(p => p.ContactsMembers)
+                    .HasForeignKey(d => d.ContactId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("fk_contacts_members_contacts");
+            });
+
             modelBuilder.Entity<Messages>(entity =>
             {
                 entity.ToTable("messages");
@@ -170,6 +187,8 @@ namespace API.Persistance
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ContactId).HasColumnName("contact_id");
+
+                entity.Property(e => e.ContactMemberId).HasColumnName("contact_member_id");
 
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
@@ -183,6 +202,12 @@ namespace API.Persistance
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.ContactId)
                     .HasConstraintName("fk_messages_contacts");
+
+                entity.HasOne(d => d.ContactMember)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.ContactMemberId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("fk_messages_contacts_members");
 
                 entity.HasOne(d => d.WriterType)
                     .WithMany(p => p.Messages)

@@ -1,6 +1,7 @@
 ﻿using API.Dto;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
+using Common.Exceptions;
 using Common.Service;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace API.Service
     public interface IMessageService
     {
         Task<MessageDtoWithId> Create(MessageDto messageDto);
-        Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize);
+        Task<MessageDtoWithIdList> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<SearchResultDtoList> Find(SearchQueryDto query);
         Task<MessageInAliasOrderDto> GetOrder(int messageId, int aliasId);
     }
@@ -37,7 +38,9 @@ namespace API.Service
 
         public async Task<MessageDtoWithId> Create(MessageDto messageDto)
         {
-            await _securityService.CheckIfUserIsOwnerOfContact(messageDto.ContactId);
+            var contact = await _contactRepository.Get(messageDto.ContactId);
+            Validate(messageDto, contact);
+
             var message = new Messages
             {
                 Contact = await _contactRepository.Get(messageDto.ContactId),
@@ -48,9 +51,19 @@ namespace API.Service
                     .Select(x => _attachmentService.CreateAttachment(x)).ToList()
             };
 
+            if (messageDto.ContactMemberId.HasValue)
+            {
+                message.ContactMember = contact.ContactsMembers.First(x => x.Id == messageDto.ContactMemberId.Value);
+            }
+
             await _messageRepository.Add(message);
             await _messageRepository.Save();
 
+            return GetMessageDtoWithId(message);
+        }
+
+        private MessageDtoWithId GetMessageDtoWithId(Messages message)
+        {
             return new MessageDtoWithId
             {
                 Id = message.Id,
@@ -58,7 +71,10 @@ namespace API.Service
                 Date = message.Date,
                 WriterType = message.WriterType.Name,
                 ContactId = message.Contact.Id,
-                Attachments = message.Attachments.Select(x => CreateAttachemtDtoWithId(x)).ToList()
+                ContactMemberId = message.ContactMemberId,
+                Attachments = message.Attachments.Select(x => CreateAttachemtDtoWithId(x)).ToList(),
+                Application = message.Contact.Application.Name,
+                ContactName = GetContactName(message)
             };
         }
 
@@ -67,7 +83,7 @@ namespace API.Service
             var rawMessages = await _messageRepository.Find(_httpMetadataService.UserId,
                 query.Query, query.AliasesIds, query.IgnoreLetterSize);
 
-            Func<Messages, int> aliasIdSelector = message => 
+            Func<Messages, int> aliasIdSelector = message =>
                 message.Contact.AliasesMembers.FirstOrDefault(y => y.Alias.Internal).AliasId;
 
             var list = rawMessages
@@ -78,7 +94,7 @@ namespace API.Service
                     Attachments = x.Attachments.Select(y => CreateAttachemtDtoWithId(y)).ToList(),
                     Date = x.Date.Value,
                     Application = x.Contact.Application.Name,
-                    ContactName = x.Contact.Name,
+                    ContactName = GetContactName(x),
                     WriterType = x.WriterType.Name,
                     AliasId = aliasIdSelector(x),
                     AllAliases = x.Contact.AliasesMembers.Select(y => new SearchAlias
@@ -103,27 +119,19 @@ namespace API.Service
             };
         }
 
-        public async Task<MessageDtoWithDetailsList> GetPage(int aliasId, int pageNumber, int pageSize)
+        public async Task<MessageDtoWithIdList> GetPage(int aliasId, int pageNumber, int pageSize)
         {
             await _securityService.CheckIfUserIsOwnerOfAlias(aliasId);
             var raw = await _messageRepository.GetPage(aliasId, pageNumber, pageSize);
 
-            var list = raw.Select(x => new MessageDtoWithDetails
-            {
-                Id = x.Id,
-                Attachments = x.Attachments.Select(y => CreateAttachemtDtoWithId(y)).ToList(),
-                ContactName = x.Contact.Name,
-                Application = x.Contact.Application.Name,
-                Content = x.Content,
-                Date = x.Date,
-                WriterType = x.WriterType.Name,
-            }).ToList();
+            var list = raw.Select(x => GetMessageDtoWithId(x)).ToList();
 
-            return new MessageDtoWithDetailsList
+            return new MessageDtoWithIdList
             {
                 Messages = list
             };
         }
+
         private AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment)
         {
             return new AttachmentDtoWithId
@@ -132,6 +140,33 @@ namespace API.Service
                 Content = attachment.Content,
                 ContentType = attachment.ContentType
             };
+        }
+        private string GetContactName(Messages message)
+        {
+            if (message.ContactMember != null)
+            {
+                return message.ContactMember.Name;
+            }
+            return message.Contact.Name;
+        }
+        private void Validate(MessageDto messageDto, Contacts contact)
+        {
+            _securityService.CheckIfUserIsOwnerOfContact(contact);
+            if (messageDto.Content.Length > 307200)
+            {
+                throw new BadRequestException("Message content can contains maximum of 307200 characters");
+            }
+            if (messageDto.ContactMemberId.HasValue)
+            {
+                if (messageDto.WriterType == "app_user")
+                {
+                    throw new BadRequestException("Message from app user can not be also from a contact member");
+                }
+                if (!contact.ContactsMembers.Where(x => x.Id == messageDto.ContactMemberId.Value).Any())
+                {
+                    throw new BadRequestException("Contact member is not a member of given contact");
+                }
+            }
         }
     }
 }

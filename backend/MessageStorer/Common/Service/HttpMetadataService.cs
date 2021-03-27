@@ -58,7 +58,7 @@ namespace Common.Service
                     .User
                     .Claims
                     .FirstOrDefault(x => x.Type == "int")
-                    .Value);
+                    ?.Value ?? "false");
             }
         }
     }

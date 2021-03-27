@@ -21,6 +21,7 @@ namespace API.Dto
         public string Name { get; set; }
         public string Application { get; set; }
         public string InApplicationId { get; set; }
+        public List<ContactMemberWithIdDto> ContactMembers { get; set; }
     }
     public class CreateAliasDto
     {

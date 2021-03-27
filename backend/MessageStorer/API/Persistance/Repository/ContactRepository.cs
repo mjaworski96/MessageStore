@@ -39,6 +39,7 @@ namespace API.Persistance.Repository
                 .Include(x => x.AliasesMembers)
                 .ThenInclude(x => x.Alias)
                 .Include(x => x.AppUser)
+                .Include(x => x.ContactsMembers)
                 .FirstOrDefaultAsync(x =>
                 x.Application.Name == appName &&
                 x.InApplicationId == inAppId &&
@@ -50,6 +51,8 @@ namespace API.Persistance.Repository
             {
                 return await _messageStoreContext
                 .Contacts
+                .Include(x => x.ContactsMembers)
+                .Include(x => x.Application)
                 .FirstAsync(x => x.Id == id);
             }
             catch(InvalidOperationException e)

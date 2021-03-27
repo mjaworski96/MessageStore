@@ -34,8 +34,11 @@ namespace API.Persistance.Repository
             var query = _messagesStoreContext
                 .Aliases
                 .Include(x => x.AliasesMembers)
-                .ThenInclude(x => x.Contact)
-                .ThenInclude(x => x.Application)
+                     .ThenInclude(x => x.Contact)
+                        .ThenInclude(x => x.ContactsMembers)
+                .Include(x => x.AliasesMembers)
+                    .ThenInclude(x => x.Contact)
+                        .ThenInclude(x => x.Application)
                 .Where(x => x.AliasesMembers
                     .Select(y => y.Contact.AppUserId)
                         .All(z => z == userId));
@@ -76,10 +79,10 @@ namespace API.Persistance.Repository
                 .Aliases
                 .Include(x => x.AliasesMembers)
                     .ThenInclude(x => x.Contact)
-                    .ThenInclude(x => x.Application)
+                        .ThenInclude(x => x.Application)
                 .Include(x => x.AliasesMembers)
                     .ThenInclude(x => x.Contact)
-                    .ThenInclude(x => x.AppUser)
+                        .ThenInclude(x => x.AppUser)
                 .Where(x => ids.Contains(x.Id))
                 .ToListAsync();
         }
@@ -103,11 +106,14 @@ namespace API.Persistance.Repository
                 var query = _messagesStoreContext
                 .Aliases
                 .Include(x => x.AliasesMembers)
-                    .ThenInclude(x => x.Contact)
-                    .ThenInclude(x => x.Application)
+                     .ThenInclude(x => x.Contact)
+                        .ThenInclude(x => x.ContactsMembers)
                 .Include(x => x.AliasesMembers)
                     .ThenInclude(x => x.Contact)
-                    .ThenInclude(x => x.AppUser);
+                        .ThenInclude(x => x.Application)
+                .Include(x => x.AliasesMembers)
+                    .ThenInclude(x => x.Contact)
+                        .ThenInclude(x => x.AppUser);
 
                 if (throwExeptionIfNotFound)
                     return await query.FirstAsync(x => x.Id == id);

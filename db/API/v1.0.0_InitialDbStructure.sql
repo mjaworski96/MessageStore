@@ -73,7 +73,7 @@ CREATE TABLE contacts
 (
 	id INTEGER NOT NULL,
 	name VARCHAR(256) NOT NULL,
-	in_application_id VARCHAR(100),
+	in_application_id VARCHAR(256),
 	app_user_id INTEGER NOT NULL,
 	application_id INTEGER NOT NULL
 );
@@ -111,13 +111,32 @@ ALTER TABLE aliases_members ALTER COLUMN id SET DEFAULT nextval('public.aliases_
 ALTER TABLE aliases_members ADD CONSTRAINT fk_aliases_members_aliases FOREIGN KEY (alias_id) REFERENCES aliases(id) ON DELETE CASCADE;
 ALTER TABLE aliases_members ADD CONSTRAINT fk_aliases_members_contacts FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
 
+CREATE TABLE contacts_members
+(
+	id INTEGER NOT NULL,
+	name VARCHAR(256) NOT NULL,
+	contact_id INTEGER
+);
+ALTER TABLE contacts_members ADD CONSTRAINT contacts_members_pkey PRIMARY KEY (id);
+CREATE SEQUENCE public.contacts_members_id_seq
+    AS INTEGER
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE contacts_members_id_seq OWNED BY contacts_members.id;
+ALTER TABLE contacts_members ALTER COLUMN id SET DEFAULT nextval('public.contacts_members_id_seq'::regclass);
+ALTER TABLE contacts_members ADD CONSTRAINT fk_contacts_members_contacts FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
+
 CREATE TABLE messages
 (
 	id INTEGER NOT NULL,
 	content VARCHAR(307200), -- 30KiB
 	date TIMESTAMP,
 	writer_type_id INTEGER NOT NULL,
-	contact_id INTEGER NOT NULL
+	contact_id INTEGER NOT NULL,
+	contact_member_id INTEGER
 );
 ALTER TABLE messages ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
 CREATE SEQUENCE public.messages_id_seq
@@ -132,6 +151,7 @@ ALTER TABLE messages ALTER COLUMN id SET DEFAULT nextval('public.messages_id_seq
 
 ALTER TABLE messages ADD CONSTRAINT fk_messages_writer_types FOREIGN KEY (writer_type_id) REFERENCES writer_types(id) ON DELETE CASCADE;
 ALTER TABLE messages ADD CONSTRAINT fk_messages_contacts FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
+ALTER TABLE messages ADD CONSTRAINT fk_messages_contacts_members FOREIGN KEY (contact_member_id) REFERENCES contacts_members(id) ON DELETE CASCADE;
 
 CREATE TABLE attachments
 (
@@ -153,9 +173,9 @@ ALTER TABLE attachments ALTER COLUMN id SET DEFAULT nextval('public.attachments_
 
 ALTER TABLE attachments ADD CONSTRAINT fk_attachments_messages FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE;
 
+
 INSERT INTO app_users(username, email, password) VALUES
-('test', 'test@test', '$2a$10$hbnIe4MWaMmiL6eWHRqYFu2n.HBs9DtfG33tm.Qct13t9vqzYCfEO'), --test
-('marcin','marcin@test', '$2a$10$XxY/vqp0dT3sQPRvcdDDM.lnpT6Q3SJF3lWN3HLmeT4rdmZ8nHtQe'); --test
+('test', 'test@test', '$2a$10$hbnIe4MWaMmiL6eWHRqYFu2n.HBs9DtfG33tm.Qct13t9vqzYCfEO'); --test
 
 INSERT INTO writer_types(name) VALUES
 ('app_user'), ('contact');
