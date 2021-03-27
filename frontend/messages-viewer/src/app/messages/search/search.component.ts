@@ -25,7 +25,7 @@ export class SearchComponent implements OnInit {
   query = '';
   aliases: Checkbox[];
   ignoreLetterSize = true;
-
+  pendingSearch = false;
   results: SearchResultDto[];
 
   constructor(private aliasService: AliasService,
@@ -60,24 +60,25 @@ export class SearchComponent implements OnInit {
     }
     return ids;
   }
-  search() {
+  async search() {
     if (this.query.length === 0) {
       this.toastr.warning(this.translatedMessage.nativeElement.innerHTML);
       return;
     }
-
+    this.pendingSearch = true;
     this.results = [];
-    this.searchService.search(
-      {
-        aliasesIds: this.getAliasesIds(),
-        ignoreLetterSize: this.ignoreLetterSize,
-        query: this.query
-      }
-    )
-      .toPromise()
-      .then(res => {
-        this.results = res.results;
-      });
+    try {
+      const queryResult = await this.searchService.search(
+        {
+          aliasesIds: this.getAliasesIds(),
+          ignoreLetterSize: this.ignoreLetterSize,
+          query: this.query
+        }
+      ).toPromise();
+      this.results = queryResult.results;
+    } finally {
+      this.pendingSearch = false;
+    }
   }
   navigate(result: SearchResultDto, event: MouseEvent): void {
     this.searchService

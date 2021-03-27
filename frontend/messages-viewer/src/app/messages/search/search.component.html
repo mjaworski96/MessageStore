@@ -16,7 +16,7 @@
     </div>
     <div class="search-button-container">
       <button class="full-width" mat-flat-button color="primary" (click)="search()"
-      i18n="Search|Search button@@search">Search</button>
+      [disabled]="pendingSearch" i18n="Search|Search button@@search">Search</button>
     </div>
   </div>
   <div *ngIf="results else noResults">
@@ -24,7 +24,7 @@
       <div class="contact-name">
         <span>{{result.contactName}} ({{result.application}} </span>
         <span *ngIf="writtenByAppUser(result)">written by you)</span>
-        <span *ngIf="writtenByContact(result)">written by contact)</span>
+        <span *ngIf="writtenByContact(result)">written by {{result.contactName}})</span>
         <span class="date">{{result.date | date: 'dd.MM.yyyy HH:mm:ss'}}</span>
         <span class="clear"></span>
       </div>
