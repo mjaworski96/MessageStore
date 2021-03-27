@@ -52,7 +52,7 @@ namespace MessengerIntegration.HostedService
         }
         public async Task Cancel()
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
             await SetStatus(Statuses.Queued);
         }
         private async Task ImportFile(CancellationToken cancellationToken)
@@ -66,6 +66,8 @@ namespace MessengerIntegration.HostedService
                 using var stream = _zipFile.Open(_import);
                 using var zip = _zipFile.Open(stream);
                 var messages = _zipFile.GetMessages(zip);
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (!messages.Any())
                 {
                     _logger.LogError($"No messages for import: {_import.Id}");
@@ -73,7 +75,7 @@ namespace MessengerIntegration.HostedService
                 }
                 foreach (var conversation in messages)
                 {
-                    await ImportConversation(conversation.Key, conversation.Value);
+                    await ImportConversation(conversation.Key, conversation.Value, cancellationToken);
                 }
                 
 
@@ -103,7 +105,7 @@ namespace MessengerIntegration.HostedService
             }
             
         }
-        private async Task ImportConversation(string name, List<ZipArchiveEntry> conversationData)
+        private async Task ImportConversation(string name, List<ZipArchiveEntry> conversationData, CancellationToken cancellationToken)
         {
             using var conversationStream = _zipFile.GetConversationStream(conversationData);
             if (conversationStream == null)
