@@ -36,7 +36,7 @@ namespace MessengerIntegration
             services.AddControllers();
             services.AddDbContext<MessengerIntegrationContext>(options =>
             {
-                options.UseNpgsql(Configuration["ConnectionStrings:MessengerIntegration"]);
+                options.UseNpgsql(Configuration.GetConnectionString("MessengerIntegration"));
             });
             services.AddHttpContextAccessor();
 
@@ -94,11 +94,17 @@ namespace MessengerIntegration
             services.AddSingleton<IImportFileConfig, ImportFileConfig>();
             services.AddTransient<IHttpMetadataService, HttpMetadataService>();
             services.AddTransient<IFileUtils, FileUtils>();
-            services.AddTransient<IApiClient, ApiClient>();
             services.AddTransient<IZipFile, ZipFile>();
             services.AddSingleton<IImportConfig, ImportConfig>();
+            services.AddSingleton<IApiConfig, ApiConfig>();
 
             services.AddHostedService<HostedImportService>();
+
+            services.AddHttpClient("apiClient", configure =>
+            {
+                configure.BaseAddress = new Uri(Configuration["Api:Url"]);
+                configure.DefaultRequestHeaders.Add("X-Application", "messenger");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

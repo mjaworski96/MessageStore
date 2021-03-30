@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,8 @@ namespace MessengerIntegration.HostedService
         private readonly IImportService _importService;
         private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
-        private readonly IApiClient _apiClient;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IApiConfig _apiConfig;
         private readonly ILogger<ImportTask> _helperLogger;
 
         private Timer _timer;
@@ -28,7 +30,9 @@ namespace MessengerIntegration.HostedService
         private object _syncObject;
         private IServiceScope _serviceScope;
 
-        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider, IFileUtils fileUtils, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> helperLogger)
+        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider,
+            IFileUtils fileUtils, IZipFile zipFile, IHttpClientFactory httpClientFactory,
+            IApiConfig apiConfig, ILogger<ImportTask> helperLogger)
         {
             _config = config;
             _serviceScope = serviceScopeProvider.CreateScope();
@@ -38,9 +42,10 @@ namespace MessengerIntegration.HostedService
 
             _fileUtils = fileUtils;
             _zipFile = zipFile;
-            _apiClient = apiClient;
+            _apiConfig = apiConfig;
             _syncObject = new object();
             _helperLogger = helperLogger;
+            _httpClientFactory = httpClientFactory;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -49,7 +54,7 @@ namespace MessengerIntegration.HostedService
             for (int i = 0; i < _config.ParallelImportsCount; i++)
             {
                 _importTasks.Add(new ImportTask(_syncObject, _config, _importRepository, _importService, _fileUtils,
-                    _zipFile, _apiClient, _helperLogger));
+                    _zipFile, _httpClientFactory, _apiConfig, _helperLogger));
             }
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,

@@ -1,5 +1,6 @@
 ﻿using MessengerIntegration.Config;
 using MessengerIntegration.Infrastructure;
+using MessengerIntegration.Infrastructure.Http;
 using MessengerIntegration.Persistance.Entity;
 using MessengerIntegration.Persistance.Repository;
 using MessengerIntegration.Service;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,11 +26,13 @@ namespace MessengerIntegration.HostedService
         private readonly IImportService _importService;
         private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
-        private readonly IApiClient _apiClient;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IApiConfig _apiConfig;
         private readonly ILogger<ImportTask> _logger;
+        
         private Imports _import;
 
-        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IFileUtils fileUtils, IZipFile zipFile, IApiClient apiClient, ILogger<ImportTask> logger)
+        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IFileUtils fileUtils, IZipFile zipFile, IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> logger)
         {
             Completed = true;
             _syncObject = syncObject;
@@ -37,8 +41,10 @@ namespace MessengerIntegration.HostedService
             _importService = importService;
             _fileUtils = fileUtils;
             _zipFile = zipFile;
-            _apiClient = apiClient;
+            _httpClientFactory = httpClientFactory;
+            _apiConfig = apiConfig;
             _logger = logger;
+         
         }
 
         public void StartImport(Imports import)
@@ -73,9 +79,14 @@ namespace MessengerIntegration.HostedService
                     _logger.LogError($"No messages for import: {_import.Id}");
                     await SetStatus(Statuses.ErrorNoMessages);
                 }
+
+                var token = new SharedToken();
+                var httpClient = _httpClientFactory.CreateClient("apiClient");
+                var userApiClient = new UserApiClient(token, httpClient, _apiConfig);
+                await userApiClient.Authorize(_import.UserId);
                 foreach (var conversation in messages)
                 {
-                    await ImportConversation(conversation.Key, conversation.Value, cancellationToken);
+                    await ImportConversation(conversation.Key, conversation.Value, userApiClient, cancellationToken);
                 }
                 
 
@@ -105,15 +116,24 @@ namespace MessengerIntegration.HostedService
             }
             
         }
-        private async Task ImportConversation(string name, List<ZipArchiveEntry> conversationData, CancellationToken cancellationToken)
+        private async Task ImportConversation(string name, 
+            List<ZipArchiveEntry> conversationData, 
+            UserApiClient userApiClient,
+            CancellationToken cancellationToken)
         {
             using var conversationStream = _zipFile.GetConversationStream(conversationData);
+            cancellationToken.ThrowIfCancellationRequested();
             if (conversationStream == null)
             {
                 _logger.LogWarning($"Empty converstion {name} in import {_import.Id}");
                 return;
             }
             var conversationDocument = await _zipFile.GetConversation(conversationStream);
+            cancellationToken.ThrowIfCancellationRequested();
+
+
+
+
         }
         private async Task SetStatus(string statusName)
         {

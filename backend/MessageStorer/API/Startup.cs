@@ -35,7 +35,7 @@ namespace API
             services.AddControllers();
             services.AddDbContext<MessagesStoreContext>(options =>
             {
-                options.UseNpgsql(Configuration["ConnectionStrings:MessagesStore"]);
+                options.UseNpgsql(Configuration.GetConnectionString("MessagesStore"));
             });
 
             services.AddHttpContextAccessor();
