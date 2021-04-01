@@ -16,7 +16,7 @@ namespace MessengerIntegration.Infrastructure.Http
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/internal/genereateInternalToken?forUser={userId}");
             request.Headers.Add("Authorization", _apiConfig.Token);
             var response = await _httpClient.SendAsync(request);
-            await CheckResponseAsync(response);
+            await CheckResponse(response);
         }
     }
 }

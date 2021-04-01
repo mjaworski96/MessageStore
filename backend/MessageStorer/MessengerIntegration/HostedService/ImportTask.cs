@@ -1,16 +1,20 @@
 ﻿using MessengerIntegration.Config;
+using MessengerIntegration.HostedService.Model;
 using MessengerIntegration.Infrastructure;
 using MessengerIntegration.Infrastructure.Http;
+using MessengerIntegration.Infrastructure.Http.Model;
 using MessengerIntegration.Persistance.Entity;
 using MessengerIntegration.Persistance.Repository;
 using MessengerIntegration.Service;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -83,10 +87,11 @@ namespace MessengerIntegration.HostedService
                 var token = new SharedToken();
                 var httpClient = _httpClientFactory.CreateClient("apiClient");
                 var userApiClient = new UserApiClient(token, httpClient, _apiConfig);
+                var contactApiClient = new ContactApiClient(token, httpClient);
                 await userApiClient.Authorize(_import.UserId);
                 foreach (var conversation in messages)
                 {
-                    await ImportConversation(conversation.Key, conversation.Value, userApiClient, cancellationToken);
+                    await ImportConversation(conversation.Key, conversation.Value, contactApiClient, cancellationToken);
                 }
                 
 
@@ -118,7 +123,7 @@ namespace MessengerIntegration.HostedService
         }
         private async Task ImportConversation(string name, 
             List<ZipArchiveEntry> conversationData, 
-            UserApiClient userApiClient,
+            ContactApiClient contactApiClient,
             CancellationToken cancellationToken)
         {
             using var conversationStream = _zipFile.GetConversationStream(conversationData);
@@ -131,9 +136,25 @@ namespace MessengerIntegration.HostedService
             var conversationDocument = await _zipFile.GetConversation(conversationStream);
             cancellationToken.ThrowIfCancellationRequested();
 
+            var contact = await ImportContact(name, conversationDocument, contactApiClient);
 
 
-
+        }
+        private async Task<ContactWithId> ImportContact(string conversationName, JsonDocument document,
+            ContactApiClient contactApiClient)
+        {
+            var participantsRaw = document.RootElement.GetProperty("participants");
+            var participants = JsonConvert.DeserializeObject<List<Participant>>(participantsRaw.GetRawText());
+            var others = participants.Where(x => x.Name != _import.FacebookName).ToList();
+            var contact = new Contact()
+            {
+                InApplicationId = conversationName,
+                Name = others.Count == 1
+                    ? others.First().Name : conversationName,
+                Members = others.Count == 1
+                    ? null : others.Select(x => new ContactMember() { Name = x.Name }).ToList(),
+            };
+            return await contactApiClient.CreateOrUpdateContact(contact);
         }
         private async Task SetStatus(string statusName)
         {

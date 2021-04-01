@@ -1,6 +1,8 @@
 ﻿using MessengerIntegration.Exceptions;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MessengerIntegration.Infrastructure.Http
@@ -15,7 +17,7 @@ namespace MessengerIntegration.Infrastructure.Http
             _authorizationToken = authorizationToken;
             _httpClient = httpClient;
         }
-        protected async Task CheckResponseAsync(HttpResponseMessage response)
+        protected async Task CheckResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -30,6 +32,17 @@ namespace MessengerIntegration.Infrastructure.Http
         protected void AddAuthorization(HttpRequestMessage request)
         {
             request.Headers.Add("Authorization", _authorizationToken.AuthorizationToken);
+        }
+        protected async Task<TResult> Put<TResult, TBody>(string url, TBody body)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, url);
+            AddAuthorization(request);
+            var requestBody = JsonConvert.SerializeObject(body);
+            request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+            var response = await _httpClient.SendAsync(request);
+            await CheckResponse(response);
+            var resultBody = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<TResult>(resultBody);
         }
     }
 }
