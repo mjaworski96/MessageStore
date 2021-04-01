@@ -28,18 +28,21 @@ namespace API
                         .TryGetValue("Authorization", out var authorization) &&
                     !httpContext.Response.Headers.ContainsKey("Authorization"))
                 {
-                    var refreshedData = await appUserService
-                        .Refresh(authorization.ToString());
-                    if (refreshedData != null)
+                    if(authorization.ToString().StartsWith("Bearer"))
                     {
-                        httpContext.Response.Headers.Add("Authorization", refreshedData.Token);
-                        httpContext.Response.Headers.Add("X-User", 
-                            JsonConvert.SerializeObject(refreshedData.AppUser,
-                            new JsonSerializerSettings
-                            {
-                                ContractResolver = new CamelCasePropertyNamesContractResolver()
-                            }));
-                    }
+                        var refreshedData = await appUserService
+                        .Refresh(authorization.ToString());
+                        if (refreshedData != null)
+                        {
+                            httpContext.Response.Headers.Add("Authorization", refreshedData.Token);
+                            httpContext.Response.Headers.Add("X-User",
+                                JsonConvert.SerializeObject(refreshedData.AppUser,
+                                new JsonSerializerSettings
+                                {
+                                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                                }));
+                        }
+                    }      
                 }
             }
             catch (Exception e)
