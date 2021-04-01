@@ -103,6 +103,10 @@ namespace API.Service
 
         private static void AddConactMembers(ContactDto contactDto, Contacts entity)
         {
+            if (contactDto.Members == null || contactDto.Members.Count == 0)
+            {
+                return;
+            }
             var newMembers = contactDto.Members.Select(x => new MatchingContactMember<ContactMemberDto>(x)).ToList();
 
             foreach (var item in entity.ContactsMembers)
