@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace API.Dto
+namespace MessengerIntegration.Infrastructure.Http.Model
 {
     public class SyncDateTime
     {

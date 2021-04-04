@@ -8,13 +8,17 @@ using MessengerIntegration.Persistance.Repository;
 using MessengerIntegration.Service;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -77,7 +81,7 @@ namespace MessengerIntegration.HostedService
                 using var zip = _zipFile.Open(stream);
                 var messages = _zipFile.GetMessages(zip);
                 cancellationToken.ThrowIfCancellationRequested();
-
+                
                 if (!messages.Any())
                 {
                     _logger.LogError($"No messages for import: {_import.Id}");
@@ -88,10 +92,12 @@ namespace MessengerIntegration.HostedService
                 var httpClient = _httpClientFactory.CreateClient("apiClient");
                 var userApiClient = new UserApiClient(token, httpClient, _apiConfig);
                 var contactApiClient = new ContactApiClient(token, httpClient);
+                var messageApiClient = new MessageApiClient(token, httpClient);
+
                 await userApiClient.Authorize(_import.UserId);
                 foreach (var conversation in messages)
                 {
-                    await ImportConversation(conversation.Key, conversation.Value, contactApiClient, cancellationToken);
+                    await ImportConversation(conversation.Key, conversation.Value, contactApiClient, messageApiClient, cancellationToken);
                 }
                 
 
@@ -121,12 +127,21 @@ namespace MessengerIntegration.HostedService
             }
             
         }
+        private async Task SetStatus(string statusName)
+        {
+            if (!Completed && _import != null)
+            {
+                await _importService.SetStatus(_import, statusName);
+            }
+        }
         private async Task ImportConversation(string name, 
             List<ZipArchiveEntry> conversationData, 
             ContactApiClient contactApiClient,
+            MessageApiClient messageApiClient,
             CancellationToken cancellationToken)
         {
             using var conversationStream = _zipFile.GetConversationStream(conversationData);
+            
             cancellationToken.ThrowIfCancellationRequested();
             if (conversationStream == null)
             {
@@ -137,31 +152,65 @@ namespace MessengerIntegration.HostedService
             cancellationToken.ThrowIfCancellationRequested();
 
             var contact = await ImportContact(name, conversationDocument, contactApiClient);
-
-
+            cancellationToken.ThrowIfCancellationRequested();
+            await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, cancellationToken);
         }
+        
         private async Task<ContactWithId> ImportContact(string conversationName, JsonDocument document,
             ContactApiClient contactApiClient)
         {
             var participantsRaw = document.RootElement.GetProperty("participants");
             var participants = JsonConvert.DeserializeObject<List<Participant>>(participantsRaw.GetRawText());
-            var others = participants.Where(x => x.Name != _import.FacebookName).ToList();
+            var others = participants.Where(x => FixEncoding(x.Name) != _import.FacebookName).ToList();
             var contact = new Contact()
             {
                 InApplicationId = conversationName,
                 Name = others.Count == 1
-                    ? others.First().Name : conversationName,
+                    ? FixEncoding(others.First().Name) : conversationName,
                 Members = others.Count == 1
-                    ? null : others.Select(x => new ContactMember() { Name = x.Name }).ToList(),
+                    ? null : others.Select(x => new ContactMember() { Name = FixEncoding(x.Name) }).ToList(),
             };
             return await contactApiClient.CreateOrUpdateContact(contact);
         }
-        private async Task SetStatus(string statusName)
+        private async Task ImportMessages(ContactWithId contact, MessageApiClient messageApiClient,
+            JsonDocument document, List<ZipArchiveEntry> conversationData, 
+            CancellationToken cancellationToken)
         {
-            if (!Completed && _import != null)
+            var lastSyncTime = await messageApiClient.GetSyncTime(contact.Id);
+            var messages = document.RootElement.GetProperty("messages");            
+            foreach (var message in messages.EnumerateArray())
             {
-                await _importService.SetStatus(_import, statusName);
+                await ImportMessages(contact, messageApiClient, message, conversationData, lastSyncTime);
+                cancellationToken.ThrowIfCancellationRequested();
             }
+        }
+
+        private async Task ImportMessages(ContactWithId contact, MessageApiClient messageApiClient, JsonElement message, List<ZipArchiveEntry> conversationData, SyncDateTime lastSyncTime)
+        {
+            var rawMessage = JsonConvert.DeserializeObject<RawMessage>(message.GetRawText());
+            var messageDate = new DateTime(1970, 1, 1).AddMilliseconds(rawMessage.TimestampMs);
+            if (messageDate < lastSyncTime.From || messageDate > lastSyncTime.To)
+            {
+                var messageToSend = new Message
+                {
+                    ContactId = contact.Id,
+                    Content = FixEncoding(rawMessage.Content),
+                    Date = messageDate,
+                    WriterType = rawMessage.SenderName == _import.FacebookName ? "app_user" : "contact",
+                    ContactMemberId = contact.Members.Count == 1 ? null : contact.Members.FirstOrDefault(x => x.Name == FixEncoding(rawMessage.SenderName))?.Id
+                };
+                await messageApiClient.CreateMessage(messageToSend);
+            }
+        }
+        private string FixEncoding(string src)
+        {
+            if (string.IsNullOrEmpty(src))
+            {
+                return src;
+            }
+            var encoding = Encoding.GetEncoding(_config.FileEncoding);
+            var unescapeText = System.Text.RegularExpressions.Regex.Unescape(src);
+            return Encoding.UTF8.GetString(encoding.GetBytes(unescapeText));
         }
     }
 }

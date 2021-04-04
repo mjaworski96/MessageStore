@@ -8,7 +8,7 @@ namespace API.Service
 {
     public interface ISyncDateTimeService
     {
-        Task<SyncDateTime> Get(int? contactId);
+        Task<SyncDateTimeDto> Get(int? contactId);
     }
     public class SyncDateTimeService : ISyncDateTimeService
     {
@@ -21,7 +21,7 @@ namespace API.Service
             _messageRepository = messageRepository;
         }
 
-        public async Task<SyncDateTime> Get(int? contactId)
+        public async Task<SyncDateTimeDto> Get(int? contactId)
         {
             var newestMessage = await _messageRepository.GetNewest(
                 _httpMetadataService.UserId,
@@ -34,7 +34,7 @@ namespace API.Service
                 contactId);
             var oldestDate = oldestMessage?.Date ?? new DateTime(2038, 1, 19, 3, 14, 7); //Last Unix timestamp (32bit)
 
-            return new SyncDateTime
+            return new SyncDateTimeDto
             {
                 From = oldestDate,
                 To = newestDate,        

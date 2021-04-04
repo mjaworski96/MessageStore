@@ -37,7 +37,6 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpGet("syncDateTime")]
-        [NoInternalAccess]
         public async Task<IActionResult> GetSyncDateTime([FromQuery] int? contactId)
         {
             _logger.LogInformation($"Started GET /api/messages/syncDateTime?contactId={contactId}");

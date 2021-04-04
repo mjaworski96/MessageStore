@@ -152,7 +152,7 @@ namespace API.Service
         private void Validate(MessageDto messageDto, Contacts contact)
         {
             _securityService.CheckIfUserIsOwnerOfContact(contact);
-            if (messageDto.Content.Length > 307200)
+            if (messageDto.Content?.Length > 307200)
             {
                 throw new BadRequestException("Message content can contains maximum of 307200 characters");
             }

@@ -33,6 +33,25 @@ namespace MessengerIntegration.Infrastructure.Http
         {
             request.Headers.Add("Authorization", _authorizationToken.AuthorizationToken);
         }
+        protected async Task<TResult> Get<TResult>(string url)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            AddAuthorization(request);
+            var response = await _httpClient.SendAsync(request);
+            await CheckResponse(response);
+            var resultBody = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<TResult>(resultBody);
+        }
+        protected async Task Post<TBody>(string url, TBody body)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            AddAuthorization(request);
+            var requestBody = JsonConvert.SerializeObject(body);
+            request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+            var response = await _httpClient.SendAsync(request);
+            await CheckResponse(response);
+        }
+
         protected async Task<TResult> Put<TResult, TBody>(string url, TBody body)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, url);
