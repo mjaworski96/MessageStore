@@ -21,6 +21,7 @@ namespace MessengerIntegration.HostedService
         private readonly IImportService _importService;
         private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
+        private readonly IAttachmentResolve _attachmentResolve;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IApiConfig _apiConfig;
         private readonly ILogger<ImportTask> _helperLogger;
@@ -31,8 +32,8 @@ namespace MessengerIntegration.HostedService
         private IServiceScope _serviceScope;
 
         public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider,
-            IFileUtils fileUtils, IZipFile zipFile, IHttpClientFactory httpClientFactory,
-            IApiConfig apiConfig, ILogger<ImportTask> helperLogger)
+            IFileUtils fileUtils, IZipFile zipFile, IAttachmentResolve attachmentResolve,
+            IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> helperLogger)
         {
             _config = config;
             _serviceScope = serviceScopeProvider.CreateScope();
@@ -42,6 +43,7 @@ namespace MessengerIntegration.HostedService
 
             _fileUtils = fileUtils;
             _zipFile = zipFile;
+            _attachmentResolve = attachmentResolve;
             _apiConfig = apiConfig;
             _syncObject = new object();
             _helperLogger = helperLogger;
@@ -54,7 +56,7 @@ namespace MessengerIntegration.HostedService
             for (int i = 0; i < _config.ParallelImportsCount; i++)
             {
                 _importTasks.Add(new ImportTask(_syncObject, _config, _importRepository, _importService, _fileUtils,
-                    _zipFile, _httpClientFactory, _apiConfig, _helperLogger));
+                    _zipFile, _attachmentResolve, _httpClientFactory, _apiConfig, _helperLogger));
             }
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,

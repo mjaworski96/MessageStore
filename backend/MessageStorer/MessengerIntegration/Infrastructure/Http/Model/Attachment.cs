@@ -7,5 +7,7 @@ namespace MessengerIntegration.Infrastructure.Http.Model
 {
     public class Attachment
     {
+        public byte[] Content { get; set; }
+        public string ContentType { get; set; }
     }
 }

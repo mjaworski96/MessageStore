@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MessengerIntegration.HostedService.Model
 {
@@ -11,5 +12,10 @@ namespace MessengerIntegration.HostedService.Model
         public long TimestampMs { get; set; }
 
         public string Content { get; set; }
+        public List<RawAttachment> Photos { get; set; }
+    }
+    public class RawAttachment
+    {
+        public string Uri { get; set; }
     }
 }

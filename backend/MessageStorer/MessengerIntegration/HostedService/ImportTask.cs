@@ -26,7 +26,7 @@ namespace MessengerIntegration.HostedService
 {
     public class ImportTask
     {
-        public bool Completed { get; set; }      
+        public bool Completed { get; set; }
         private CancellationTokenSource _cancellationTokenSource;
         private readonly object _syncObject;
         private readonly IImportConfig _config;
@@ -34,13 +34,14 @@ namespace MessengerIntegration.HostedService
         private readonly IImportService _importService;
         private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
+        private readonly IAttachmentResolve _attachmentResolve;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IApiConfig _apiConfig;
         private readonly ILogger<ImportTask> _logger;
-        
+
         private Imports _import;
 
-        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IFileUtils fileUtils, IZipFile zipFile, IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> logger)
+        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IFileUtils fileUtils, IZipFile zipFile, IAttachmentResolve attachmentResolve, IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> logger)
         {
             Completed = true;
             _syncObject = syncObject;
@@ -49,10 +50,11 @@ namespace MessengerIntegration.HostedService
             _importService = importService;
             _fileUtils = fileUtils;
             _zipFile = zipFile;
+            _attachmentResolve = attachmentResolve;
             _httpClientFactory = httpClientFactory;
             _apiConfig = apiConfig;
             _logger = logger;
-         
+
         }
 
         public void StartImport(Imports import)
@@ -62,7 +64,7 @@ namespace MessengerIntegration.HostedService
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
             Task.Run(async () => await ImportFile(token), token);
-            
+
         }
         public async Task Cancel()
         {
@@ -81,7 +83,7 @@ namespace MessengerIntegration.HostedService
                 using var zip = _zipFile.Open(stream);
                 var messages = _zipFile.GetMessages(zip);
                 cancellationToken.ThrowIfCancellationRequested();
-                
+
                 if (!messages.Any())
                 {
                     _logger.LogError($"No messages for import: {_import.Id}");
@@ -99,7 +101,7 @@ namespace MessengerIntegration.HostedService
                 {
                     await ImportConversation(conversation.Key, conversation.Value, contactApiClient, messageApiClient, cancellationToken);
                 }
-                
+
 
                 await SetStatus(Statuses.Completed);
                 _logger.LogInformation($"Finished import {_import.Id}");
@@ -109,7 +111,7 @@ namespace MessengerIntegration.HostedService
                 _logger.LogError($"Corrupted file for import: {_import.Id}: {e.Message}\n{e.StackTrace}");
                 await SetStatus(Statuses.ErrorInvalidFile);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError($"Exception occured while importing file for import: {_import.Id}: {e.Message}\n{e.StackTrace}");
                 await SetStatus(Statuses.ErrorUnknownError);
@@ -120,12 +122,12 @@ namespace MessengerIntegration.HostedService
                 {
                     _fileUtils.Delete(_import.Id);
                 }
-                lock(_syncObject)
+                lock (_syncObject)
                 {
                     Completed = true;
                 }
             }
-            
+
         }
         private async Task SetStatus(string statusName)
         {
@@ -134,14 +136,14 @@ namespace MessengerIntegration.HostedService
                 await _importService.SetStatus(_import, statusName);
             }
         }
-        private async Task ImportConversation(string name, 
-            List<ZipArchiveEntry> conversationData, 
+        private async Task ImportConversation(string name,
+            List<ZipArchiveEntry> conversationData,
             ContactApiClient contactApiClient,
             MessageApiClient messageApiClient,
             CancellationToken cancellationToken)
         {
             using var conversationStream = _zipFile.GetConversationStream(conversationData);
-            
+
             cancellationToken.ThrowIfCancellationRequested();
             if (conversationStream == null)
             {
@@ -155,7 +157,7 @@ namespace MessengerIntegration.HostedService
             cancellationToken.ThrowIfCancellationRequested();
             await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, cancellationToken);
         }
-        
+
         private async Task<ContactWithId> ImportContact(string conversationName, JsonDocument document,
             ContactApiClient contactApiClient)
         {
@@ -173,11 +175,11 @@ namespace MessengerIntegration.HostedService
             return await contactApiClient.CreateOrUpdateContact(contact);
         }
         private async Task ImportMessages(ContactWithId contact, MessageApiClient messageApiClient,
-            JsonDocument document, List<ZipArchiveEntry> conversationData, 
+            JsonDocument document, List<ZipArchiveEntry> conversationData,
             CancellationToken cancellationToken)
         {
             var lastSyncTime = await messageApiClient.GetSyncTime(contact.Id);
-            var messages = document.RootElement.GetProperty("messages");            
+            var messages = document.RootElement.GetProperty("messages");
             foreach (var message in messages.EnumerateArray())
             {
                 await ImportMessages(contact, messageApiClient, message, conversationData, lastSyncTime);
@@ -195,12 +197,50 @@ namespace MessengerIntegration.HostedService
                 {
                     ContactId = contact.Id,
                     Content = FixEncoding(rawMessage.Content),
+                    Attachments = await GetAttachments(rawMessage, conversationData),
                     Date = messageDate,
                     WriterType = rawMessage.SenderName == _import.FacebookName ? "app_user" : "contact",
                     ContactMemberId = contact.Members.Count == 1 ? null : contact.Members.FirstOrDefault(x => x.Name == FixEncoding(rawMessage.SenderName))?.Id
                 };
                 await messageApiClient.CreateMessage(messageToSend);
             }
+        }
+        private async Task<List<Attachment>> GetAttachments(RawMessage rawMessage, List<ZipArchiveEntry> conversation)
+        {
+            var result = new List<Attachment>();
+
+            result.AddRange(await GetAttachments(rawMessage.Photos, 
+                (name) => _attachmentResolve.ResolveForPhoto(conversation, name)));
+
+            return result;
+        }
+        private async Task<List<Attachment>> GetAttachments(List<RawAttachment> rawAttachments,
+            Func<string, ZipArchiveEntry> resolver)
+        {
+            var result = new List<Attachment>();
+            if (rawAttachments == null)
+            {
+                return result;
+            }
+
+            foreach (var attachment in rawAttachments)
+            {
+                var file = resolver(attachment.Uri);
+                if (file != null)
+                {
+                    using var stream = file.Open();
+                    using var buffer = new MemoryStream();
+                    await stream.CopyToAsync(buffer);
+                    var mime = _attachmentResolve.GetMimeType(file.Name);
+                    result.Add(new Attachment
+                    {
+                        Content = buffer.ToArray(),
+                        ContentType = mime,
+                    });
+                }
+            }
+
+            return result;
         }
         private string FixEncoding(string src)
         {
