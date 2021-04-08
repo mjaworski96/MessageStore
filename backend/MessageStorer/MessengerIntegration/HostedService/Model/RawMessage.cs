@@ -12,7 +12,12 @@ namespace MessengerIntegration.HostedService.Model
         public long TimestampMs { get; set; }
 
         public string Content { get; set; }
+
         public List<RawAttachment> Photos { get; set; }
+
+        public List<RawAttachment> Videos { get; set; }
+
+        public List<RawAttachment> Gifs { get; set; }
     }
     public class RawAttachment
     {
