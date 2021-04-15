@@ -13,6 +13,7 @@ namespace MessengerIntegration.Infrastructure
         ZipArchiveEntry ResolveForPhoto(List<ZipArchiveEntry> entries, string uri);
         ZipArchiveEntry ResolveForVideo(List<ZipArchiveEntry> entries, string uri);
         ZipArchiveEntry ResolveForGif(List<ZipArchiveEntry> entries, string uri);
+        ZipArchiveEntry ResolveForAudio(List<ZipArchiveEntry> entries, string uri);
         string GetMimeType(string path);
     }
     public class AttachmentResolve : IAttachmentResolve
@@ -37,20 +38,7 @@ namespace MessengerIntegration.Infrastructure
 
         public ZipArchiveEntry ResolveForVideo(List<ZipArchiveEntry> entries, string uri)
         {
-            entries = entries.Where(x => x.FullName.Contains("videos")).ToList();
-            var last = uri.Split("/").LastOrDefault();
-            var filenamePrefix = last.Substring(0, last.IndexOf(".")).Replace("-", "");
-            if (string.IsNullOrEmpty(last))
-            {
-                _logger.LogWarning($"Can't resolve video: {uri}");
-                return null;
-            }
-            var entry = entries.FirstOrDefault(x => x.Name.StartsWith(filenamePrefix));
-            if (entry == null)
-            {
-                _logger.LogWarning($"Can't resolve video: {uri}");
-            }
-            return entry;
+            return ResolveForVideoAudio("videos", entries, uri, "video");
         }
 
         public ZipArchiveEntry ResolveForGif(List<ZipArchiveEntry> entries, string uri)
@@ -62,6 +50,28 @@ namespace MessengerIntegration.Infrastructure
             entries = entries.Where(x => x.FullName.Contains(directory)).ToList();
             var last = uri.Split("/").LastOrDefault();
             var filenamePrefix = last.Substring(0, last.IndexOf("."));
+            if (string.IsNullOrEmpty(last))
+            {
+                _logger.LogWarning($"Can't resolve {type}: {uri}");
+                return null;
+            }
+            var entry = entries.FirstOrDefault(x => x.Name.StartsWith(filenamePrefix));
+            if (entry == null)
+            {
+                _logger.LogWarning($"Can't resolve {type}: {uri}");
+            }
+            return entry;
+        }
+
+        public ZipArchiveEntry ResolveForAudio(List<ZipArchiveEntry> entries, string uri)
+        {
+            return ResolveForVideoAudio("audio", entries, uri, "audio");
+        }
+        private ZipArchiveEntry ResolveForVideoAudio(string directory, List<ZipArchiveEntry> entries, string uri, string type)
+        {
+            entries = entries.Where(x => x.FullName.Contains(directory)).ToList();
+            var last = uri.Split("/").LastOrDefault();
+            var filenamePrefix = last.Substring(0, last.IndexOf(".")).Replace("-", "");
             if (string.IsNullOrEmpty(last))
             {
                 _logger.LogWarning($"Can't resolve {type}: {uri}");

@@ -18,6 +18,9 @@ namespace MessengerIntegration.HostedService.Model
         public List<RawAttachment> Videos { get; set; }
 
         public List<RawAttachment> Gifs { get; set; }
+
+        [JsonProperty("audio_files")]
+        public List<RawAttachment> Audio { get; set; }
     }
     public class RawAttachment
     {

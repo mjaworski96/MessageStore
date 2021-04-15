@@ -218,6 +218,9 @@ namespace MessengerIntegration.HostedService
             result.AddRange(await GetAttachments(rawMessage.Gifs,
                 (name) => _attachmentResolve.ResolveForGif(conversation, name)));
 
+            result.AddRange(await GetAttachments(rawMessage.Audio,
+                (name) => _attachmentResolve.ResolveForAudio(conversation, name)));
+
             return result;
         }
         private async Task<List<Attachment>> GetAttachments(List<RawAttachment> rawAttachments,
