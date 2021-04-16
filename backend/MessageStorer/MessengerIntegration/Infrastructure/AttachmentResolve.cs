@@ -14,6 +14,7 @@ namespace MessengerIntegration.Infrastructure
         ZipArchiveEntry ResolveForVideo(List<ZipArchiveEntry> entries, string uri);
         ZipArchiveEntry ResolveForGif(List<ZipArchiveEntry> entries, string uri);
         ZipArchiveEntry ResolveForAudio(List<ZipArchiveEntry> entries, string uri);
+        ZipArchiveEntry ResolveForFile(List<ZipArchiveEntry> entries, string uri);
         string GetMimeType(string path);
     }
     public class AttachmentResolve : IAttachmentResolve
@@ -81,6 +82,23 @@ namespace MessengerIntegration.Infrastructure
             if (entry == null)
             {
                 _logger.LogWarning($"Can't resolve {type}: {uri}");
+            }
+            return entry;
+        }
+
+        public ZipArchiveEntry ResolveForFile(List<ZipArchiveEntry> entries, string uri)
+        {
+            entries = entries.Where(x => x.FullName.Contains("files")).ToList();
+            var filename = uri.Split("/").LastOrDefault();
+            if (string.IsNullOrEmpty(filename))
+            {
+                _logger.LogWarning($"Can't resolve file: {uri}");
+                return null;
+            }
+            var entry = entries.FirstOrDefault(x => x.Name == filename);
+            if (entry == null)
+            {
+                _logger.LogWarning($"Can't resolve file: {uri}");
             }
             return entry;
         }

@@ -1,4 +1,4 @@
-﻿using MessengerIntegration.Config;
+using MessengerIntegration.Config;
 using MessengerIntegration.HostedService.Model;
 using MessengerIntegration.Infrastructure;
 using MessengerIntegration.Infrastructure.Http;
@@ -220,6 +220,9 @@ namespace MessengerIntegration.HostedService
 
             result.AddRange(await GetAttachments(rawMessage.Audio,
                 (name) => _attachmentResolve.ResolveForAudio(conversation, name)));
+
+            result.AddRange(await GetAttachments(rawMessage.Files,
+                (name) => _attachmentResolve.ResolveForFile(conversation, name)));
 
             return result;
         }
