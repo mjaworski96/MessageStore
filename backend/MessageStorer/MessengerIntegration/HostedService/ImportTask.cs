@@ -1,4 +1,4 @@
-using MessengerIntegration.Config;
+﻿using MessengerIntegration.Config;
 using MessengerIntegration.HostedService.Model;
 using MessengerIntegration.Infrastructure;
 using MessengerIntegration.Infrastructure.Http;
@@ -261,7 +261,8 @@ namespace MessengerIntegration.HostedService
                 return src;
             }
             var encoding = Encoding.GetEncoding(_config.FileEncoding);
-            var unescapeText = System.Text.RegularExpressions.Regex.Unescape(src);
+
+            var unescapeText = src.Replace("\\u00", "");
             return Encoding.UTF8.GetString(encoding.GetBytes(unescapeText));
         }
     }
