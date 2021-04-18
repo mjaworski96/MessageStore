@@ -17,8 +17,7 @@ namespace MessengerIntegration.HostedService
     public class HostedImportService : IHostedService, IDisposable
     {
         private readonly IImportConfig _config;
-        private readonly IImportRepository _importRepository;
-        private readonly IImportService _importService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
         private readonly IAttachmentResolve _attachmentResolve;
@@ -29,17 +28,14 @@ namespace MessengerIntegration.HostedService
         private Timer _timer;
         private List<ImportTask> _importTasks;
         private object _syncObject;
-        private IServiceScope _serviceScope;
+       
 
-        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeProvider,
+        public HostedImportService(IImportConfig config, IServiceScopeFactory serviceScopeFactory,
             IFileUtils fileUtils, IZipFile zipFile, IAttachmentResolve attachmentResolve,
             IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> helperLogger)
         {
             _config = config;
-            _serviceScope = serviceScopeProvider.CreateScope();
-            
-            _importRepository = _serviceScope.ServiceProvider.GetService<IImportRepository>();
-            _importService = _serviceScope.ServiceProvider.GetService<IImportService>();
+            _serviceScopeFactory = serviceScopeFactory;
 
             _fileUtils = fileUtils;
             _zipFile = zipFile;
@@ -55,7 +51,7 @@ namespace MessengerIntegration.HostedService
             _importTasks = new List<ImportTask>(_config.ParallelImportsCount);
             for (int i = 0; i < _config.ParallelImportsCount; i++)
             {
-                _importTasks.Add(new ImportTask(_syncObject, _config, _importRepository, _importService, _fileUtils,
+                _importTasks.Add(new ImportTask(_syncObject, _config, _serviceScopeFactory, _fileUtils,
                     _zipFile, _attachmentResolve, _httpClientFactory, _apiConfig, _helperLogger));
             }
 
@@ -74,13 +70,17 @@ namespace MessengerIntegration.HostedService
 
                 if (freeTasks.Any())
                 {
-                    var queuedImportsTask = _importRepository.GetQueued(_config.ParallelImportsCount);
-                    queuedImportsTask.Wait();
-                    var queuedImports = queuedImportsTask.Result;
-                    for (int i = 0; i < queuedImports.Count; i++)
+                    using(var scope = _serviceScopeFactory.CreateScope())
                     {
-                        freeTasks[i].StartImport(queuedImports[i]);
-                    }
+                        var importRepository = scope.ServiceProvider.GetService<IImportRepository>();
+                        var queuedImportsTask = importRepository.GetQueued(_config.ParallelImportsCount);
+                        queuedImportsTask.Wait();
+                        var queuedImports = queuedImportsTask.Result;
+                        for (int i = 0; i < queuedImports.Count; i++)
+                        {
+                            freeTasks[i].StartImport(queuedImports[i].Id).Wait();
+                        }
+                    }   
                 }
             }
         }
@@ -94,7 +94,6 @@ namespace MessengerIntegration.HostedService
         public void Dispose()
         {
             _timer.Dispose();
-            _serviceScope.Dispose();
         }
     }
 }

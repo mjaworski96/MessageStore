@@ -6,6 +6,7 @@ using MessengerIntegration.Infrastructure.Http.Model;
 using MessengerIntegration.Persistance.Entity;
 using MessengerIntegration.Persistance.Repository;
 using MessengerIntegration.Service;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,8 +31,9 @@ namespace MessengerIntegration.HostedService
         private CancellationTokenSource _cancellationTokenSource;
         private readonly object _syncObject;
         private readonly IImportConfig _config;
-        private readonly IImportRepository _importRepository;
-        private readonly IImportService _importService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private IImportRepository _importRepository;
+        private IImportService _importService;
         private readonly IFileUtils _fileUtils;
         private readonly IZipFile _zipFile;
         private readonly IAttachmentResolve _attachmentResolve;
@@ -40,14 +42,14 @@ namespace MessengerIntegration.HostedService
         private readonly ILogger<ImportTask> _logger;
 
         private Imports _import;
+        private IServiceScope _serviceScope;
 
-        public ImportTask(object syncObject, IImportConfig config, IImportRepository importRepository, IImportService importService, IFileUtils fileUtils, IZipFile zipFile, IAttachmentResolve attachmentResolve, IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> logger)
+        public ImportTask(object syncObject, IImportConfig config, IServiceScopeFactory serviceScopeFactory, IFileUtils fileUtils, IZipFile zipFile, IAttachmentResolve attachmentResolve, IHttpClientFactory httpClientFactory, IApiConfig apiConfig, ILogger<ImportTask> logger)
         {
             Completed = true;
             _syncObject = syncObject;
             _config = config;
-            _importRepository = importRepository;
-            _importService = importService;
+            _serviceScopeFactory = serviceScopeFactory;
             _fileUtils = fileUtils;
             _zipFile = zipFile;
             _attachmentResolve = attachmentResolve;
@@ -57,25 +59,29 @@ namespace MessengerIntegration.HostedService
 
         }
 
-        public void StartImport(Imports import)
+        public async Task StartImport(string importId)
         {
             Completed = false;
-            _import = import;
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
-            Task.Run(async () => await ImportFile(token), token);
+            PrepareScope();
+            _import = await _importRepository.Get(importId);
+            #pragma warning disable CS4014
+            Task.Run(async () => await ImportFile(importId, token), token);
+            #pragma warning restore CS4014
 
         }
         public async Task Cancel()
         {
             _cancellationTokenSource?.Cancel();
             await SetStatus(Statuses.Queued);
+            _serviceScope?.Dispose();
         }
-        private async Task ImportFile(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation($"Start import {_import.Id}");
+        private async Task ImportFile(string importId, CancellationToken cancellationToken)
+        {        
             try
             {
+                _logger.LogInformation($"Start import {_import.Id}");
                 await SetStatus(Statuses.Processing);
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -119,6 +125,7 @@ namespace MessengerIntegration.HostedService
             finally
             {
                 await _importRepository.Save();
+                _serviceScope?.Dispose();
                 if (_config.DeleteFileAfterImport && _import != null)
                 {
                     _fileUtils.Delete(_import.Id);
@@ -136,6 +143,12 @@ namespace MessengerIntegration.HostedService
             {
                 await _importService.SetStatus(_import, statusName);
             }
+        }
+        private void PrepareScope()
+        {
+            _serviceScope = _serviceScopeFactory.CreateScope();
+            _importRepository = _serviceScope.ServiceProvider.GetService<IImportRepository>();
+            _importService = _serviceScope.ServiceProvider.GetService<IImportService>();
         }
         private async Task ImportConversation(string name,
             List<ZipArchiveEntry> conversationData,
