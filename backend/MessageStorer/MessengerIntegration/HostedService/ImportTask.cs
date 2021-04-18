@@ -118,6 +118,7 @@ namespace MessengerIntegration.HostedService
             }
             finally
             {
+                await _importRepository.Save();
                 if (_config.DeleteFileAfterImport && _import != null)
                 {
                     _fileUtils.Delete(_import.Id);
@@ -203,8 +204,22 @@ namespace MessengerIntegration.HostedService
                     ContactMemberId = contact.Members.Count == 1 ? null : contact.Members.FirstOrDefault(x => x.Name == FixEncoding(rawMessage.SenderName))?.Id
                 };
                 await messageApiClient.CreateMessage(messageToSend);
+                UpdateImportDates(messageDate);
             }
         }
+
+        private void UpdateImportDates(DateTime messageDate)
+        {
+            if (!_import.StartDate.HasValue || _import.StartDate.Value > messageDate)
+            {
+                _import.StartDate = messageDate;
+            }
+            if (!_import.EndDate.HasValue || _import.EndDate.Value < messageDate)
+            {
+                _import.EndDate = messageDate;
+            }
+        }
+
         private async Task<List<Attachment>> GetAttachments(RawMessage rawMessage, List<ZipArchiveEntry> conversation)
         {
             var result = new List<Attachment>();
