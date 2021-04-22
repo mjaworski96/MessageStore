@@ -47,8 +47,7 @@ namespace API.Service
                 Content = messageDto.Content,
                 Date = messageDto.Date,
                 WriterType = await _writerTypeRepository.Get(messageDto.WriterType),
-                Attachments = (messageDto.Attachments ?? new List<AttachmentDto>())
-                    .Select(x => _attachmentService.CreateAttachment(x)).ToList()
+                Attachments = await _attachmentService.CreateAttachments(messageDto.Attachments)
             };
 
             if (messageDto.ContactMemberId.HasValue)
@@ -137,7 +136,7 @@ namespace API.Service
             return new AttachmentDtoWithId
             {
                 Id = attachment.Id,
-                Content = attachment.Content,
+                //Content = attachment.Content,
                 ContentType = attachment.ContentType
             };
         }

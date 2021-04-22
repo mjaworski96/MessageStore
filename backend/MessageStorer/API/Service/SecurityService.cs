@@ -15,18 +15,21 @@ namespace API.Service
         void CheckIfUserIsOwnerOfAliases(IEnumerable<Aliases> aliases);
         Task CheckIfUserIsOwnerOfContact(int contactId);
         void CheckIfUserIsOwnerOfContact(Contacts contact);
+        void CheckIfUserIsOwnerOfAttachment(Attachments attachment);
     }
     public class SecurityService: ISecurityService
     {
         private readonly IAliasRepository _aliasRepository;
         private readonly IHttpMetadataService _httpMetadataService;
         private readonly IContactRepository _contactRepository;
+        private readonly IMessageRepository _messageRepository;
 
-        public SecurityService(IAliasRepository aliasRepository, IHttpMetadataService httpMetadataService, IContactRepository contactRepository)
+        public SecurityService(IAliasRepository aliasRepository, IHttpMetadataService httpMetadataService, IContactRepository contactRepository, IMessageRepository messageRepository)
         {
             _aliasRepository = aliasRepository;
             _httpMetadataService = httpMetadataService;
             _contactRepository = contactRepository;
+            _messageRepository = messageRepository;
         }
 
         public async Task CheckIfUserIsOwnerOfAlias(int aliasId)
@@ -67,6 +70,13 @@ namespace API.Service
             {
                 throw new ForbiddenException($"You have no access for this contact");
             }
+        }
+
+        public void CheckIfUserIsOwnerOfAttachment(Attachments attachment)
+        {
+            var ownerId = attachment.Message.Contact.AppUserId;
+            if (ownerId != _httpMetadataService.UserId)
+                throw new ForbiddenException($"You have no access for this attachment");
         }
     }
 }

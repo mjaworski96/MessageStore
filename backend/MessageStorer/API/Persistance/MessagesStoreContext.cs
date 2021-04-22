@@ -116,11 +116,13 @@ namespace API.Persistance
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Content).HasColumnName("content");
-
                 entity.Property(e => e.ContentType)
                     .HasColumnName("content_type")
                     .HasMaxLength(100);
+
+                entity.Property(e => e.Filename)
+                    .HasColumnName("filename")
+                    .HasMaxLength(64);
 
                 entity.Property(e => e.MessageId).HasColumnName("message_id");
 

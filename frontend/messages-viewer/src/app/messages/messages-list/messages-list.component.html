@@ -7,11 +7,7 @@
           <div>
             {{message.content}}
           </div>
-          <div *ngIf="message.attachments.length > 0">
-            <div *ngFor="let attachment of message.attachments" class="attachment">
-              <img [src]="'data:' + attachment.contentType + ';charset=utf-8;base64, ' + attachment.content | safeImage">
-            </div>
-          </div>
+          <app-attachments [attachments]="message.attachments"></app-attachments>
           <div class="message-data">
             <span *ngIf="writtenByContact(message) else you">{{message.contactName}}</span>
             {{message.date | date: 'dd.MM.yyyy HH:mm:ss'}}

@@ -7,10 +7,11 @@ import { SearchComponent } from './search/search.component';
 import {MatButtonModule, MatCheckboxModule, MatInputModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
+import { AttachmentsComponent } from './attachments/attachments.component';
 
 
 @NgModule({
-  declarations: [MessagesListComponent, SearchComponent],
+  declarations: [MessagesListComponent, SearchComponent, AttachmentsComponent],
   imports: [
     CommonModule,
     MessagesRoutingModule,

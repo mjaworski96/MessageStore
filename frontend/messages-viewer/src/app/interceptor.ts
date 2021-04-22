@@ -14,7 +14,6 @@ export class Interceptor  implements HttpInterceptor {
               private errorHandlingService: ErrorHandlingService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     if (this.sessionStorageService.isUserLoggedIn()) {
       request = request.clone({
         setHeaders: {
@@ -22,10 +21,11 @@ export class Interceptor  implements HttpInterceptor {
         }
       });
     }
+    const ignoreError = request.url.includes('/api/attachments');
     return next.handle(request).pipe(
       tap(
         result => this.handleValidResponse(result),
-        error => this.handleErrorResponse(error))
+        error => this.handleErrorResponse(error, ignoreError))
     );
   }
   handleValidResponse(result: HttpEvent<any>): void {
@@ -38,8 +38,10 @@ export class Interceptor  implements HttpInterceptor {
       }
     }
   }
-  handleErrorResponse(error: any): Observable<any> {
-    this.errorHandlingService.handle(error);
+  handleErrorResponse(error: any, ignoreErrors: boolean = false): Observable<any> {
+    if (!ignoreErrors) {
+      this.errorHandlingService.handle(error);
+    }
     return of(error);
   }
 }

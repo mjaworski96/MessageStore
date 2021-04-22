@@ -1,0 +1,7 @@
+<div *ngIf="attachments.length > 0">
+  <div *ngFor="let attachment of attachments" class="attachment">
+    <div *ngIf="getType(attachment) == 'image'">
+      <img [src]="apiAttachmentsUrl + attachment.id  | attachment | async | notNull">
+    </div>
+</div>
+</div>

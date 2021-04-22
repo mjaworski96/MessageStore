@@ -95,12 +95,14 @@ namespace API
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ISyncDateTimeService, SyncDateTimeService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IAliasRepository, AliasRepository>();
             services.AddScoped<IAliasService, AliasService>();
             services.AddScoped<ISecurityService, SecurityService>();
             services.AddScoped<IAppUserService, AppUserService>();
 
-            services.AddScoped<ISecurityConfig, SecurityConfig>();
+            services.AddSingleton<ISecurityConfig, SecurityConfig>();
+            services.AddSingleton<IAttachmentConfig, AttachmentConfig>();
 
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionHandler()));

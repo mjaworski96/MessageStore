@@ -30,11 +30,7 @@
       </div>
       <div class="message-content" [innerHTML]="searchHighlight(result.content)">
       </div>
-      <div *ngIf="result.attachments.length > 0">
-        <div *ngFor="let attachment of result.attachments" class="attachment">
-          <img [src]="'data:' + attachment.contentType + ';charset=utf-8;base64, ' + attachment.content | safeImage">
-        </div>
-      </div>
+      <app-attachments [attachments]="result.attachments"></app-attachments>
     </div>
   </div>
   <ng-template #noResults>
