@@ -1,0 +1,10 @@
+<div>
+  <div *ngIf="getType() == 'image'">
+    <img [src]="apiAttachmentsUrl + attachment.id  | attachment | async | notNull">
+  </div>
+  <div *ngIf="getType() == 'video'">
+    <video controls>
+      <source [src]="getVideoUrl()" [type]="attachment.contentType">
+    </video>
+  </div>
+</div>

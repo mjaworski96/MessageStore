@@ -8,10 +8,11 @@ import {MatButtonModule, MatCheckboxModule, MatInputModule} from '@angular/mater
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import { AttachmentsComponent } from './attachments/attachments.component';
+import { AttachmentComponent } from './attachments/attachment/attachment.component';
 
 
 @NgModule({
-  declarations: [MessagesListComponent, SearchComponent, AttachmentsComponent],
+  declarations: [MessagesListComponent, SearchComponent, AttachmentsComponent, AttachmentComponent],
   imports: [
     CommonModule,
     MessagesRoutingModule,

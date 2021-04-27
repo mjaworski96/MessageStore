@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 
-namespace API
+namespace API.Middleware
 {
     public class RefreshTokenMiddleware
     {

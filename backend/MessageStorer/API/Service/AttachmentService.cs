@@ -14,6 +14,7 @@ namespace API.Service
     {
         Task<List<Attachments>> CreateAttachments(List<AttachmentDto> attachments);
         Task<AttachmentContentDto> Get(int id);
+        Task<string> GetFilename(int id);
     }
     public class AttachmentService : IAttachmentService
     {
@@ -56,6 +57,14 @@ namespace API.Service
                 Content = content,
                 ContentType = entity.ContentType
             };
+        }
+
+        public async Task<string> GetFilename(int id)
+        {
+            var entity = await _attachmentRepository.Get(id);
+            _securityService.CheckIfUserIsOwnerOfAttachment(entity);
+            var relativePath = Path.Combine(_attachmentsConfig.Directory, entity.Filename);
+            return Path.GetFullPath(relativePath);
         }
 
         private async Task<Attachments> CreateAttachment(AttachmentDto attachmentDto)

@@ -12,11 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Common.Service;
+using API.Middleware;
 
 namespace API
 {
@@ -119,6 +118,8 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMiddleware<AddTokenFromQueryMiddleware>();
 
             app.UseAuthentication();
 

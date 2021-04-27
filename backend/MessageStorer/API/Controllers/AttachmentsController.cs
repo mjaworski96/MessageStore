@@ -23,13 +23,23 @@ namespace API.Controllers
             _attachmentService = attachmentService;
             _logger = logger;
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            _logger.LogInformation($"Started GET /api/contacts");
+            _logger.LogInformation($"Started GET /api/attachments/{id}");
             var result = await _attachmentService.Get(id);
-            _logger.LogInformation($"Ended GET /api/contacts");
+            _logger.LogInformation($"Ended GET /api/attachments/{id}");
             return File(result.Content, result.ContentType);
+        }
+
+        [HttpGet("{id}/stream")]
+        public async Task<ActionResult> GetStream(int id)
+        {
+            _logger.LogInformation($"Started GET /api/attachments/{id}/stream");
+            var result = await _attachmentService.GetFilename(id);
+            _logger.LogInformation($"Ended GET /api/attachments/{id}/stream");
+            return PhysicalFile(result, "application/octet-stream", true);
         }
     }
 }
