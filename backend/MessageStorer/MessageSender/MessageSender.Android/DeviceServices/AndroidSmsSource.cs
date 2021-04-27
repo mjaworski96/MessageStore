@@ -187,12 +187,14 @@ namespace MessageSender.Droid.DeviceServices
                     {
                         var partId = cursor.GetString(cursor.GetColumnIndex("_id"));
                         var type = cursor.GetString(cursor.GetColumnIndex("ct"));
+                        var name = cursor.GetString(cursor.GetColumnIndex("name"));
                         if (type != "text/plain" && type != "application/smil")
                         {
                             yield return new Attachment
                             {
                                 Content = GetAttachmentContent(partId),
-                                ContentType = type
+                                ContentType = type,
+                                SaveAsFilename = name
                             };
                         }
                     } while (cursor.MoveToNext());

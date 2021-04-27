@@ -4,6 +4,7 @@
     {
         public byte[] Content { get; set; }
         public string ContentType { get; set; }
+        public string SaveAsFilename { get; set; }
     }
     public class AttachmentWithId
     {

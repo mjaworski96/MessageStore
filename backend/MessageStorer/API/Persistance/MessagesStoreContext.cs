@@ -126,6 +126,10 @@ namespace API.Persistance
 
                 entity.Property(e => e.MessageId).HasColumnName("message_id");
 
+                entity.Property(e => e.SaveAsFilename)
+                    .HasColumnName("save_as_filename")
+                    .HasMaxLength(256);
+
                 entity.HasOne(d => d.Message)
                     .WithMany(p => p.Attachments)
                     .HasForeignKey(d => d.MessageId)

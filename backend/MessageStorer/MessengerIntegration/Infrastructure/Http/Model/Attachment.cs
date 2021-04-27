@@ -9,5 +9,6 @@ namespace MessengerIntegration.Infrastructure.Http.Model
     {
         public byte[] Content { get; set; }
         public string ContentType { get; set; }
+        public string SaveAsFilename { get; set; }
     }
 }

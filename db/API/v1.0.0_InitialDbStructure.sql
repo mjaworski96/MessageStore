@@ -156,8 +156,9 @@ ALTER TABLE messages ADD CONSTRAINT fk_messages_contacts_members FOREIGN KEY (co
 CREATE TABLE attachments
 (
 	id INTEGER NOT NULL,
-	content_type VARCHAR(100),
 	filename VARCHAR(64),
+	content_type VARCHAR(100),
+	save_as_filename VARCHAR (256)
 	message_id INTEGER NOT NULL
 );
 ALTER TABLE attachments ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);

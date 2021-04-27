@@ -9,6 +9,7 @@ namespace API.Persistance.Entity
         public string ContentType { get; set; }
         public int MessageId { get; set; }
         public string Filename { get; set; }
+        public string SaveAsFilename { get; set; }
 
         public virtual Messages Message { get; set; }
     }

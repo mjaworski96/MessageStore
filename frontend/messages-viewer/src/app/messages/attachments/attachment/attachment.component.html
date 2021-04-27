@@ -1,10 +1,16 @@
 <div>
-  <div *ngIf="getType() == 'image'">
+  <div *ngIf="getType() === 'image'">
     <img [src]="apiAttachmentsUrl + attachment.id  | attachment | async | notNull">
   </div>
-  <div *ngIf="getType() == 'video'">
+  <div *ngIf="getType() === 'video'">
     <video controls>
       <source [src]="getVideoUrl()" [type]="attachment.contentType">
     </video>
+  </div>
+  <div *ngIf="getType() !== 'video' && getType() !== 'video'" class="full-width-button">
+    <button mat-flat-button color="primary" (click)="downloadAttachment()"
+            i18n="Download attachment|Text on download attachment button@@download-attachment">
+      Download attachment
+    </button>
   </div>
 </div>

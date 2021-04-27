@@ -2,6 +2,7 @@
 using API.Dto;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
+using HeyRed.Mime;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,8 @@ namespace API.Service
     {
         Task<List<Attachments>> CreateAttachments(List<AttachmentDto> attachments);
         Task<AttachmentContentDto> Get(int id);
-        Task<string> GetFilename(int id);
+        Task<AttachmentMetadataDto> GetMetadata(int id);
+        AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment);
     }
     public class AttachmentService : IAttachmentService
     {
@@ -41,6 +43,27 @@ namespace API.Service
             return result;
         }
 
+        private async Task<Attachments> CreateAttachment(AttachmentDto attachmentDto)
+        {
+            var filename = Guid.NewGuid().ToString();
+            await File.WriteAllBytesAsync(Path.Combine(_attachmentsConfig.Directory, filename), attachmentDto.Content);
+            return new Attachments
+            {
+                ContentType = attachmentDto.ContentType,
+                Filename = filename,
+                SaveAsFilename = attachmentDto.SaveAsFilename ?? $"{filename}.{MimeTypesMap.GetExtension(attachmentDto.ContentType)}"
+            };
+        }
+
+        public AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment)
+        {
+            return new AttachmentDtoWithId
+            {
+                Id = attachment.Id,
+                ContentType = attachment.ContentType,
+                SaveAsFilename = attachment.SaveAsFilename
+            };
+        }
         public async Task<AttachmentContentDto> Get(int id)
         {
             var entity = await _attachmentRepository.Get(id);
@@ -55,26 +78,21 @@ namespace API.Service
             return new AttachmentContentDto
             {
                 Content = content,
-                ContentType = entity.ContentType
+                ContentType = entity.ContentType,
+                SaveAsFilename = entity.SaveAsFilename
             };
         }
 
-        public async Task<string> GetFilename(int id)
+        public async Task<AttachmentMetadataDto> GetMetadata(int id)
         {
             var entity = await _attachmentRepository.Get(id);
             _securityService.CheckIfUserIsOwnerOfAttachment(entity);
             var relativePath = Path.Combine(_attachmentsConfig.Directory, entity.Filename);
-            return Path.GetFullPath(relativePath);
-        }
-
-        private async Task<Attachments> CreateAttachment(AttachmentDto attachmentDto)
-        {
-            var filename = Guid.NewGuid().ToString();
-            await File.WriteAllBytesAsync(Path.Combine(_attachmentsConfig.Directory, filename), attachmentDto.Content);
-            return new Attachments
+            return new AttachmentMetadataDto
             {
-                ContentType = attachmentDto.ContentType,
-                Filename = filename
+                Filename = Path.GetFullPath(relativePath),
+                ContentType = entity.ContentType,
+                SaveAsFilename = entity.SaveAsFilename
             };
         }
     }

@@ -37,9 +37,9 @@ namespace API.Controllers
         public async Task<ActionResult> GetStream(int id)
         {
             _logger.LogInformation($"Started GET /api/attachments/{id}/stream");
-            var result = await _attachmentService.GetFilename(id);
+            var result = await _attachmentService.GetMetadata(id);
             _logger.LogInformation($"Ended GET /api/attachments/{id}/stream");
-            return PhysicalFile(result, "application/octet-stream", true);
+            return PhysicalFile(result.Filename, "application/octet-stream", result.SaveAsFilename, true);
         }
     }
 }

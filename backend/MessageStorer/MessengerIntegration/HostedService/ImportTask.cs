@@ -276,6 +276,7 @@ namespace MessengerIntegration.HostedService
                     {
                         Content = buffer.ToArray(),
                         ContentType = mime,
+                        SaveAsFilename = file.Name
                     });
                 }
             }

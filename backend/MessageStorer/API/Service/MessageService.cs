@@ -71,7 +71,7 @@ namespace API.Service
                 WriterType = message.WriterType.Name,
                 ContactId = message.Contact.Id,
                 ContactMemberId = message.ContactMemberId,
-                Attachments = message.Attachments.Select(x => CreateAttachemtDtoWithId(x)).ToList(),
+                Attachments = message.Attachments.Select(x => _attachmentService.CreateAttachemtDtoWithId(x)).ToList(),
                 Application = message.Contact.Application.Name,
                 ContactName = GetContactName(message)
             };
@@ -90,7 +90,7 @@ namespace API.Service
                 {
                     MessageId = x.Id,
                     Content = x.Content,
-                    Attachments = x.Attachments.Select(y => CreateAttachemtDtoWithId(y)).ToList(),
+                    Attachments = x.Attachments.Select(y => _attachmentService.CreateAttachemtDtoWithId(y)).ToList(),
                     Date = x.Date.Value,
                     Application = x.Contact.Application.Name,
                     ContactName = GetContactName(x),
@@ -128,16 +128,6 @@ namespace API.Service
             return new MessageDtoWithIdList
             {
                 Messages = list
-            };
-        }
-
-        private AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment)
-        {
-            return new AttachmentDtoWithId
-            {
-                Id = attachment.Id,
-                //Content = attachment.Content,
-                ContentType = attachment.ContentType
             };
         }
         private string GetContactName(Messages message)
