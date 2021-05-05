@@ -4,3 +4,6 @@ img, video {
   margin: 0 auto;
   display: block;
 }
+.attachment-wrapper {
+  margin: 10px 0;
+}

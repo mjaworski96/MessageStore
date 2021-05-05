@@ -2,6 +2,9 @@ import {AttachmentWithID} from './attachment';
 
 export interface Query {
   query: string;
+  from: string;
+  to: string;
+  hasAttachments: boolean;
   ignoreLetterSize: boolean;
   aliasesIds: number[];
 }

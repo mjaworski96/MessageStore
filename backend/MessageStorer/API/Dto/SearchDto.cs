@@ -7,7 +7,10 @@ namespace API.Dto
     {
         public List<int> AliasesIds { get; set; }
         public string Query { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
         public bool IgnoreLetterSize { get; set; } = true;
+        public bool HasAttachments { get; set; } = false;
     }
     public class SearchResultDto
     {

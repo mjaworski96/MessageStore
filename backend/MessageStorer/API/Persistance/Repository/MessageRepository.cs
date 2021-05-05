@@ -1,5 +1,6 @@
 ﻿using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,8 @@ namespace API.Persistance.Repository
         Task<Messages> GetNewest(int userId, string application, int? contactId);
         Task<Messages> GetOldest(int userId, string application, int? contactId);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
-        Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize);
+        Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize,
+            DateTime? dateFrom, DateTime? dateTo, bool hasAttachment);
         Task<long> GetRowNumber(int messageId, int aliasId);
     }
     public class MessageRepository: IMessageRepository
@@ -28,8 +30,9 @@ namespace API.Persistance.Repository
         {
             await _messageStoreContext.AddAsync(message);
         }
-        //TODO
-        public Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize)
+
+        public Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize,
+            DateTime? dateFrom, DateTime? dateTo, bool hasAttachment)
         {
             var query = _messageStoreContext
                 .Messages
@@ -43,10 +46,19 @@ namespace API.Persistance.Repository
                 .Include(x => x.Contact)
                     .ThenInclude(x => x.AppUser)
                 .Include(x => x.ContactMember)
+                
                 .Where(x => x.Contact.AppUserId == userId);
 
+            if (dateFrom != null)
+            {
+                query = query.Where(x => x.Date >= dateFrom);
+            }
+            if (dateTo != null)
+            {
+                query = query.Where(x => x.Date <= dateTo);
+            }
 
-            if(aliasesIds?.Any() ?? false)
+            if (aliasesIds?.Any() ?? false)
             {
                 query = query
                     .Where(x => x.Contact.AliasesMembers
@@ -57,6 +69,11 @@ namespace API.Persistance.Repository
                 query = query.Where(x => x.Content.ToLower().Contains(searchFor.ToLower()));
             else
                 query = query.Where(x => x.Content.ToLower().Contains(searchFor));
+
+            if (hasAttachment)
+            {
+                query = query.Where(x => x.Attachments.Any());
+            }
 
             return query.ToListAsync();
         }

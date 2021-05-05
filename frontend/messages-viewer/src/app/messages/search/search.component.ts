@@ -25,6 +25,9 @@ export class SearchComponent implements OnInit {
   query = '';
   aliases: Checkbox[];
   ignoreLetterSize = true;
+  hasAttachments = false;
+  from: string;
+  to: string;
   pendingSearch = false;
   results: SearchResultDto[];
 
@@ -61,7 +64,7 @@ export class SearchComponent implements OnInit {
     return ids;
   }
   async search() {
-    if (this.query.length === 0) {
+    if ( !this.query && !this.from && !this.to && !this.hasAttachments) {
       this.toastr.warning(this.translatedMessage.nativeElement.innerHTML);
       return;
     }
@@ -72,7 +75,10 @@ export class SearchComponent implements OnInit {
         {
           aliasesIds: this.getAliasesIds(),
           ignoreLetterSize: this.ignoreLetterSize,
-          query: this.query
+          query: this.query,
+          from: this.from,
+          to: this.to,
+          hasAttachments: this.hasAttachments
         }
       ).toPromise();
       this.results = queryResult.results;
@@ -116,5 +122,8 @@ export class SearchComponent implements OnInit {
       regex = new RegExp(this.query, 'g');
     }
     return text.replace(regex, '<mark>$&</mark>');
+  }
+  canSearch() {
+    return !this.query && !this.from && !this.to && !this.hasAttachments;
   }
 }

@@ -80,7 +80,8 @@ namespace API.Service
         public async Task<SearchResultDtoList> Find(SearchQueryDto query)
         {
             var rawMessages = await _messageRepository.Find(_httpMetadataService.UserId,
-                query.Query, query.AliasesIds, query.IgnoreLetterSize);
+                query.Query, query.AliasesIds, query.IgnoreLetterSize,
+                query.From, query.To, query.HasAttachments);
 
             Func<Messages, int> aliasIdSelector = message =>
                 message.Contact.AliasesMembers.FirstOrDefault(y => y.Alias.Internal).AliasId;
