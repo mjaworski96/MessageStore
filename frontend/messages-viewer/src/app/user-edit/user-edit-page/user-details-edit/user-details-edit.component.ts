@@ -48,7 +48,7 @@ export class UserDetailsEditComponent implements OnInit {
     ).toPromise().then((result: HttpResponse <LoggedUser>) => {
       this.toastr.success(this.translatedMessage.nativeElement.innerHTML);
       this.router.navigated = false;
-      this.router.navigate(['/', 'user']);
+      this.router.navigate(['/', 'account']);
     });
   }
 }
