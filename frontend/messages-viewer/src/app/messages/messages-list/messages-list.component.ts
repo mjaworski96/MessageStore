@@ -53,6 +53,10 @@ export class MessagesListComponent implements OnInit, AfterViewChecked {
     if (this.mustScrollDown) {
       this.mustScrollDown = false;
       window.scrollTo(0, this.scrollContainer.nativeElement.scrollHeight);
+      const page = +this.route.snapshot.queryParamMap.get('page');
+      if (page > 1 && window.pageYOffset === 0) {
+        this.loadData(page - 1, false);
+      }
     }
   }
 
