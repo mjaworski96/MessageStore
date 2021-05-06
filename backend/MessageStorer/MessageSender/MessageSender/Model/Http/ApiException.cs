@@ -9,7 +9,10 @@ namespace MessageSender.Model.Http
         {
             Code = apiErrorResponse.Code;
         }
-
+        public ApiException(int code)
+        {
+            Code = code;
+        }
         public int Code { get; set; }
     }
     public class ApiErrorResponse

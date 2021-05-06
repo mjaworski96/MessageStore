@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -51,6 +52,10 @@ namespace MessageSender.Model.Http
             {
                 var body = await message.Content.ReadAsStringAsync();
                 var error = JsonConvert.DeserializeObject<ApiErrorResponse>(body);
+                if (message.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new ApiException(401);
+                }
                 throw new ApiException(error);
             }
         }
