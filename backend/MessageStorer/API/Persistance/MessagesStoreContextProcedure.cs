@@ -13,13 +13,17 @@ namespace API.Persistance
         {
             modelBuilder.Entity<RowNumber>().HasNoKey();
         }
-        public Task<RowNumber> GetRowNumber(int messageId, int aliasId)
+        public async Task<RowNumber> GetRowNumber(int messageId, int aliasId)
         {
-            var query = $"SELECT * FROM FindRowNumber({messageId}, {aliasId})";
-            return RowNumbers
+            var query = $"SELECT * FROM FindRowNumber({messageId}, {aliasId});";
+            return await RowNumbers
                 .FromSqlRaw(query)
                 .FirstOrDefaultAsync();
 
+        }
+        public async Task RemoveMessagesWithImportId(int importId)
+        {
+            await Database.ExecuteSqlRawAsync($"SELECT * FROM DeleteMessagesWithImportId({importId});");
         }
     }
 }

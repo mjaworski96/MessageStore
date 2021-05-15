@@ -13,10 +13,15 @@ namespace API.Persistance.Repository
         Task Save();
         Task<Messages> GetNewest(int userId, string application, int? contactId);
         Task<Messages> GetOldest(int userId, string application, int? contactId);
+        Task<Messages> GetOldest(int importId);
+        Task<Messages> GetNewest(int importId);
+        Task<string> GetApplication(int importId);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize,
             DateTime? dateFrom, DateTime? dateTo, bool hasAttachment);
         Task<long> GetRowNumber(int messageId, int aliasId);
+        Task<List<string>> GetFilenamesToRemove(int importId);
+        Task RemoveMessagesWithImportId(int importId);
     }
     public class MessageRepository: IMessageRepository
     {
@@ -134,6 +139,42 @@ namespace API.Persistance.Repository
         public async Task Save()
         {
             await _messageStoreContext.SaveChangesAsync();
+        }
+
+        public Task<Messages> GetOldest(int importId)
+        {
+            return _messageStoreContext.Messages
+                .Where(x => x.ImportId == importId)
+                .OrderBy(x => x.Date)
+                .FirstOrDefaultAsync();
+        }
+
+        public Task<Messages> GetNewest(int importId)
+        {
+            return _messageStoreContext.Messages
+                .Where(x => x.ImportId == importId)
+                .OrderByDescending(x => x.Date)
+                .FirstOrDefaultAsync();
+        }
+        public async Task<string> GetApplication(int importId)
+        {
+            return await _messageStoreContext.Messages
+                .Where(x => x.ImportId == importId)
+                .Select(x => x.Contact.Application.Name)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task RemoveMessagesWithImportId(int importId)
+        {
+            await _messageStoreContext.RemoveMessagesWithImportId(importId);
+        }
+
+        public async Task<List<string>> GetFilenamesToRemove(int importId)
+        {
+            return await _messageStoreContext.Attachments
+                .Where(x => x.Message.ImportId == importId)
+                .Select(x => x.Filename)
+                .ToListAsync();
         }
     }
 }

@@ -4,7 +4,6 @@ using API.Persistance.Repository;
 using Common.Exceptions;
 using Common.Service;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +15,7 @@ namespace API.Service
         Task<MessageDtoWithIdList> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<SearchResultDtoList> Find(SearchQueryDto query);
         Task<MessageInAliasOrderDto> GetOrder(int messageId, int aliasId);
+        Task DeleteForImport(string importId);
     }
     public class MessageService : IMessageService
     {
@@ -23,15 +23,17 @@ namespace API.Service
         private readonly IContactRepository _contactRepository;
         private readonly IWriterTypeRepository _writerTypeRepository;
         private readonly IAttachmentService _attachmentService;
+        private readonly IImportRepository _importRepository;
         private readonly ISecurityService _securityService;
         private readonly IHttpMetadataService _httpMetadataService;
 
-        public MessageService(IMessageRepository messageRepository, IContactRepository contactRepository, IWriterTypeRepository writerTypeRepository, IAttachmentService attachmentService, ISecurityService securityService, IHttpMetadataService httpMetadataService)
+        public MessageService(IMessageRepository messageRepository, IContactRepository contactRepository, IWriterTypeRepository writerTypeRepository, IAttachmentService attachmentService, IImportRepository importRepository, ISecurityService securityService, IHttpMetadataService httpMetadataService)
         {
             _messageRepository = messageRepository;
             _contactRepository = contactRepository;
             _writerTypeRepository = writerTypeRepository;
             _attachmentService = attachmentService;
+            _importRepository = importRepository;
             _securityService = securityService;
             _httpMetadataService = httpMetadataService;
         }
@@ -47,7 +49,8 @@ namespace API.Service
                 Content = messageDto.Content,
                 Date = messageDto.Date,
                 WriterType = await _writerTypeRepository.Get(messageDto.WriterType),
-                Attachments = await _attachmentService.CreateAttachments(messageDto.Attachments)
+                Attachments = await _attachmentService.CreateAttachments(messageDto.Attachments),
+                Import = await _importRepository.GetOrCreate(messageDto.ImportId),
             };
 
             if (messageDto.ContactMemberId.HasValue)
@@ -157,6 +160,24 @@ namespace API.Service
                     throw new BadRequestException("Contact member is not a member of given contact");
                 }
             }
+        }
+
+        public async Task DeleteForImport(string importId)
+        {
+            var import = await _importRepository.Get(importId);
+            if (import != null)
+            {
+                var attachments = await _messageRepository.GetFilenamesToRemove(import.Id);
+
+                foreach (var item in attachments)
+                {
+                    _attachmentService.Remove(item);
+                }
+
+                await _messageRepository.RemoveMessagesWithImportId(import.Id);
+                await _importRepository.Remove(import);
+            }
+            
         }
     }
 }

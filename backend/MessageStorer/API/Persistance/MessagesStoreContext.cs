@@ -23,6 +23,7 @@ namespace API.Persistance
         public virtual DbSet<Attachments> Attachments { get; set; }
         public virtual DbSet<Contacts> Contacts { get; set; }
         public virtual DbSet<ContactsMembers> ContactsMembers { get; set; }
+        public virtual DbSet<Imports> Imports { get; set; }
         public virtual DbSet<Messages> Messages { get; set; }
         public virtual DbSet<WriterTypes> WriterTypes { get; set; }
 
@@ -186,6 +187,18 @@ namespace API.Persistance
                     .HasConstraintName("fk_contacts_members_contacts");
             });
 
+            modelBuilder.Entity<Imports>(entity =>
+            {
+                entity.ToTable("imports");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ImportId)
+                    .IsRequired()
+                    .HasColumnName("import_id")
+                    .HasMaxLength(64);
+            });
+
             modelBuilder.Entity<Messages>(entity =>
             {
                 entity.ToTable("messages");
@@ -202,6 +215,8 @@ namespace API.Persistance
 
                 entity.Property(e => e.Date).HasColumnName("date");
 
+                entity.Property(e => e.ImportId).HasColumnName("import_id");
+
                 entity.Property(e => e.WriterTypeId).HasColumnName("writer_type_id");
 
                 entity.HasOne(d => d.Contact)
@@ -214,6 +229,11 @@ namespace API.Persistance
                     .HasForeignKey(d => d.ContactMemberId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_messages_contacts_members");
+
+                entity.HasOne(d => d.Import)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.ImportId)
+                    .HasConstraintName("fk_messages_imports");
 
                 entity.HasOne(d => d.WriterType)
                     .WithMany(p => p.Messages)

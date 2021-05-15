@@ -7,6 +7,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { DeleteAliasDialogComponent } from './alias-view/delete-alias-dialog/delete-alias-dialog.component';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { DeleteAliasDialogComponent } from './alias-view/delete-alias-dialog/del
     BrowserAnimationsModule,
     MatCheckboxModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    SharedModule
   ],
   entryComponents: [
     DeleteAliasDialogComponent

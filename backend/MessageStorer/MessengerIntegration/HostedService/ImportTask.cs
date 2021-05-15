@@ -108,7 +108,6 @@ namespace MessengerIntegration.HostedService
                     await ImportConversation(conversation.Key, conversation.Value, contactApiClient, messageApiClient, cancellationToken);
                 }
 
-
                 await SetStatus(Statuses.Completed);
                 _logger.LogInformation($"Finished import {_import.Id}");
             }
@@ -214,7 +213,8 @@ namespace MessengerIntegration.HostedService
                     Attachments = await GetAttachments(rawMessage, conversationData),
                     Date = messageDate,
                     WriterType = rawMessage.SenderName == _import.FacebookName ? "app_user" : "contact",
-                    ContactMemberId = contact.Members.Count == 1 ? null : contact.Members.FirstOrDefault(x => x.Name == FixEncoding(rawMessage.SenderName))?.Id
+                    ContactMemberId = contact.Members.Count == 1 ? null : contact.Members.FirstOrDefault(x => x.Name == FixEncoding(rawMessage.SenderName))?.Id,
+                    ImportId = _import.Id
                 };
                 await messageApiClient.CreateMessage(messageToSend);
                 UpdateImportDates(messageDate);

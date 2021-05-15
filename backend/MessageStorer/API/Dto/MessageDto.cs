@@ -10,6 +10,7 @@ namespace API.Dto
         public DateTime? Date { get; set; }
         //"app_user" or "contact"
         public string WriterType { get; set; }
+        public string ImportId { get; set; }
         public int ContactId { get; set; }
         public int? ContactMemberId { get; set; }
     }

@@ -49,8 +49,8 @@ CREATE SEQUENCE public.app_users_id_seq
     CACHE 1;
 ALTER SEQUENCE app_users_id_seq OWNED BY app_users.id;
 ALTER TABLE app_users ALTER COLUMN id SET DEFAULT nextval('public.app_users_id_seq'::regclass);
-CREATE UNIQUE INDEX app_users_con_unq_username on app_users (LOWER(username));
-CREATE UNIQUE INDEX app_users_con_unq_email on app_users (LOWER(email));
+CREATE UNIQUE INDEX app_users_unq_username on app_users (LOWER(username));
+CREATE UNIQUE INDEX app_users_unq_email on app_users (LOWER(email));
 
 CREATE TABLE applications
 (
@@ -129,11 +129,29 @@ ALTER SEQUENCE contacts_members_id_seq OWNED BY contacts_members.id;
 ALTER TABLE contacts_members ALTER COLUMN id SET DEFAULT nextval('public.contacts_members_id_seq'::regclass);
 ALTER TABLE contacts_members ADD CONSTRAINT fk_contacts_members_contacts FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
 
+CREATE TABLE imports
+(
+	id INTEGER NOT NULL,
+	import_id VARCHAR(64) NOT NULL
+);
+ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);
+CREATE SEQUENCE public.imports_id_seq
+    AS INTEGER
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE imports_id_seq OWNED BY imports.id;
+ALTER TABLE imports ALTER COLUMN id SET DEFAULT nextval('public.imports_id_seq'::regclass);
+CREATE UNIQUE INDEX imports_unq_import_id on imports (LOWER(import_id));
+
 CREATE TABLE messages
 (
 	id INTEGER NOT NULL,
 	content VARCHAR(307200), -- 30KiB
 	date TIMESTAMP,
+	import_id INT NOT NULL,
 	writer_type_id INTEGER NOT NULL,
 	contact_id INTEGER NOT NULL,
 	contact_member_id INTEGER
@@ -152,13 +170,14 @@ ALTER TABLE messages ALTER COLUMN id SET DEFAULT nextval('public.messages_id_seq
 ALTER TABLE messages ADD CONSTRAINT fk_messages_writer_types FOREIGN KEY (writer_type_id) REFERENCES writer_types(id) ON DELETE CASCADE;
 ALTER TABLE messages ADD CONSTRAINT fk_messages_contacts FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
 ALTER TABLE messages ADD CONSTRAINT fk_messages_contacts_members FOREIGN KEY (contact_member_id) REFERENCES contacts_members(id) ON DELETE CASCADE;
+ALTER TABLE messages ADD CONSTRAINT fk_messages_imports FOREIGN KEY (import_id) REFERENCES imports(id) ON DELETE CASCADE;
 
 CREATE TABLE attachments
 (
 	id INTEGER NOT NULL,
 	filename VARCHAR(64),
 	content_type VARCHAR(100),
-	save_as_filename VARCHAR (256)
+	save_as_filename VARCHAR (256),
 	message_id INTEGER NOT NULL
 );
 ALTER TABLE attachments ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);
@@ -203,4 +222,13 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION DeleteMessagesWithImportId
+(pImportId INT)
+RETURNS VOID
+LANGUAGE plpgsql    
+AS $$
+BEGIN
+	DELETE FROM messages WHERE import_id = pImportId;
+END;
+$$;
 

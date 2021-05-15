@@ -25,7 +25,7 @@
       <tbody>
         <tr *ngFor="let alias of filtered" class="alias" (click)="navigate(alias)">
           <td>{{alias.name}}</td>
-          <td>{{alias.application}}</td>
+          <td><app-application-name [application]="alias.application"></app-application-name></td>
           <td>{{alias.inApplicationId}}</td>
           <td>
             <button *ngIf="!alias.internal" mat-flat-button color="accent" (click)="edit(alias.id, $event)" i18n="Edit alias|Edit alias button@@edit-alias">

@@ -100,7 +100,7 @@ namespace MessageSender.ViewModel
             Dictionary<string, int> contactNumberToId = new Dictionary<string, int>();
             CurrentProgress = 0;
             int currentSent = 0;
-
+            var importId = Guid.NewGuid().ToString();
             using (var contactHttpSender = new ContactHttpSender(ServerIp))
             using (var smsHttpSender = new SmsHttpSender(ServerIp))
             {
@@ -126,6 +126,7 @@ namespace MessageSender.ViewModel
                         contactNumberToId.Add(GetPhoneNumberDictionaryKey(contact.PhoneNumber), contact.Id);
                     }
                     sms.ContactId = contactNumberToId[GetPhoneNumberDictionaryKey(sms.PhoneNumber)];
+                    sms.ImportId = importId;
                     await smsHttpSender.Send(sms);
                     UpdateProgress(ref currentSent, maxProgress);
                 }

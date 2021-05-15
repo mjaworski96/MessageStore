@@ -10,6 +10,7 @@ namespace MessageSender.Model
         public List<Attachment> Attachments { get; set; }
         public DateTime? Date { get; set; }
         public string WriterType { get; set; }
+        public string ImportId { get; set; }
         public int ContactId { get; set; }
         [JsonIgnore]
         public string PhoneNumber { get; set; }

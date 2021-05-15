@@ -5,6 +5,8 @@
           i18n="Contacts|Contacts link@@contacts-link">Contacts</button>
   <button mat-button *ngIf="isLoggedIn()" [routerLink]="['search']"
           i18n="Search|Search link@@search-link">Search</button>
+  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['imports']"
+          i18n="Imports|Imports link@@imports-link">Imports</button>
   <button mat-button *ngIf="isLoggedIn()" [routerLink]="['messenger']"
           i18n="Messenger|Messenger link@@messenger-link">Messenger</button>
   <span class="spacer"></span>

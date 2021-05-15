@@ -63,7 +63,6 @@ export class AliasViewComponent implements OnInit {
     });
     dialogRef.afterClosed().toPromise().then( res => {
       if (res === true) {
-        console.log('confirm')
         this.aliasService.delete(id)
           .toPromise()
           .then(() => {

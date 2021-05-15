@@ -13,6 +13,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {AuthorizationModule} from './authorization/authorization.module';
 import {UserEditModule} from './user-edit/user-edit.module';
 import {MessengerModule} from './messenger/messenger.module';
+import {ImportsModule} from './imports/imports.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {MessengerModule} from './messenger/messenger.module';
     MessengerModule,
     AuthorizationModule,
     UserEditModule,
+    ImportsModule,
     ToastrModule.forRoot(),
   ],
   providers: [

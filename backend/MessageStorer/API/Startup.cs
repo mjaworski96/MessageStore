@@ -91,6 +91,7 @@ namespace API
             services.AddScoped<IHttpMetadataService, HttpMetadataService>();
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IWriterTypeRepository, WriterTypeRepository>();
+            services.AddScoped<IImportRepository, ImportRepository>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ISyncDateTimeService, SyncDateTimeService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
@@ -99,6 +100,7 @@ namespace API
             services.AddScoped<IAliasService, AliasService>();
             services.AddScoped<ISecurityService, SecurityService>();
             services.AddScoped<IAppUserService, AppUserService>();
+            services.AddScoped<IImportService, ImportService>();
 
             services.AddSingleton<ISecurityConfig, SecurityConfig>();
             services.AddSingleton<IAttachmentConfig, AttachmentConfig>();

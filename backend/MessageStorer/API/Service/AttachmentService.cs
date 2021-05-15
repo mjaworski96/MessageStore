@@ -17,6 +17,7 @@ namespace API.Service
         Task<AttachmentContentDto> Get(int id);
         Task<AttachmentMetadataDto> GetMetadata(int id);
         AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment);
+        void Remove(string filename);
     }
     public class AttachmentService : IAttachmentService
     {
@@ -94,6 +95,11 @@ namespace API.Service
                 ContentType = entity.ContentType,
                 SaveAsFilename = entity.SaveAsFilename
             };
+        }
+
+        public void Remove(string filename)
+        {
+            File.Delete(Path.Combine(_attachmentsConfig.Directory, filename));
         }
     }
 }
