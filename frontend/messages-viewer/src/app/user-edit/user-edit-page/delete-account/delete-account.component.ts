@@ -4,6 +4,7 @@ import {SessionStorageService} from '../../../services/session-storage.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {DeleteUserAccountDialogComponent} from './delete-user-account-dialog/delete-user-account-dialog.component';
+import {DialogConfig} from '../../../shared/utils/dialog-config';
 
 @Component({
   selector: 'app-delete-account',
@@ -21,10 +22,7 @@ export class DeleteAccountComponent implements OnInit {
   }
 
   delete(): void {
-    const dialogRef = this.dialog.open(DeleteUserAccountDialogComponent, {
-      height: '250px',
-      width: '350px',
-    });
+    const dialogRef = this.dialog.open(DeleteUserAccountDialogComponent, DialogConfig);
     dialogRef.afterClosed().toPromise().then( res => {
       if (res === true) {
         this.userAccountService.deleteAccount()

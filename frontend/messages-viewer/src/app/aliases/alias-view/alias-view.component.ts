@@ -3,8 +3,8 @@ import {AliasService} from '../../services/alias.service';
 import {AliasWithId} from '../../model/alias';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
-import {DeleteUserAccountDialogComponent} from '../../user-edit/user-edit-page/delete-account/delete-user-account-dialog/delete-user-account-dialog.component';
 import {DeleteAliasDialogComponent} from './delete-alias-dialog/delete-alias-dialog.component';
+import {DialogConfig} from '../../shared/utils/dialog-config';
 
 @Component({
   selector: 'app-alias-view',
@@ -57,10 +57,7 @@ export class AliasViewComponent implements OnInit {
   }
   delete(id: number, event: Event) {
     event.stopImmediatePropagation();
-    const dialogRef = this.dialog.open(DeleteAliasDialogComponent, {
-      height: '250px',
-      width: '350px',
-    });
+    const dialogRef = this.dialog.open(DeleteAliasDialogComponent, DialogConfig);
     dialogRef.afterClosed().toPromise().then( res => {
       if (res === true) {
         this.aliasService.delete(id)

@@ -6,6 +6,7 @@ import {MessagesImportService} from '../../services/messages-import.service';
 import {MessagesImportList} from '../../model/message-import';
 import {MatDialog} from '@angular/material';
 import {DeleteMessagesDialogComponent} from './delete-messages-dialog/delete-messages-dialog.component';
+import {DialogConfig} from '../../shared/utils/dialog-config';
 
 @Component({
   selector: 'app-import-view',
@@ -24,10 +25,7 @@ export class ImportViewComponent implements OnInit {
     this.imports = this.route.snapshot.data.imports;
   }
   async delete(importId: string) {
-    const dialogRef = this.dialog.open(DeleteMessagesDialogComponent, {
-      height: '250px',
-      width: '350px',
-    });
+    const dialogRef = this.dialog.open(DeleteMessagesDialogComponent, DialogConfig);
 
     try {
       const res = await dialogRef.afterClosed().toPromise();
