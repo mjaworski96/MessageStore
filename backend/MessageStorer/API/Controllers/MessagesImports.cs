@@ -33,8 +33,7 @@ namespace API.Controllers
             _logger.LogInformation($"Ended GET /api/messagesImports");
             return Ok(result);
         }
-        [HttpDelete]
-        [Route("{importId}/removeMessages")]
+        [HttpDelete("{importId}/removeMessages")]
         public async Task<ActionResult<ImportDtoList>> Remove(string importId)
         {
             _logger.LogInformation($"Started DELETE /api/messagesImports/{importId}/removeMessages");

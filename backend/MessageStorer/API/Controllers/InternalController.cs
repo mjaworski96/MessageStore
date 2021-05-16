@@ -24,8 +24,7 @@ namespace API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        [Route("genereateInternalToken")]
+        [HttpGet("genereateInternalToken")]
         public async Task<IActionResult> GenerateInternalToken([FromQuery] int forUser)
         {
             _logger.LogInformation($"Started GET /api/internal/generateInternalToken?forUser={forUser}");

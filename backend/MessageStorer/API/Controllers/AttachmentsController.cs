@@ -25,7 +25,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             _logger.LogInformation($"Started GET /api/attachments/{id}");
             var result = await _attachmentService.Get(id);
@@ -34,7 +34,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/stream")]
-        public async Task<ActionResult> GetStream(int id)
+        public async Task<IActionResult> GetStream(int id)
         {
             _logger.LogInformation($"Started GET /api/attachments/{id}/stream");
             var result = await _attachmentService.GetMetadata(id);

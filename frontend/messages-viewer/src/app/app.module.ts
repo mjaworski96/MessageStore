@@ -14,15 +14,17 @@ import {AuthorizationModule} from './authorization/authorization.module';
 import {UserEditModule} from './user-edit/user-edit.module';
 import {MessengerModule} from './messenger/messenger.module';
 import {ImportsModule} from './imports/imports.module';
+import { MainPageComponent } from './main-page/main-page.component';
+import {MatButtonModule} from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     CoreModule,
     AliasesModule,
@@ -31,6 +33,8 @@ import {ImportsModule} from './imports/imports.module';
     AuthorizationModule,
     UserEditModule,
     ImportsModule,
+    AppRoutingModule,
+    MatButtonModule,
     ToastrModule.forRoot(),
   ],
   providers: [

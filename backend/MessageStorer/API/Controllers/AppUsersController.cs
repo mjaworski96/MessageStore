@@ -38,8 +38,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        [Route("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(AppUserLoginDetails loginDetails)
         {
             _logger.LogInformation($"Started POST /api/appUser/login");

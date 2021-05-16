@@ -1,0 +1,24 @@
+<div class="main-page-wrapper">
+  <div>
+    <div i18n="Mobile app|Mobile app info@mobile-app">
+      To upload your sms and mms please use our app.
+    </div>
+    <div class="half-width-button download-btn">
+      <button mat-flat-button color="primary" (click)="downloadApk()"
+              i18n="Mobile app download|Mobile app download button@mobile-app-dowload">Download app</button>
+    </div>
+    <div i18n="Mobile app instructions|Mobile app instructions@mobile-app-instructions">
+      After downloading and installing app, login to your account and press "SYNC SMS" button
+    </div>
+  </div>
+  <hr>
+  <div>
+    <div i18n="Messenger info|Messenger info">
+      To upload your messenger messages please go to messenger page and follow the instructions.
+    </div>
+    <div class="half-width-button download-btn">
+      <button mat-flat-button color="primary" [routerLink]="['/', 'messenger']"
+              i18n="Messenger page|Messenger page link@@messenger-ling">Go to messenger page.</button>
+    </div>
+  </div>
+</div>
