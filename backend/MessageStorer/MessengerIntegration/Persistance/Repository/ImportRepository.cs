@@ -12,9 +12,10 @@ namespace MessengerIntegration.Persistance.Repository
     {
         Task Add(Imports importEntity);
         Task Save();
-        Task<Imports> Get(string importId);
+        Task<Imports> Get(string importId, bool throwExeptionIfNotFound);
         Task<List<Imports>> GetAll(int userId);
         Task<List<Imports>> GetQueued(int parallelImportsCount);
+        Task Delete(Imports import);
     }
     public class ImportRepository : IImportRepository
     {
@@ -30,13 +31,27 @@ namespace MessengerIntegration.Persistance.Repository
             await _messengerIntegrationContext.AddAsync(importEntity);
         }
 
-        public async Task<Imports> Get(string importId)
+        public async Task Delete(Imports import)
+        {
+            _messengerIntegrationContext.Remove(import);
+            await _messengerIntegrationContext.SaveChangesAsync();
+        }
+
+        public async Task<Imports> Get(string importId, bool throwExeptionIfNotFound)
         {
             try
             {
-                return await _messengerIntegrationContext.Imports
-                    .Include(x => x.Status)
-                    .FirstAsync(x => x.Id == importId);
+                var query = _messengerIntegrationContext.Imports
+                        .Include(x => x.Status);
+                if (throwExeptionIfNotFound)
+                {
+                    return await query.FirstAsync(x => x.Id == importId);
+                }
+                else
+                {
+                    return await query.FirstOrDefaultAsync(x => x.Id == importId);
+                }
+                
             }
             catch (InvalidOperationException e)
             {

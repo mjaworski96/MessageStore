@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Service;
 using API.Middleware;
+using System;
+using API.Infrastructure;
 
 namespace API
 {
@@ -97,6 +99,7 @@ namespace API
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IAliasRepository, AliasRepository>();
+            services.AddScoped<IMessengerIntegrationClient, MessengerIntegrationClient>();
             services.AddScoped<IAliasService, AliasService>();
             services.AddScoped<ISecurityService, SecurityService>();
             services.AddScoped<IAppUserService, AppUserService>();
@@ -107,6 +110,11 @@ namespace API
 
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionHandler()));
+
+            services.AddHttpClient("messengerIntegrationClient", configure =>
+            {
+                configure.BaseAddress = new Uri(Configuration["MessengerIntegration:Url"]);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
 ﻿using API.Dto;
+using API.Infrastructure;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
 using Common.Exceptions;
@@ -26,8 +27,9 @@ namespace API.Service
         private readonly IImportRepository _importRepository;
         private readonly ISecurityService _securityService;
         private readonly IHttpMetadataService _httpMetadataService;
+        private readonly IMessengerIntegrationClient _messengerIntegrationClient;
 
-        public MessageService(IMessageRepository messageRepository, IContactRepository contactRepository, IWriterTypeRepository writerTypeRepository, IAttachmentService attachmentService, IImportRepository importRepository, ISecurityService securityService, IHttpMetadataService httpMetadataService)
+        public MessageService(IMessageRepository messageRepository, IContactRepository contactRepository, IWriterTypeRepository writerTypeRepository, IAttachmentService attachmentService, IImportRepository importRepository, ISecurityService securityService, IHttpMetadataService httpMetadataService, IMessengerIntegrationClient messengerIntegrationClient)
         {
             _messageRepository = messageRepository;
             _contactRepository = contactRepository;
@@ -36,6 +38,7 @@ namespace API.Service
             _importRepository = importRepository;
             _securityService = securityService;
             _httpMetadataService = httpMetadataService;
+            _messengerIntegrationClient = messengerIntegrationClient;
         }
 
         public async Task<MessageDtoWithId> Create(MessageDto messageDto)
@@ -173,7 +176,11 @@ namespace API.Service
                 {
                     _attachmentService.Remove(item);
                 }
-
+                var application = await _messageRepository.GetApplication(import.Id);
+                if (application == "messenger")
+                {
+                    await _messengerIntegrationClient.DeleteImport(importId);
+                }
                 await _messageRepository.RemoveMessagesWithImportId(import.Id);
                 await _importRepository.Remove(import);
             }

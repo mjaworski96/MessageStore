@@ -65,9 +65,9 @@ namespace MessengerIntegration.HostedService
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
             PrepareScope();
-            _import = await _importRepository.Get(importId);
+            _import = await _importRepository.Get(importId, true);
             #pragma warning disable CS4014
-            Task.Run(async () => await ImportFile(importId, token), token);
+            Task.Run(async () => await ImportFile(token), token);
             #pragma warning restore CS4014
 
         }
@@ -77,7 +77,7 @@ namespace MessengerIntegration.HostedService
             await SetStatus(Statuses.Queued);
             _serviceScope?.Dispose();
         }
-        private async Task ImportFile(string importId, CancellationToken cancellationToken)
+        private async Task ImportFile(CancellationToken cancellationToken)
         {        
             try
             {

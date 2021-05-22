@@ -53,5 +53,13 @@ namespace MessengerIntegration.Controller
             _logger.LogInformation($"Ended PUT /api/import/{id}");
             return NoContent();
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteImport(string id)
+        {
+            _logger.LogInformation($"Started DELETE /api/import/{id}");
+            await _importService.Delete(id);
+            _logger.LogInformation($"Ended DELETE /api/import/{id}");
+            return NoContent();
+        }
     }
 }

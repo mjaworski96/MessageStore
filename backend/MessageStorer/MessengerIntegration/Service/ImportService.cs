@@ -19,6 +19,7 @@ namespace MessengerIntegration.Service
         Task FinishUpload(string importId);
         Task<ImportDtoWithIdList> GetAllForUser();
         Task SetStatus(Imports import, string statusName);
+        Task Delete(string importId);
     }
     public class ImportService: IImportService
     {
@@ -62,7 +63,7 @@ namespace MessengerIntegration.Service
 
         public async Task UploadFile(string importId, FileDto fileDto)
         {
-            var import = await _importRepository.Get(importId);
+            var import = await _importRepository.Get(importId, true);
             CheckImport(import);
             CheckStatus(import, Statuses.Created);
             try
@@ -77,7 +78,7 @@ namespace MessengerIntegration.Service
         }
         public async Task FinishUpload(string importId)
         {
-            var import = await _importRepository.Get(importId);
+            var import = await _importRepository.Get(importId, true);
             CheckImport(import);
             CheckStatus(import, Statuses.Created);
             try
@@ -131,6 +132,20 @@ namespace MessengerIntegration.Service
             {
                 Imports = entities.Select(x => CreateImportDtoWithId(x)).ToList()
             };
+        }
+
+        public async Task Delete(string importId)
+        {
+            var import = await _importRepository.Get(importId, false);
+            if (import != null)
+            {
+                if (import.UserId != _httpMetadataService.UserId)
+                {
+                    throw new ForbiddenException("You have no access to this import");
+                }
+                await _importRepository.Delete(import);
+                _fileUtils.Delete(import.Id);
+            }
         }
     }
 }

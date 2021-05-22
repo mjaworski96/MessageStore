@@ -124,7 +124,7 @@ namespace API.Service
         }
         public async Task<InternalTokenDto> CreateInternalToken(int userId)
         {
-            var authorization = _httpMetadataService.Authorization;
+            var authorization = _httpMetadataService.AuthorizationToken;
             if (string.IsNullOrEmpty(authorization))
             {
                 throw new UnauthorizedException("You are not authorized");

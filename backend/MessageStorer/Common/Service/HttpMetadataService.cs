@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -8,7 +9,7 @@ namespace Common.Service
     {
         int UserId { get; }
         string Application { get; }
-        string Authorization { get; }
+        string AuthorizationToken { get; }
         bool InternalToken { get; }
     }
     public class HttpMetadataService : IHttpMetadataService
@@ -38,7 +39,7 @@ namespace Common.Service
             }
         }
 
-        public string Authorization
+        public string AuthorizationToken
         {
             get
             {
