@@ -4,13 +4,13 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:lang="clr-namespace:MessageSender.View.Lang"
              x:Class="MessageSender.View.MainPage">
 
     <StackLayout>
         <ProgressBar Progress="{Binding CurrentProgress}"></ProgressBar>
-        <Entry Text="{Binding ServerIp}" Placeholder="Server address"></Entry>
-        <Button Text="Sync SMS" Command="{Binding SyncSmsCommand}"></Button>
-        <Button Text="Logout" Command="{Binding LogoutCommand}"></Button>
+        <Button Text="{x:Static lang:Lang.SyncSms}" Command="{Binding SyncSmsCommand}"></Button>
+        <Button Text="{x:Static lang:Lang.Logout}" Command="{Binding LogoutCommand}"></Button>
         <Label Text="{Binding Error}"/>
     </StackLayout>
 

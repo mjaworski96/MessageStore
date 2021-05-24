@@ -75,7 +75,7 @@ namespace MessageSender.ViewModel
         }
         private async Task Login()
         {
-            using(var userHttpSender = new UserHttpSender(Config.ServerAddress))
+            using(var userHttpSender = new UserHttpSender(ServerIp))
             {
                 var loginDetails = new LoginDetails
                 {

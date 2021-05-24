@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lang="clr-namespace:MessageSender.View.Lang"
+             
              mc:Ignorable="d"
              x:Class="MessageSender.View.LoginPage">
     <ContentPage.Content>
         <StackLayout>
-            <Entry Text="{Binding ServerIp}" Placeholder="Server address"></Entry>
-
-            <Entry Text="{Binding Username}" Placeholder="Username"></Entry>
-            <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Password"></Entry>
-            <Button Text="Login" Command="{Binding LoginCommand}"></Button>
+            <Entry Text="{Binding Username}" Placeholder="{x:Static lang:Lang.Username}"></Entry>
+            <Entry Text="{Binding Password}" IsPassword="True" Placeholder="{x:Static lang:Lang.Password}"></Entry>
+            <Button Text="{x:Static lang:Lang.Login}" Command="{Binding LoginCommand}"></Button>
+            <Label Text="{x:Static lang:Lang.RegisterInfo}"/>
             <Label Text="{Binding Error}"/>
         </StackLayout>
     </ContentPage.Content>
