@@ -1,23 +1,25 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Common.Exceptions
 {
-    public class ConflictException : HttpException
+    public abstract class ConflictException : HttpException
     {
         public override int StatusCode => 409;
-
         public ConflictException(string message) : base(message)
         {
-        }
-
-        public ConflictException(string message, Exception innerException) : base(message, innerException)
+        }  
+    }
+    public class UsernameConflictException : ConflictException
+    {
+        public UsernameConflictException() : base(Lang.Lang.UsernameConflict)
         {
         }
-
-        public ConflictException(SerializationInfo info, StreamingContext context) : base(info, context)
+    }
+    public class EmailConflictException : ConflictException
+    {
+        public EmailConflictException() : base(Lang.Lang.EmailConflict)
         {
         }
+    }
 
-     }
 }

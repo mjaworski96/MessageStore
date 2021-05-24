@@ -30,7 +30,7 @@ namespace API.Persistance.Repository
             }
             catch (InvalidOperationException e)
             {
-                throw new NotFoundException($"Attachment with id {id} not found.", e);
+                throw new AttachmentNotFoundException(id, e);
             }
         }
     }

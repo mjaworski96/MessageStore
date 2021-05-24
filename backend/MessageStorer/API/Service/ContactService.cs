@@ -86,17 +86,17 @@ namespace API.Service
         {
             if (contactDto.Name.Length > 256)
             {
-                throw new BadRequestException("Contact name can contain maximum of 256 characters");
+                throw new TooLongContactNameException();
             }
             if (contactDto.InApplicationId.Length > 256)
             {
-                throw new BadRequestException("Contact InApplicationId can contain maximum of 256 characters");
+                throw new TooLongContactInApplicationIdException();
             }
             foreach (var item in contactDto.Members ?? Enumerable.Empty<ContactMemberDto>())
             {
                 if (item.Name.Length > 256)
                 {
-                    throw new BadRequestException("Contact member name can contain maximum of 256 characters");
+                    throw new TooLongContactMemberNameException();
                 }
             }
         }

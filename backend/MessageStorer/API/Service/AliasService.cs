@@ -71,11 +71,11 @@ namespace API.Service
             _securityService.CheckIfUserIsOwnerOfAliases(contacts);
             if (contacts.Count != createAlias.Members.Count)
             {
-                throw new NotFoundException("Contacts not found");
+                throw new ContactsNotFoundException();
             }
             if (contacts.Any(x => !x.Internal))
             {
-                throw new BadRequestException("Aliases can be created only from contacts (not other aliases)");
+                throw new AliasCreationException();
             }
 
             return contacts;
@@ -90,7 +90,7 @@ namespace API.Service
 
             if (alias.Internal)
             {
-                throw new BadRequestException("Raw aliases can't be modified");
+                throw new RawAliasModificationException();
             }
             var newContactsId = updateAlias.Members.Select(x => x.Id).ToList();
             var existingMembersId = alias.AliasesMembers.Select(x => x.Id).ToList();
@@ -127,7 +127,7 @@ namespace API.Service
                 _securityService.CheckIfUserIsOwnerOfAlias(aliasToDelete);
                 if (aliasToDelete.Internal)
                 {
-                    throw new BadRequestException("Raw aliases can't be deleted");
+                    throw new RawAliasDeletionException();
                 }
                 await _aliasRepository.Remove(aliasToDelete);
             }
@@ -170,7 +170,7 @@ namespace API.Service
         {
             if(string.IsNullOrEmpty(aliasName) || aliasName.Length > 256)
             {
-                throw new BadRequestException("Invalid alias name.");
+                throw new InvalidAliasNameException();
             }
         }
     }

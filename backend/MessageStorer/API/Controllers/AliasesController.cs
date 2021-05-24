@@ -2,6 +2,7 @@
 using API.Dto;
 using API.Security;
 using API.Service;
+using Common.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,8 +11,6 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    [NoInternalAccess]
     public class AliasesController : ControllerBase
     {
         private readonly IAliasService _aliasService;

@@ -36,7 +36,7 @@ namespace API.Service
         {
             var owner = await _aliasRepository.GetOwner(aliasId);
             if (owner?.Id != _httpMetadataService.UserId)
-                throw new ForbiddenException($"You have no access for this alias");
+                throw new ForbiddenAliasException();
         }
 
         public void CheckIfUserIsOwnerOfAlias(Aliases alias)
@@ -44,7 +44,7 @@ namespace API.Service
             if (alias.AliasesMembers.FirstOrDefault()?.Contact.AppUserId != 
                 _httpMetadataService.UserId)
             {
-                throw new ForbiddenException($"You have no access for this alias");
+                throw new ForbiddenAliasException();
             }
         }
 
@@ -60,7 +60,7 @@ namespace API.Service
         {
             var owner = await _contactRepository.GetOwner(contactId);
             if (owner.Id != _httpMetadataService.UserId)
-                throw new ForbiddenException($"You have no access for this contact");
+                throw new ForbiddenContactException();
         }
 
         public void CheckIfUserIsOwnerOfContact(Contacts contact)
@@ -68,7 +68,7 @@ namespace API.Service
             if (contact.AppUserId !=
                 _httpMetadataService.UserId)
             {
-                throw new ForbiddenException($"You have no access for this contact");
+                throw new ForbiddenContactException();
             }
         }
 
@@ -76,7 +76,7 @@ namespace API.Service
         {
             var ownerId = attachment.Message.Contact.AppUserId;
             if (ownerId != _httpMetadataService.UserId)
-                throw new ForbiddenException($"You have no access for this attachment");
+                throw new ForbiddenAttachmentException();
         }
     }
 }

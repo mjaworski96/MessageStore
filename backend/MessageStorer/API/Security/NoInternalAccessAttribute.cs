@@ -20,7 +20,7 @@ namespace API.Security
             var httpMetadataService = (IHttpMetadataService)context.HttpContext.RequestServices.GetService(typeof(IHttpMetadataService));
             if (httpMetadataService.InternalToken)
             {
-                var exception = new ForbiddenException("You can't acces this resuorce");
+                var exception = new ForbiddenResourceException();
                 context.Result = new ObjectResult(new ApiError(exception))
                 {
                     StatusCode = exception.StatusCode,

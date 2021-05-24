@@ -55,7 +55,7 @@ namespace MessengerIntegration.Persistance.Repository
             }
             catch (InvalidOperationException e)
             {
-                throw new NotFoundException($"Import with id: {importId} not found", e);
+                throw new ImportNotFoundException(importId, e);
             }
         }
 

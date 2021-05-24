@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-
-namespace Common.Exceptions
+﻿namespace Common.Exceptions
 {
-    public class UnauthorizedException : HttpException
+    public abstract class UnauthorizedException : HttpException
     {
         public override int StatusCode => 401;
         public UnauthorizedException(string message) : base(message)
         {
-        }
-
-        public UnauthorizedException(string message, Exception innerException) : base(message, innerException)
+        }    
+    }
+    public class UserNotLoggedInException : UnauthorizedException
+    {
+        public UserNotLoggedInException(): base(Lang.Lang.UserNotLoggedInException)
         {
         }
-
-        public UnauthorizedException(SerializationInfo info, StreamingContext context) : base(info, context)
+    }
+    public class InvalidUsernameAndPasswordException : UnauthorizedException
+    {
+        public InvalidUsernameAndPasswordException() : base(Lang.Lang.InvalidUsernameAndPassword)
         {
         }
     }

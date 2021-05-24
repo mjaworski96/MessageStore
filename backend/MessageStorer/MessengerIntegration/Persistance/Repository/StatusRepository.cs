@@ -29,7 +29,7 @@ namespace MessengerIntegration.Persistance.Repository
             }
             catch (InvalidOperationException e)
             {
-                throw new NotFoundException($"Status {name} not found", e);
+                throw new StatusNotFoundException(name, e);
             }
         }
     }

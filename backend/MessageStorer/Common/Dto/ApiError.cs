@@ -9,7 +9,7 @@ namespace Common.Dto
         public ApiError()
         {
             Code = 500;
-            Message = "Unknown error";
+            Message =  Lang.Lang.InternalServerError;
         }
         public ApiError(HttpException httpException)
         {

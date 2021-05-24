@@ -150,17 +150,17 @@ namespace API.Service
             _securityService.CheckIfUserIsOwnerOfContact(contact);
             if (messageDto.Content?.Length > 307200)
             {
-                throw new BadRequestException("Message content can contains maximum of 307200 characters");
+                throw new TooLongMessageContentException();
             }
             if (messageDto.ContactMemberId.HasValue)
             {
                 if (messageDto.WriterType == "app_user")
                 {
-                    throw new BadRequestException("Message from app user can not be also from a contact member");
+                    throw new AppUserContactMemberException();
                 }
                 if (!contact.ContactsMembers.Where(x => x.Id == messageDto.ContactMemberId.Value).Any())
                 {
-                    throw new BadRequestException("Contact member is not a member of given contact");
+                    throw new MissingContactMemberException();
                 }
             }
         }

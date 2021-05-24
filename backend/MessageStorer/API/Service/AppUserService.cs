@@ -127,16 +127,16 @@ namespace API.Service
             var authorization = _httpMetadataService.AuthorizationToken;
             if (string.IsNullOrEmpty(authorization))
             {
-                throw new UnauthorizedException("You are not authorized");
+                throw new UnauthorizedAccessException();
             }
             if (authorization != _config.InternalToken)
             {
-                throw new ForbiddenException("You can't acces this resource");
+                throw new ForbiddenResourceException();
             }
             var appUser = await _appUserRepository.Get(userId, false);
             if (appUser == null)
             {
-                throw new UnauthorizedException("Invalid username or password");
+                throw new InvalidUsernameAndPasswordException();
             }
 
             return new InternalTokenDto
@@ -166,7 +166,7 @@ namespace API.Service
         {
             if (appUser == null)
             {
-                throw new UnauthorizedException("Invalid username or password");
+                throw new InvalidUsernameAndPasswordException();
             }
             CheckPassword(appUser, credentials.Password, false);
         }
@@ -177,11 +177,11 @@ namespace API.Service
             {
                 if (loggedIn)
                 {
-                    throw new ForbiddenException("Password is invalid");
+                    throw new InvalidPasswordException();
                 }
                 else
                 {
-                    throw new UnauthorizedException("Invalid username or password");
+                    throw new InvalidUsernameAndPasswordException();
                 }
             }
         }
@@ -212,29 +212,29 @@ namespace API.Service
         {
             if (await _appUserRepository.GetByUsername(username, false) != null)
             {
-                throw new ConflictException("User with this username exists.");
+                throw new UsernameConflictException();
             }
             if (await _appUserRepository.GetByEmail(email, false) != null)
             {
-                throw new ConflictException("User with this email exists.");
+                throw new EmailConflictException();
             }
         }
         private void ValidateUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
-                throw new BadRequestException("Username can't be empty.");
+                throw new EmptyUsernameException();
             }
             if (username.Length > 20)
             {
-                throw new BadRequestException("Username can't be longer than 20 characters.");
+                throw new TooLongUsernameException();
             }
         }
         private void ValidatePassword(string password)
         {
             if (string.IsNullOrEmpty(password))
             {
-                throw new BadRequestException("Password can't be empty");
+                throw new EmptyPasswordException();
             }
         }
         private void ValidateEmail(string email)
@@ -244,12 +244,12 @@ namespace API.Service
                 var addr = new System.Net.Mail.MailAddress(email);
                 if (addr.Address != email)
                 {
-                    throw new BadRequestException("Invalid email");
+                    throw new InvalidEmailException();
                 }
             }
             catch
             {
-                throw new BadRequestException("Invalid email");
+                throw new InvalidEmailException();
             }
         }
         private async Task CheckIfUserUnique(AppUsers currentData, AppUserDto newData)
@@ -258,14 +258,14 @@ namespace API.Service
             {
                 if (await _appUserRepository.GetByUsername(newData.Username, false) != null)
                 {
-                    throw new ConflictException("User with this username exists.");
+                    throw new UsernameConflictException();
                 }
             }
             if (currentData.Email != newData.Email)
             {
                 if (await _appUserRepository.GetByEmail(newData.Email, false) != null)
                 {
-                    throw new ConflictException("User with this email exists.");
+                    throw new EmailConflictException();
                 }
             }
         }

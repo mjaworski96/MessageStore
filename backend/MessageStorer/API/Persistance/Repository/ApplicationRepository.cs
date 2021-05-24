@@ -29,7 +29,7 @@ namespace API.Persistance.Repository
             }
             catch (InvalidOperationException e)
             {
-                throw new NotFoundException($"Application {name} not found", e);
+                throw new ApplicationNotFoundException(name, e);
             }
         }
     }

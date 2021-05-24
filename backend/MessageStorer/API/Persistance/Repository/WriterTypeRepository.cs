@@ -29,7 +29,7 @@ namespace API.Persistance.Repository
             }
             catch(InvalidOperationException e)
             {
-                throw new NotFoundException($"Writer type {name} not found.", e);
+                throw new WriterTypeNotFoundException(name, e);
             }
         }
     }

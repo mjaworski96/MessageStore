@@ -57,7 +57,7 @@ namespace API.Persistance.Repository
             }
             catch(InvalidOperationException e)
             {
-                throw new NotFoundException($"Contact with id {id} not found.", e);
+                throw new ContactNotFoundException(id, e);
             }
         }
 

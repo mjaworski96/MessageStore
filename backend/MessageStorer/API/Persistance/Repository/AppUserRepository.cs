@@ -46,7 +46,7 @@ namespace API.Persistance.Repository
             }
             catch (InvalidOperationException e)
             {
-                throw new NotFoundException($"User with id: {id} not found.", e);
+                throw new UserByIdNotFoundException(id, e);
             }
         }
 
@@ -63,7 +63,7 @@ namespace API.Persistance.Repository
             }
             catch(InvalidOperationException e)
             {
-                throw new NotFoundException($"User {name} not found.", e);
+                throw new UserByUsernameNotFoundException(name, e);
             }
         }
 
@@ -80,7 +80,7 @@ namespace API.Persistance.Repository
             }
             catch (InvalidOperationException e)
             {
-                throw new NotFoundException($"User with email: {email} not found.", e);
+                throw new UserByEmailException(email, e);
             }
         }
 

@@ -43,11 +43,11 @@ namespace MessengerIntegration.Service
         {
             if (string.IsNullOrEmpty(importDto.FacebookName))
             {
-                throw new BadRequestException("Facebook usernname must be provided");
+                throw new EmptyFacebookNameException();
             }
             if (importDto.FacebookName.Length > 256)
             {
-                throw new BadRequestException("Facebook usernname length must be less than 256");
+                throw new TooLongFacebookNameException();
             }
             var importEntity = new Imports
             {
@@ -101,15 +101,14 @@ namespace MessengerIntegration.Service
         {
             if (import.Status.Name != validStatus)
             {
-                throw new BadRequestException($"Import has invalid status. " +
-                    $"Should be {validStatus} but is {import.Status.Name}");
+                throw new InvalidImportStatusException(validStatus, import.Status.Name);
             }
         }
         private void CheckImport(Imports import)
         {
             if (import.UserId != _httpMetadataService.UserId)
             {
-                throw new ForbiddenException($"You can't acces this import");
+                throw new ForbiddenImportException();
             }
         }
         private ImportDtoWithId CreateImportDtoWithId(Imports importEntity)
@@ -141,7 +140,7 @@ namespace MessengerIntegration.Service
             {
                 if (import.UserId != _httpMetadataService.UserId)
                 {
-                    throw new ForbiddenException("You have no access to this import");
+                    throw new ForbiddenImportException();
                 }
                 await _importRepository.Delete(import);
                 _fileUtils.Delete(import.Id);
