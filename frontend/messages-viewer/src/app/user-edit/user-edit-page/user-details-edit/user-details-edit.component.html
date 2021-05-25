@@ -8,10 +8,6 @@
                    *ngIf="userDetailsForm.get('username').hasError('required')">
           Username is required.
         </mat-error>
-        <mat-error i18n="Username validation|Shown when username is too short@@username-too-short-validation"
-                   *ngIf="userDetailsForm.get('username').hasError('minlength')">
-          Username must contain at least {{minUsernameLength}} characters.
-        </mat-error>
         <mat-error i18n="Username validation|Shown when username is too long@@username-too-long-validation"
                    *ngIf="userDetailsForm.get('username').hasError('maxlength')">
           Username must contain a maximum of {{maxUsernameLength}} characters.

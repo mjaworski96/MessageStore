@@ -1,0 +1,1082 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="app-title" datatype="html">
+        <source>Messages Viewer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">App title</note>
+        <note priority="1" from="meaning">App title</note>
+      <target>Podglądacz Wiadomości</target></trans-unit>
+      <trans-unit id="contacts-link" datatype="html">
+        <source>Contacts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Contacts link</note>
+        <note priority="1" from="meaning">Contacts</note>
+      <target>Kontakty</target></trans-unit>
+      <trans-unit id="search-link" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Search link</note>
+        <note priority="1" from="meaning">Search</note>
+      <target>Szukaj</target></trans-unit>
+      <trans-unit id="imports-link" datatype="html">
+        <source>Imports</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <note priority="1" from="description">Imports link</note>
+        <note priority="1" from="meaning">Imports</note>
+      <target>Importy</target></trans-unit>
+      <trans-unit id="messenger-link" datatype="html">
+        <source>Messenger</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">Messenger link</note>
+        <note priority="1" from="meaning">Messenger</note>
+      <target>Messenger</target></trans-unit>
+      <trans-unit id="login-link" datatype="html">
+        <source>Login</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <note priority="1" from="description">Login link</note>
+        <note priority="1" from="meaning">Login</note>
+      <target>Logowanie</target></trans-unit>
+      <trans-unit id="register-link" datatype="html">
+        <source>Register</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <note priority="1" from="description">Register link</note>
+        <note priority="1" from="meaning">Register</note>
+      <target>Rejestracja</target></trans-unit>
+      <trans-unit id="account-link" datatype="html">
+        <source>Account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <note priority="1" from="description">Account link</note>
+        <note priority="1" from="meaning">Account</note>
+      <target>Konto</target></trans-unit>
+      <trans-unit id="logout-button" datatype="html">
+        <source>Logout</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/header/header.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <note priority="1" from="description">Logout link</note>
+        <note priority="1" from="meaning">Logout</note>
+      <target>Wyloguj</target></trans-unit>
+      <trans-unit id="da162223a412a508c0d7e8f1fb976b10abd0c93d" datatype="html">
+        <source>
+      To upload your sms and mms please use our app.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">Mobile app info@mobile-app</note>
+        <note priority="1" from="meaning">Mobile app</note>
+      <target>Aby wgrać swoje smsy i mmsy pobierz naszą aplikację.</target></trans-unit>
+      <trans-unit id="12fa374f695677c516a27918452649053311469a" datatype="html">
+        <source>Download app</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <note priority="1" from="description">Mobile app download button@mobile-app-dowload</note>
+        <note priority="1" from="meaning">Mobile app download</note>
+      <target>Pobierz aplikację</target></trans-unit>
+      <trans-unit id="fa63aae88a44ccba7cccb6df12402c3a8e3ee7ef" datatype="html">
+        <source>
+      After downloading and installing app, login to your account and press "SYNC SMS" button
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <note priority="1" from="description">Mobile app instructions@mobile-app-instructions</note>
+        <note priority="1" from="meaning">Mobile app instructions</note>
+      <target>Po pobraniu i zainstalowaniu aplikacji naciśnij przycisk "Synchronizuj SMS"</target></trans-unit>
+      <trans-unit id="5944fb4be52f6fe3e79148bcf2d765e748b55f35" datatype="html">
+        <source>
+      To upload your messenger messages please go to messenger page and follow the instructions.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <note priority="1" from="description">Messenger info</note>
+        <note priority="1" from="meaning">Messenger info</note>
+      <target>Aby wgrać wiadomości z messengera udaj się do strony messenger i podążaj za instrukcjami.</target></trans-unit>
+      <trans-unit id="messenger-ling" datatype="html">
+        <source>Go to messenger page.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <note priority="1" from="description">Messenger page link</note>
+        <note priority="1" from="meaning">Messenger page</note>
+      <target>Idź do strony messenger.</target></trans-unit>
+      <trans-unit id="2dd1146d0484516e1d624855f86b7c3c41624378" datatype="html">
+        <source>
+  SMS
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/application-name/application-name.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Sms@sms</note>
+        <note priority="1" from="meaning">Sms</note>
+      <target>SMS</target></trans-unit>
+      <trans-unit id="messenger" datatype="html">
+        <source>
+  Messenger
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/application-name/application-name.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Messenger</note>
+        <note priority="1" from="meaning">Messenger</note>
+      <target>Messenger</target></trans-unit>
+      <trans-unit id="delete-alias-title" datatype="html">
+        <source>
+    Delete alias?
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/delete-alias-dialog/delete-alias-dialog.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Delete alias dialog title</note>
+        <note priority="1" from="meaning">Delete alias</note>
+      <target>Skasować alias?</target></trans-unit>
+      <trans-unit id="cannot-undone" datatype="html">
+        <source>
+    This operation cannot be undone!
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/delete-alias-dialog/delete-alias-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/delete-account/delete-user-account-dialog/delete-user-account-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/delete-messages-dialog/delete-messages-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Cannot undone operation</note>
+        <note priority="1" from="meaning">Cannot undone</note>
+      <target>Ta operacja nie może zostać cofnięta!</target></trans-unit>
+      <trans-unit id="No" datatype="html">
+        <source>No</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/delete-alias-dialog/delete-alias-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/delete-account/delete-user-account-dialog/delete-user-account-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/delete-messages-dialog/delete-messages-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <note priority="1" from="description">No</note>
+        <note priority="1" from="meaning">No</note>
+      <target>Nie</target></trans-unit>
+      <trans-unit id="yes" datatype="html">
+        <source>Yes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/delete-alias-dialog/delete-alias-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/delete-account/delete-user-account-dialog/delete-user-account-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/delete-messages-dialog/delete-messages-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">Yes</note>
+        <note priority="1" from="meaning">Yes</note>
+      <target>Tak</target></trans-unit>
+      <trans-unit id="add-alias" datatype="html">
+        <source>
+        Add new alias
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Add alias button</note>
+        <note priority="1" from="meaning">Add alias</note>
+      <target>Dodaj nowy alias</target></trans-unit>
+      <trans-unit id="search-input" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description"> Text in search alias input</note>
+        <note priority="1" from="meaning">Search aliases</note>
+      <target>Wyszukaj</target></trans-unit>
+      <trans-unit id="application-identifier" datatype="html">
+        <source>Application identifier</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <note priority="1" from="description">Application identifier</note>
+        <note priority="1" from="meaning">Application identifier</note>
+        <target>Identyfikator w aplikacji</target>
+      </trans-unit>
+      <trans-unit id="edit" datatype="html">
+        <source>Edit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <note priority="1" from="description">Edit</note>
+        <note priority="1" from="meaning">Edit</note>
+        <target>Edytuj</target>
+      </trans-unit>
+      <trans-unit id="delete" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <note priority="1" from="description">Delete</note>
+        <note priority="1" from="meaning">Delete</note>
+        <target>Skasuj</target>
+      </trans-unit>
+      <trans-unit id="edit-alias" datatype="html">
+        <source>
+              Edit alias
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <note priority="1" from="description">Edit alias button</note>
+        <note priority="1" from="meaning">Edit alias</note>
+      <target>Edytuj alias</target></trans-unit>
+      <trans-unit id="delete-alias" datatype="html">
+        <source>
+              Delete
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-view/alias-view.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <note priority="1" from="description">Delete alias button</note>
+        <note priority="1" from="meaning">Delete alias</note>
+      <target>Skasuj</target></trans-unit>
+      <trans-unit id="name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-editor/alias-editor.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Text in name placeholder</note>
+        <note priority="1" from="meaning">Name placeholder</note>
+      <target>Nazwa</target></trans-unit>
+      <trans-unit id="name-required-validation" datatype="html">
+        <source>
+          Name is required.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-editor/alias-editor.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <note priority="1" from="description">Shown when name is empty</note>
+        <note priority="1" from="meaning">Name validation</note>
+      <target>Nazwa jest wymagana.</target></trans-unit>
+      <trans-unit id="name-too-long-validation" datatype="html">
+        <source>
+          Name can be maximum 256 characters long.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-editor/alias-editor.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">Shown when name is too long</note>
+        <note priority="1" from="meaning">Name validation</note>
+      <target>Nazwa może zawierać co najwyżej 256 znaków.</target></trans-unit>
+      <trans-unit id="at-least-two-elements-validation" datatype="html">
+        <source>
+          You must select at least 2 contacts.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-editor/alias-editor.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <note priority="1" from="description">Shown when not enough contacts are selected</note>
+        <note priority="1" from="meaning">At least 2 selected items</note>
+      <target>Musisz wygrać co najmniej 2 kontakty.</target></trans-unit>
+      <trans-unit id="create" datatype="html">
+        <source>
+          Create
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-editor/alias-editor.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <note priority="1" from="description">Text in create button</note>
+        <note priority="1" from="meaning">Create button</note>
+      <target>Stwórz</target></trans-unit>
+      <trans-unit id="update" datatype="html">
+        <source>
+            Update
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/aliases/alias-editor/alias-editor.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <note priority="1" from="description">Text in update button</note>
+        <note priority="1" from="meaning">Update button</note>
+      <target>Aktualizuj</target></trans-unit>
+      <trans-unit id="you" datatype="html">
+        <source>You</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/messages-list/messages-list.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <note priority="1" from="description">You (message written by you)</note>
+        <note priority="1" from="meaning">You</note>
+      <target>Ty</target></trans-unit>
+      <trans-unit id="search-for" datatype="html">
+        <source>Search for</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Search for input</note>
+        <note priority="1" from="meaning">Search for</note>
+      <target>Szukaj frazy</target></trans-unit>
+      <trans-unit id="date-from" datatype="html">
+        <source>From</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <note priority="1" from="description">Date from</note>
+        <note priority="1" from="meaning">Date from</note>
+      <target>Od</target></trans-unit>
+      <trans-unit id="date-to" datatype="html">
+        <source>To</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <note priority="1" from="description">Date to</note>
+        <note priority="1" from="meaning">Date to</note>
+      <target>Do</target></trans-unit>
+      <trans-unit id="ignore-letter-size" datatype="html">
+        <source>Ignore letter size</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <note priority="1" from="description">Ignore letter size checkbox</note>
+        <note priority="1" from="meaning">Ignore letter size</note>
+      <target>Ignoruj rozmiar liter</target></trans-unit>
+      <trans-unit id="has-attachment" datatype="html">
+        <source>Has attachments</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <note priority="1" from="description">Has attachments button</note>
+        <note priority="1" from="meaning">Has attachments</note>
+      <target>Z załącznikiem</target></trans-unit>
+      <trans-unit id="search" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+        <note priority="1" from="description">Search button</note>
+        <note priority="1" from="meaning">Search</note>
+      <target>Szukaj</target></trans-unit>
+      <trans-unit id="cant-search" datatype="html">
+        <source>You can't search without providing "Search for" or providing "from" / "to" date or setting "has Attachment"</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <note priority="1" from="description">Can't search message</note>
+        <note priority="1" from="meaning">Can't search</note>
+      <target>Nie możesz szukać bez podania "Szukaj frazy" lub daty "od"/"do lub zaznaczenia "Z załącznikiem"
+"</target></trans-unit>
+      <trans-unit id="download-attachment" datatype="html">
+        <source>
+      Download attachment
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/attachments/attachment/attachment.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">Text on download attachment button</note>
+        <note priority="1" from="meaning">Download attachment</note>
+      <target>Pobierz załącznik</target></trans-unit>
+      <trans-unit id="fb-name" datatype="html">
+        <source>Facebook name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Text in facebook name placeholder</note>
+        <note priority="1" from="meaning">Facebook name placeholder</note>
+      <target>Nazwa na Facebooku</target></trans-unit>
+      <trans-unit id="fb-name-too-long-validation" datatype="html">
+        <source>
+            Facebook name can be maximum 256 characters long.
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <note priority="1" from="description">Shown when facebook name is too long</note>
+        <note priority="1" from="meaning">Facebook name validation</note>
+      <target>Nazwa na Facebooku może zawierać maksymalnie 256 znaków.</target></trans-unit>
+      <trans-unit id="choose-file" datatype="html">
+        <source>Choose file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <note priority="1" from="description">Text in file upload</note>
+        <note priority="1" from="meaning">File upload</note>
+      <target>Wybierz plik</target></trans-unit>
+      <trans-unit id="file-required-validation" datatype="html">
+        <source>
+          You must select file to import.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <note priority="1" from="description">Shown file name is empty</note>
+        <note priority="1" from="meaning">File validation</note>
+      <target>Wybierz plik do zaimportowania</target></trans-unit>
+      <trans-unit id="start-import" datatype="html">
+        <source>Start import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <note priority="1" from="description">Text in start import button</note>
+        <note priority="1" from="meaning">Start import button</note>
+      <target>Rozpocznij import</target></trans-unit>
+      <trans-unit id="id" datatype="html">
+        <source>Id</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Import id</note>
+        <note priority="1" from="meaning">Id</note>
+      <target>Id</target></trans-unit>
+      <trans-unit id="createdAt" datatype="html">
+        <source>Crated at</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Created at table header</note>
+        <note priority="1" from="meaning">Created at</note>
+      <target>Utworzono</target></trans-unit>
+      <trans-unit id="status" datatype="html">
+        <source>Status</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <note priority="1" from="description">Status header</note>
+        <note priority="1" from="meaning">Status</note>
+      <target>Satus</target></trans-unit>
+      <trans-unit id="start-date" datatype="html">
+        <source>Start date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Start date header</note>
+        <note priority="1" from="meaning">Start date</note>
+      <target>Data od</target></trans-unit>
+      <trans-unit id="end-date" datatype="html">
+        <source>End date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <note priority="1" from="description">End date header</note>
+        <note priority="1" from="meaning">End date</note>
+      <target>Daa do</target></trans-unit>
+      <trans-unit id="status-created" datatype="html">
+        <source>Created</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <note priority="1" from="description">Created status</note>
+        <note priority="1" from="meaning">Created status</note>
+      <target>Utworzony</target></trans-unit>
+      <trans-unit id="status-queued" datatype="html">
+        <source>Queued</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <note priority="1" from="description">Queued status</note>
+        <note priority="1" from="meaning">Queued status</note>
+      <target>Oczekujący</target></trans-unit>
+      <trans-unit id="error-status-invalid-file" datatype="html">
+        <source>Error - Invalid file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <note priority="1" from="description">Error invalid file status</note>
+        <note priority="1" from="meaning">Error invalid file status</note>
+      <target>Błąd - niepoprawny plik</target></trans-unit>
+      <trans-unit id="error-status-no-messages" datatype="html">
+        <source>Error - No messages in imported file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <note priority="1" from="description">Error no messages status</note>
+        <note priority="1" from="meaning">Error no messages status</note>
+      <target>Błąd - brak wiadomości w zaimportowanym pliku</target></trans-unit>
+      <trans-unit id="status-processing" datatype="html">
+        <source>Processing</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <note priority="1" from="description">Processing status</note>
+        <note priority="1" from="meaning">Processing status</note>
+      <target>Przetwarzanie</target></trans-unit>
+      <trans-unit id="status-completed" datatype="html">
+        <source>Completed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <note priority="1" from="description">Completed status</note>
+        <note priority="1" from="meaning">Completed status</note>
+      <target>Zakończony</target></trans-unit>
+      <trans-unit id="error-status-unknown error" datatype="html">
+        <source>Unknown error</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <note priority="1" from="description">Unknown error status</note>
+        <note priority="1" from="meaning">Unknown error status</note>
+      <target>NIeznany błąd</target></trans-unit>
+      <trans-unit id="messenger-instructions" datatype="html">
+        <source>
+    How to import messenger data?
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import instructions</note>
+        <note priority="1" from="meaning">Messenger instructions</note>
+      <target>Jak zaimportować dane z messengera?</target></trans-unit>
+      <trans-unit id="messenger-step-1" datatype="html">
+        <source>
+        Login to your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Facebook<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> account.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 1</note>
+        <note priority="1" from="meaning">Messenger import step 1</note>
+      <target>Zaloguj się do swojego konta na Facebooku.</target></trans-unit>
+      <trans-unit id="messenger-step-2" datatype="html">
+        <source>
+        Go to <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Settings &amp; Privacy<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> &gt; <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Settings<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> &gt; <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Your Facebook information<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> &gt; <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Download your data<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 2</note>
+        <note priority="1" from="meaning">Messenger import step 2</note>
+      <target>Idź do Ustawienia i Prywatność &gt; Ustawienia &gt; Twoje wiadomości na Facebooku &gt; Pobierz swoje dane.</target></trans-unit>
+      <trans-unit id="messenger-step-3" datatype="html">
+        <source>
+        Select range, format <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>JSON<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> and media quality. In your information section select <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Messages<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 3</note>
+        <note priority="1" from="meaning">Messenger import step 3</note>
+      <target>Wybierz zakres, format JSON i jakość danych. W sekcji twoje informacje wybierz Wiadomości.</target></trans-unit>
+      <trans-unit id="messenger-step-4" datatype="html">
+        <source>
+        Press <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Create file<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> button.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 4</note>
+        <note priority="1" from="meaning">Messenger import step 4</note>
+      <target>Naciśnik przycisk Utwórz plik.</target></trans-unit>
+      <trans-unit id="messenger-step-5" datatype="html">
+        <source>
+        Wait until file is generated (may took a long time).
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 5</note>
+        <note priority="1" from="meaning">Messenger import step 5</note>
+      <target>Poczekaj aż plik zostanie wygenerowany (może to potrwać bardzo długo).</target></trans-unit>
+      <trans-unit id="messenger-step-6" datatype="html">
+        <source>
+        Download file (or files).
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 6</note>
+        <note priority="1" from="meaning">Messenger import step 6</note>
+      <target>Pobierz plik (lub pliki).</target></trans-unit>
+      <trans-unit id="messenger-step-7" datatype="html">
+        <source>
+        If there was more than one file please merge them into one .zip file.
+        You must unzip all files and then zip them into single zip archive.
+        To do this you can use WinRar or 7zip.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 7</note>
+        <note priority="1" from="meaning">Messenger import step 7</note>
+      <target>Jeśli wygenerowanych zostało więcej niż jeden plik, połącz je w jeden plik .zip.
+Musisz wypakować wszystkie pliki i spakować je w pojedyncze archiwum zip.
+Możesz do tego wykorzystać WinRar lub 7zip.</target></trans-unit>
+      <trans-unit id="messenger-step-8" datatype="html">
+        <source>
+        Go to this page.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 8</note>
+        <note priority="1" from="meaning">Messenger import step 8</note>
+      <target>Idż do tej strony.</target></trans-unit>
+      <trans-unit id="messenger-step-9" datatype="html">
+        <source>
+        Type your Facebook/Messenger name (not pseudonym).
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 9</note>
+        <note priority="1" from="meaning">Messenger import step 9</note>
+      <target>Podaj swoje imię i nazwisko na Facebooku/Messengerze (nie pseudonim).</target></trans-unit>
+      <trans-unit id="messenger-step-10" datatype="html">
+        <source>
+        Add previously created and downloaded file (Choose file).
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 10</note>
+        <note priority="1" from="meaning">Messenger import step 10</note>
+      <target>Dodaj poprzednio utworzony i pobrany plik (Wybierz plik).</target></trans-unit>
+      <trans-unit id="messenger-step-11" datatype="html">
+        <source>
+        Press start import button.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import step 11</note>
+        <note priority="1" from="meaning">Messenger import step 11</note>
+      <target>Naciśnij przycisk start import.</target></trans-unit>
+      <trans-unit id="username" datatype="html">
+        <source>Username</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/login-page/login-page.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description"> Text in username placeholder</note>
+        <note priority="1" from="meaning">Username placeholder</note>
+      <target>Nazwa użytkownika</target></trans-unit>
+      <trans-unit id="username-required-validation" datatype="html">
+        <source>
+          Username is required.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/login-page/login-page.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <note priority="1" from="description">Shown when username is empty</note>
+        <note priority="1" from="meaning">Username validation</note>
+      <target>Nazwa użytkownika jest wymagana.</target></trans-unit>
+      <trans-unit id="username-too-long-validation" datatype="html">
+        <source>
+          Username must contain a maximum of <x id="INTERPOLATION" equiv-text="{{maxUsernameLength}}"/> characters.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/login-page/login-page.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">Shown when username is too long</note>
+        <note priority="1" from="meaning">Username validation</note>
+      <target>Nazwa użytkownika może zawierać maksymalnie <x id="INTERPOLATION" equiv-text="{{maxUsernameLength}}"/> znaków.</target></trans-unit>
+      <trans-unit id="password" datatype="html">
+        <source>Password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/login-page/login-page.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <note priority="1" from="description"> Text in password placeholder</note>
+        <note priority="1" from="meaning">Password placeholder</note>
+      <target>Hasło</target></trans-unit>
+      <trans-unit id="password-required-validation" datatype="html">
+        <source>
+          Password is required.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/login-page/login-page.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <note priority="1" from="description">Shown when password is empty</note>
+        <note priority="1" from="meaning">Password validation</note>
+      <target>Hasło jest wymagane.</target></trans-unit>
+      <trans-unit id="login" datatype="html">
+        <source>Log in</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/login-page/login-page.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <note priority="1" from="description"> Text in log in button</note>
+        <note priority="1" from="meaning">Log in button</note>
+      <target>Zaloguj się</target></trans-unit>
+      <trans-unit id="email" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <note priority="1" from="description"> Text in email placeholder</note>
+        <note priority="1" from="meaning">Email placeholder</note>
+      <target>Email</target></trans-unit>
+      <trans-unit id="email-required-validation" datatype="html">
+        <source>
+          Email is required.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <note priority="1" from="description">Shown when email is empty</note>
+        <note priority="1" from="meaning">Email validation</note>
+      <target>Email jest wymagany.</target></trans-unit>
+      <trans-unit id="email-validation" datatype="html">
+        <source>
+          Enter valid email address.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <note priority="1" from="description">Shown when email is invalid</note>
+        <note priority="1" from="meaning">Email validation</note>
+      <target>Podaj poprawny adres email.</target></trans-unit>
+      <trans-unit id="confirm-password" datatype="html">
+        <source>Confirm password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <note priority="1" from="description"> Text in confirm password placeholder</note>
+        <note priority="1" from="meaning">Confirm password placeholder</note>
+      <target>Potwierdź hasło</target></trans-unit>
+      <trans-unit id="confirm-password-required-validation" datatype="html">
+        <source>
+          You must confirm password.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <note priority="1" from="description">Shown when password is empty</note>
+        <note priority="1" from="meaning">Confirm password validation</note>
+      <target>Musisz potwierdzić hasło.</target></trans-unit>
+      <trans-unit id="confirm-password-validation" datatype="html">
+        <source>
+          Passwords are different.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <note priority="1" from="description">Shown when passwords do not match</note>
+        <note priority="1" from="meaning">Confirm password validation</note>
+      <target>Hasła są różne.</target></trans-unit>
+      <trans-unit id="register" datatype="html">
+        <source>Register</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authorization/registration-page/registration-page.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <note priority="1" from="description"> Text in register button</note>
+        <note priority="1" from="meaning">Register button</note>
+      <target>Zarejestruj</target></trans-unit>
+      <trans-unit id="delete-account-title" datatype="html">
+        <source>
+    Delete account?
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/delete-account/delete-user-account-dialog/delete-user-account-dialog.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Delete account title</note>
+        <note priority="1" from="meaning">Delete account</note>
+      <target>Skasować konto?</target></trans-unit>
+      <trans-unit id="delete-account" datatype="html">
+        <source>Delete account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/delete-account/delete-account.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Delete account button</note>
+        <note priority="1" from="meaning">Delete account</note>
+      <target>Skasuj konto</target></trans-unit>
+      <trans-unit id="account-updated-msg" datatype="html">
+        <source>Account updated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-details-edit/user-details-edit.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <note priority="1" from="description">Account updated message</note>
+        <note priority="1" from="meaning">Account updated</note>
+      <target>Konto zaktualizowane</target></trans-unit>
+      <trans-unit id="old-password" datatype="html">
+        <source>Old password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Text in old password placeholder</note>
+        <note priority="1" from="meaning">Old password placeholder</note>
+      <target>Stare hasło</target></trans-unit>
+      <trans-unit id="old-password-required-validation" datatype="html">
+        <source>
+          Old password is required.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <note priority="1" from="description">Shown when password is empty</note>
+        <note priority="1" from="meaning">Password validation</note>
+      <target>Stare hasło jest wymagane</target></trans-unit>
+      <trans-unit id="new-password" datatype="html">
+        <source>New password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <note priority="1" from="description">Text in new password placeholder</note>
+        <note priority="1" from="meaning">New password placeholder</note>
+      <target>Nowe hasło</target></trans-unit>
+      <trans-unit id="confirm-new-password" datatype="html">
+        <source>Confirm new password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <note priority="1" from="description">Text in confirm new password placeholder</note>
+        <note priority="1" from="meaning">Confirm new password placeholder</note>
+      <target>Potwierdź nowe hasło</target></trans-unit>
+      <trans-unit id="confirm-new-password-required-validation" datatype="html">
+        <source>
+          You must confirm new password.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <note priority="1" from="description">Shown when new password is empty</note>
+        <note priority="1" from="meaning">Confirm new password validation</note>
+      <target>Musisz potwierdzić nowe hasło.</target></trans-unit>
+      <trans-unit id="change-password" datatype="html">
+        <source>
+        Change password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <note priority="1" from="description"> Text in change password button</note>
+        <note priority="1" from="meaning">Change password button</note>
+      <target>Zmień hasło</target></trans-unit>
+      <trans-unit id="password-changed-msg" datatype="html">
+        <source>Password changed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-edit/user-edit-page/user-password-change/user-password-change.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <note priority="1" from="description">Password changed message</note>
+        <note priority="1" from="meaning">Password changed</note>
+      <target>Hasło zmienione</target></trans-unit>
+      <trans-unit id="delete-messages-title" datatype="html">
+        <source>
+    Delete alias?
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/delete-messages-dialog/delete-messages-dialog.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Delete messages dialog title</note>
+        <note priority="1" from="meaning">Delete messages</note>
+      <target>Skasować alias?</target></trans-unit>
+      <trans-unit id="application" datatype="html">
+        <source>Application</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">application</note>
+        <note priority="1" from="meaning">Application</note>
+      <target>Applikacja</target></trans-unit>
+      <trans-unit id="delete-messages" datatype="html">
+        <source>Delete messages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <note priority="1" from="description">Delete messages button</note>
+        <note priority="1" from="meaning">Delete messages</note>
+      <target>Skasuj wiadomości</target></trans-unit>
+      <trans-unit id="delete-message" datatype="html">
+        <source>
+          Delete
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <note priority="1" from="description">Delete message button</note>
+        <note priority="1" from="meaning">Delete message</note>
+      <target>Skasuj</target></trans-unit>
+    </body>
+  </file>
+</xliff>

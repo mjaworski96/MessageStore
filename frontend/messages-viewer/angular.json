@@ -59,6 +59,18 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "pl": {
+              "aot": true,
+              "i18nFile": "src/locale/messages.pl.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "pl"
+            },
+            "en": {
+              "aot": true,
+              "i18nFile": "src/locale/messages.plen.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "en"
             }
           }
         },
@@ -70,6 +82,12 @@
           "configurations": {
             "production": {
               "browserTarget": "messages-viewer:build:production"
+            },
+            "pl": {
+              "browserTarget": "messages-viewer:build:pl"
+            },
+            "en": {
+              "browserTarget": "messages-viewer:build:en"
             }
           }
         },
