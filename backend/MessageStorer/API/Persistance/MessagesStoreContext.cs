@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using API.Persistance.Entity;
@@ -174,6 +174,10 @@ namespace API.Persistance
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ContactId).HasColumnName("contact_id");
+
+                entity.Property(e => e.InternalId)
+                    .HasColumnName("internal_id")
+                    .HasMaxLength(256);
 
                 entity.Property(e => e.Name)
                     .IsRequired()

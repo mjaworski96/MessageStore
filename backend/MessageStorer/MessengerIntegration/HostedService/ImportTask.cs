@@ -177,13 +177,15 @@ namespace MessengerIntegration.HostedService
             var participantsRaw = document.RootElement.GetProperty("participants");
             var participants = JsonConvert.DeserializeObject<List<Participant>>(participantsRaw.GetRawText());
             var others = participants.Where(x => FixEncoding(x.Name) != _import.FacebookName).ToList();
+            
             var contact = new Contact()
             {
                 InApplicationId = conversationName,
                 Name = others.Count == 1
                     ? FixEncoding(others.First().Name) : conversationName,
                 Members = others.Count == 1
-                    ? null : others.Select(x => new ContactMember() { Name = FixEncoding(x.Name) }).ToList(),
+                    ? null : others.Select(x => new ContactMember()
+                    { Name = FixEncoding(x.Name), InternalId=FixEncoding(x.Name) }).ToList(),
             };
             return await contactApiClient.CreateOrUpdateContact(contact);
         }

@@ -115,6 +115,7 @@ CREATE TABLE contacts_members
 (
 	id INTEGER NOT NULL,
 	name VARCHAR(256) NOT NULL,
+	internal_id VARCHAR(256),
 	contact_id INTEGER
 );
 ALTER TABLE contacts_members ADD CONSTRAINT contacts_members_pkey PRIMARY KEY (id);

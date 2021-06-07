@@ -38,7 +38,7 @@ namespace API.Service
         public async Task<ContactDtoWithId> AddIfNotExists(ContactDto contactDto)
         {
             Validate(contactDto);
-            Contacts entity = await _contactRepository.Get(
+            var entity = await _contactRepository.Get(
                 _httpMetadataService.Application,
                 contactDto.InApplicationId,
                 _httpMetadataService.UserId);
@@ -77,7 +77,8 @@ namespace API.Service
                 Members = entity.ContactsMembers.Select(x => new ContactMemberWithIdDto
                 {
                     Id = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    InternalId = x.InternalId
                 }).ToList()
             };
         }
@@ -111,7 +112,7 @@ namespace API.Service
 
             foreach (var item in entity.ContactsMembers)
             {
-                var matchingNew = newMembers.FirstOrDefault(x => !x.Matched && x.Original.Name == item.Name);
+                var matchingNew = newMembers.FirstOrDefault(x => !x.Matched && x.Original.InternalId == item.InternalId);
                 if (matchingNew != null)
                 {
                     matchingNew.Matched = true;
@@ -122,7 +123,8 @@ namespace API.Service
             {
                 entity.ContactsMembers.Add(new ContactsMembers
                 {
-                    Name = item.Original.Name
+                    Name = item.Original.Name,
+                    InternalId = item.Original.Name,
                 });
             }
         }

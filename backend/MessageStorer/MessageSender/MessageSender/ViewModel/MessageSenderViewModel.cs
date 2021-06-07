@@ -97,7 +97,7 @@ namespace MessageSender.ViewModel
             UpdateCanLogout(false);
 
             _permisionsService.Request();
-            Dictionary<string, int> contactNumberToId = new Dictionary<string, int>();
+            var threadIdToContact = new Dictionary<string, ContactWithId>();
             CurrentProgress = 0;
             int currentSent = 0;
             var importId = Guid.NewGuid().ToString();
@@ -113,20 +113,24 @@ namespace MessageSender.ViewModel
                     {
                         break;
                     }
-                    if (!contactNumberToId.ContainsKey(GetPhoneNumberDictionaryKey(sms.PhoneNumber)))
+                    if (!threadIdToContact.ContainsKey(sms.ThreadId))
                     {
-                        var contact = await contactHttpSender.Send(
-                            contacts.FirstOrDefault(x => x.PhoneNumber == sms.PhoneNumber)
-                            ?? new Contact
-                            {
-                                Name = sms.PhoneNumber,
-                                PhoneNumber = sms.PhoneNumber
-                            });
-
-                        contactNumberToId.Add(GetPhoneNumberDictionaryKey(contact.PhoneNumber), contact.Id);
+                        var rawContact = contacts.FirstOrDefault(x => x.InApplicationId == sms.ThreadId);
+                        var contactFromApi = await contactHttpSender.Send(rawContact);
+                        threadIdToContact.Add(rawContact.InApplicationId, contactFromApi);
                     }
-                    sms.ContactId = contactNumberToId[GetPhoneNumberDictionaryKey(sms.PhoneNumber)];
+                    var contact = threadIdToContact[sms.ThreadId];
+                    sms.ContactId = contact.Id;
                     sms.ImportId = importId;
+                    if (sms.Person != null)
+                    {
+                        var member = contact.Members.FirstOrDefault(x => x.InternalId == sms.Person.ToString());
+                        if (member != null)
+                        {
+                            sms.ContactMemberId = member.Id;
+                        }
+                    }
+
                     await smsHttpSender.Send(sms);
                     UpdateProgress(ref currentSent, maxProgress);
                 }

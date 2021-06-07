@@ -12,8 +12,13 @@ namespace MessageSender.Model
         public string WriterType { get; set; }
         public string ImportId { get; set; }
         public int ContactId { get; set; }
+        public int? ContactMemberId { get; set; }
         [JsonIgnore]
-        public string PhoneNumber { get; set; }
+        public int? Person { get; set; }
+        [JsonIgnore]
+        public string ThreadId { get; set; }
+        [JsonIgnore]
+        public bool ShouldBeIgnored { get; set; }
 
         public const string WRITER_ME = "app_user";
         public const string WRITER_CONTACT = "contact";

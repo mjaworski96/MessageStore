@@ -557,7 +557,7 @@
         </context-group>
         <note priority="1" from="description">End date header</note>
         <note priority="1" from="meaning">End date</note>
-      <target>Daa do</target></trans-unit>
+      <target>Data do</target></trans-unit>
       <trans-unit id="status-created" datatype="html">
         <source>Created</source>
         <context-group purpose="location">
