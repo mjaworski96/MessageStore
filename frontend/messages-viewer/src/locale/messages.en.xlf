@@ -757,6 +757,28 @@ To do this you can use WinRar or 7zip.</target></trans-unit>
         <note priority="1" from="description">Messenger import step 11</note>
         <note priority="1" from="meaning">Messenger import step 11</note>
       <target>Press start import button.</target></trans-unit>
+      <trans-unit id="messenger-no-data" datatype="html">
+        <source>
+          If there are no new messages after import please ensure that
+          your zip file contains messages data (at least one message_1.json file).
+          This could happen if you have no messages within selected dates or not merged zip files.
+
+          If you import many files please ensure to do it in chronological order.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <note priority="1" from="description">Messenger import no data</note>
+        <note priority="1" from="meaning">Messenger import no data</note>
+        <target>
+          If there are no new messages after import please ensure that
+          your zip file contains messages data (at least one message_1.json file).
+          This could happen if you have no messages within selected dates or not merged zip files.
+
+          If you import many files please ensure to do it in chronological order.
+        </target>
+      </trans-unit>
       <trans-unit id="username" datatype="html">
         <source>Username</source>
         <context-group purpose="location">
