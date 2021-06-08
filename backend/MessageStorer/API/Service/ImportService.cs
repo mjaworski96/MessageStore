@@ -33,6 +33,7 @@ namespace API.Service
                 importsDto.Add(new ImportDto
                 {
                     Id = item.ImportId,
+                    CreatedAt = item.CreatedAt,
                     StartDate = (await _messageRepository.GetOldest(item.Id)).Date,
                     EndDate = (await _messageRepository.GetNewest(item.Id)).Date,
                     Application = await _messageRepository.GetApplication(item.Id)

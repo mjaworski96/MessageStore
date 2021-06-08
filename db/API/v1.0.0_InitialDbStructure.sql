@@ -133,7 +133,8 @@ ALTER TABLE contacts_members ADD CONSTRAINT fk_contacts_members_contacts FOREIGN
 CREATE TABLE imports
 (
 	id INTEGER NOT NULL,
-	import_id VARCHAR(64) NOT NULL
+	import_id VARCHAR(64) NOT NULL,
+	created_at TIMESTAMP DEFAULT now()
 );
 ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);
 CREATE SEQUENCE public.imports_id_seq

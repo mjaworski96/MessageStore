@@ -197,6 +197,10 @@ namespace API.Persistance
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("created_at")
+                    .HasDefaultValueSql("now()");
+
                 entity.Property(e => e.ImportId)
                     .IsRequired()
                     .HasColumnName("import_id")

@@ -1,5 +1,6 @@
 ﻿using API.Persistance.Entity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +42,8 @@ namespace API.Persistance.Repository
             }
             var newImport = new Imports
             {
-                ImportId = importId
+                ImportId = importId,
+                CreatedAt = DateTime.UtcNow
             };
             _messageStoreContext.Imports.Add(newImport);
             await _messageStoreContext.SaveChangesAsync();

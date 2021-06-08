@@ -513,7 +513,7 @@
         <note priority="1" from="description">Import id</note>
         <note priority="1" from="meaning">Id</note>
       <target>Id</target></trans-unit>
-      <trans-unit id="createdAt" datatype="html">
+      <trans-unit id="created-at" datatype="html">
         <source>Crated at</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>

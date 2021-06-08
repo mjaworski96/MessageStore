@@ -4,6 +4,7 @@
     <tr>
       <td i18n="Id|Import id@@id">Id</td>
       <td i18n="Application|application@@application">Application</td>
+      <td i18n="Created at|Created at table header@@created-at">Crated at
       <td i18n="Start date|Start date header@@start-date">Start date</td>
       <td i18n="End date|End date header@@end-date">End date</td>
       <td i18n="Delete messages|Delete messages button@@delete-messages">Delete messages</td>
@@ -13,6 +14,7 @@
     <tr *ngFor="let import of imports.imports">
       <td>{{import.id}}</td>
       <td><app-application-name [application]="import.application"></app-application-name></td>
+      <td>{{import.createdAt | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>{{import.startDate | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>{{import.endDate | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>
