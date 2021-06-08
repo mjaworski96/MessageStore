@@ -10,12 +10,12 @@ namespace MessengerIntegration.Controller
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ImportController : ControllerBase
+    public class MessengerImportsController : ControllerBase
     {
         private readonly IImportService _importService;
-        private readonly ILogger<ImportController> _logger;
-        public ImportController(IImportService importService,
-            ILogger<ImportController> logger)
+        private readonly ILogger<MessengerImportsController> _logger;
+        public MessengerImportsController(IImportService importService,
+            ILogger<MessengerImportsController> logger)
         {
             _importService = importService;
             _logger = logger;

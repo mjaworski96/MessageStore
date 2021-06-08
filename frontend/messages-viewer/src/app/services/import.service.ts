@@ -6,7 +6,7 @@ import {FileUpload, Import, ImportsList, StartImport} from '../model/import';
   providedIn: 'root'
 })
 export class ImportService {
-  url = '/api/import';
+  url = '/api/messengerImports';
 
   constructor(private httpClient: HttpClient) { }
 

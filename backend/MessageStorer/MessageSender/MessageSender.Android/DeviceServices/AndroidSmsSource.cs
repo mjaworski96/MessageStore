@@ -98,7 +98,7 @@ namespace MessageSender.Droid.DeviceServices
                     WriterType = type == ((int)SmsMessageType.Inbox).ToString()
                         ? Sms.WRITER_CONTACT : Sms.WRITER_ME,
                     ShouldBeIgnored = type == ((int)SmsMessageType.Draft).ToString()
-                                || type == ((int)SmsMessageType.Outbox).ToString(),
+                        || type == ((int)SmsMessageType.Outbox).ToString(),
                     HasError = type == ((int)SmsMessageType.Failed).ToString()
                 };
             }

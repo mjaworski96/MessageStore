@@ -96,7 +96,28 @@ namespace MessengerIntegration.Service
             import.Status = await _statusRepository.GetStatusByName(statusName);
             await _importRepository.Save();
         }
+        public async Task<ImportDtoWithIdList> GetAllForUser()
+        {
+            var entities = await _importRepository.GetAll(_httpMetadataService.UserId);
+            return new ImportDtoWithIdList
+            {
+                Imports = entities.Select(x => CreateImportDtoWithId(x)).ToList()
+            };
+        }
 
+        public async Task Delete(string importId)
+        {
+            var import = await _importRepository.Get(importId, false);
+            if (import != null)
+            {
+                if (import.UserId != _httpMetadataService.UserId)
+                {
+                    throw new ForbiddenImportException();
+                }
+                await _importRepository.Delete(import);
+                _fileUtils.Delete(import.Id);
+            }
+        }
         private void CheckStatus(Imports import, string validStatus)
         {
             if (import.Status.Name != validStatus)
@@ -123,28 +144,6 @@ namespace MessengerIntegration.Service
                 CreatedAt = importEntity.CreatedAt,
             };
         }
-
-        public async Task<ImportDtoWithIdList> GetAllForUser()
-        {
-            var entities = await _importRepository.GetAll(_httpMetadataService.UserId);
-            return new ImportDtoWithIdList
-            {
-                Imports = entities.Select(x => CreateImportDtoWithId(x)).ToList()
-            };
-        }
-
-        public async Task Delete(string importId)
-        {
-            var import = await _importRepository.Get(importId, false);
-            if (import != null)
-            {
-                if (import.UserId != _httpMetadataService.UserId)
-                {
-                    throw new ForbiddenImportException();
-                }
-                await _importRepository.Delete(import);
-                _fileUtils.Delete(import.Id);
-            }
-        }
+        
     }
 }

@@ -1,5 +1,5 @@
 {
-  "/api/import/*": {
+  "/api/messengerImports/*": {
     "target": "https://localhost:5101",
     "secure": false,
     "logLevel": "debug"
