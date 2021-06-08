@@ -12,8 +12,8 @@ namespace API.Persistance.Entity
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? ContactId { get; set; }
         public string InternalId { get; set; }
+        public int? ContactId { get; set; }
 
         public virtual Contacts Contact { get; set; }
         public virtual ICollection<Messages> Messages { get; set; }

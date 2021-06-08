@@ -22,8 +22,7 @@ CREATE TABLE imports
 	end_date TIMESTAMP,
 	user_id INT NOT NULL,
 	facebook_name VARCHAR(256) NOT NULL,
-	created_at TIMESTAMP
+	created_at TIMESTAMP DEFAULT now()
 );
 ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);
 ALTER TABLE imports ADD CONSTRAINT fk_imports_statuses FOREIGN KEY (status_id) REFERENCES statuses(id);
-ALTER TABLE imports ALTER COLUMN created_at SET DEFAULT now();

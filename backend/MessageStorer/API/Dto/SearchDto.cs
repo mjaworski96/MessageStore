@@ -20,6 +20,7 @@ namespace API.Dto
         public List<AttachmentDtoWithId> Attachments { get; set; }
         public DateTime Date { get; set; }
         public string WriterType { get; set; }
+        public bool HasError { get; set; }
         public string ContactName { get; set; }
         public int AliasId { get; set; }
         public string Application { get; set; }

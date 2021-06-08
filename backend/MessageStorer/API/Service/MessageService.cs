@@ -54,6 +54,7 @@ namespace API.Service
                 WriterType = await _writerTypeRepository.Get(messageDto.WriterType),
                 Attachments = await _attachmentService.CreateAttachments(messageDto.Attachments),
                 Import = await _importRepository.GetOrCreate(messageDto.ImportId),
+                HasError = messageDto.HasError
             };
 
             if (messageDto.ContactMemberId.HasValue)
@@ -79,7 +80,8 @@ namespace API.Service
                 ContactMemberId = message.ContactMemberId,
                 Attachments = message.Attachments.Select(x => _attachmentService.CreateAttachemtDtoWithId(x)).ToList(),
                 Application = message.Contact.Application.Name,
-                ContactName = GetContactName(message)
+                ContactName = GetContactName(message),
+                HasError = message.HasError
             };
         }
 
@@ -108,6 +110,7 @@ namespace API.Service
                         Id = y.Alias.Id,
                         Name = y.Alias.Name,
                     }).ToList(),
+                    HasError = x.HasError
                 }).ToList();
 
             return new SearchResultDtoList

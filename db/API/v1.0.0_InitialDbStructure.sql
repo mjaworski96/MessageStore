@@ -152,6 +152,7 @@ CREATE TABLE messages
 	id INTEGER NOT NULL,
 	content VARCHAR(307200), -- 30KiB
 	date TIMESTAMP,
+	has_error BOOLEAN NOT NULL DEFAULT FALSE,
 	import_id INT NOT NULL,
 	writer_type_id INTEGER NOT NULL,
 	contact_id INTEGER NOT NULL,

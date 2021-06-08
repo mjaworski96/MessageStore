@@ -10,6 +10,7 @@ namespace API.Dto
         public DateTime? Date { get; set; }
         //"app_user" or "contact"
         public string WriterType { get; set; }
+        public bool HasError { get; set; }
         public string ImportId { get; set; }
         public int ContactId { get; set; }
         public int? ContactMemberId { get; set; }
@@ -21,6 +22,7 @@ namespace API.Dto
         public List<AttachmentDtoWithId> Attachments { get; set; }
         public DateTime? Date { get; set; }
         public string WriterType { get; set; }
+        public bool HasError { get; set; }
         public int ContactId { get; set; }
         public int? ContactMemberId { get; set; }
         public string ContactName { get; set; }

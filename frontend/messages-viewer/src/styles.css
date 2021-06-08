@@ -56,3 +56,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .table-wrapper tbody td {
   padding: 5px 0;
 }
+.unsent-message {
+  border: 1px red solid !important;
+}

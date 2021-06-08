@@ -9,6 +9,7 @@ namespace MessengerIntegration.Infrastructure.Http.Model
         public List<Attachment> Attachments { get; set; }
         public DateTime? Date { get; set; }
         public string WriterType { get; set; }
+        public bool HasError { get; set; }
         public string ImportId { get; set; }
         public int ContactId { get; set; }
         public int? ContactMemberId { get; set; }

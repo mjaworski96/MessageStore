@@ -18,6 +18,7 @@ export interface SearchResultDto {
   attachments: AttachmentWithID[];
   date: string;
   writerType: string;
+  hasError: boolean;
   contactName: string;
   aliasId: number;
   application: string;

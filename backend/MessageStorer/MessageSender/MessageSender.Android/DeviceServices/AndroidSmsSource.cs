@@ -98,7 +98,8 @@ namespace MessageSender.Droid.DeviceServices
                     WriterType = type == ((int)SmsMessageType.Inbox).ToString()
                         ? Sms.WRITER_CONTACT : Sms.WRITER_ME,
                     ShouldBeIgnored = type == ((int)SmsMessageType.Draft).ToString()
-                                || type == ((int)SmsMessageType.Outbox).ToString()
+                                || type == ((int)SmsMessageType.Outbox).ToString(),
+                    HasError = type == ((int)SmsMessageType.Failed).ToString()
                 };
             }
         }
@@ -138,7 +139,8 @@ namespace MessageSender.Droid.DeviceServices
                 WriterType = messageBox == ((int)MessageBoxType.Inbox).ToString()
                         ? Sms.WRITER_CONTACT : Sms.WRITER_ME,
                 ShouldBeIgnored = messageBox == ((int)MessageBoxType.Drafts).ToString()
-                || messageBox == ((int)MessageBoxType.Outbox).ToString()
+                || messageBox == ((int)MessageBoxType.Outbox).ToString(),
+                HasError = messageBox == ((int)MessageBoxType.Failed).ToString()
             };
         }
 

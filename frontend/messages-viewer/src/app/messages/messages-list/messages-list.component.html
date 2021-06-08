@@ -3,7 +3,9 @@
     <div #scroll>
       <div *ngFor="let message of messages">
         <div class="message"
-          [ngClass]="{'message-by-contact': writtenByContact(message), 'message-by-user': writtenByUser(message)}">
+          [ngClass]="{'message-by-contact': writtenByContact(message),
+          'message-by-user': writtenByUser(message),
+          'unsent-message': message.hasError}">
           <div>
             {{message.content}}
           </div>

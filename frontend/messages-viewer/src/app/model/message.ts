@@ -6,6 +6,7 @@ export interface MessageWithId {
   attachments: AttachmentWithID[];
   date: string;
   writerType: string;
+  hasError: boolean;
   contactName: string;
   application: string;
 }

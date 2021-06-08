@@ -13,6 +13,7 @@ namespace API.Persistance.Entity
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime? Date { get; set; }
+        public bool HasError { get; set; }
         public int ImportId { get; set; }
         public int WriterTypeId { get; set; }
         public int ContactId { get; set; }

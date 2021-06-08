@@ -216,7 +216,8 @@ namespace MessengerIntegration.HostedService
                     Date = messageDate,
                     WriterType = rawMessage.SenderName == _import.FacebookName ? "app_user" : "contact",
                     ContactMemberId = contact.Members.Count == 1 ? null : contact.Members.FirstOrDefault(x => x.Name == FixEncoding(rawMessage.SenderName))?.Id,
-                    ImportId = _import.Id
+                    ImportId = _import.Id,
+                    HasError = rawMessage.IsUnsent ?? false
                 };
                 await messageApiClient.CreateMessage(messageToSend);
                 UpdateImportDates(messageDate);

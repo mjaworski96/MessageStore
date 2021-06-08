@@ -4,7 +4,6 @@
       <mat-form-field class="full-width">
         <input matInput placeholder="Search for" i18n-placeholder="Search for|Search for input@@search-for" [(ngModel)]="query">
       </mat-form-field>
-
     </div>
     <div class="aliases-list">
       <div *ngFor="let alias of aliases">
@@ -42,7 +41,8 @@
     </div>
   </div>
   <div *ngIf="results else noResults">
-    <div *ngFor="let result of results" (click)="navigate(result, $event)" class="result">
+    <div *ngFor="let result of results" (click)="navigate(result, $event)" class="result"
+         [ngClass]="{'unsent-message': result.hasError}">
       <div class="contact-name">
         <span>{{result.contactName}} ({{result.application}} </span>
         <span *ngIf="writtenByAppUser(result)">written by you)</span>

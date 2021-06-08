@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using API.Persistance.Entity;
@@ -218,6 +218,8 @@ namespace API.Persistance
                     .HasMaxLength(307200);
 
                 entity.Property(e => e.Date).HasColumnName("date");
+
+                entity.Property(e => e.HasError).HasColumnName("has_error");
 
                 entity.Property(e => e.ImportId).HasColumnName("import_id");
 

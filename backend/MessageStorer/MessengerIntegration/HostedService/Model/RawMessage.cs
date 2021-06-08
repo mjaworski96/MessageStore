@@ -12,6 +12,8 @@ namespace MessengerIntegration.HostedService.Model
         public long TimestampMs { get; set; }
 
         public string Content { get; set; }
+        [JsonProperty("is_unsent")]
+        public bool? IsUnsent { get; set; }
 
         public List<RawAttachment> Photos { get; set; }
 
