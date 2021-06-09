@@ -11,6 +11,7 @@ namespace API.Persistance.Repository
     {
         Task<Imports> GetOrCreate(string importId);
         Task<Imports> Get(string importId);
+        Task<int?> GetOwnerId(string importId);
         Task<List<Imports>> GetAllForUser(int userId);
         Task Remove(Imports import);
     }
@@ -59,6 +60,15 @@ namespace API.Persistance.Repository
         {
             _messageStoreContext.Remove(import);
             await _messageStoreContext.SaveChangesAsync();
+        }
+
+        public async Task<int?> GetOwnerId(string importId)
+        {
+            return await _messageStoreContext
+                .Messages
+                .Where(x => x.Import.ImportId == importId)
+                .Select(x => x.Contact.AppUserId)
+                .FirstOrDefaultAsync();
         }
     }
 }

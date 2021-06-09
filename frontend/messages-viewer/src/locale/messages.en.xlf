@@ -1061,7 +1061,7 @@ To do this you can use WinRar or 7zip.</target></trans-unit>
       <target>Password changed</target></trans-unit>
       <trans-unit id="delete-messages-title" datatype="html">
         <source>
-    Delete alias?
+    Delete messages?
   </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/imports/import-view/delete-messages-dialog/delete-messages-dialog.component.html</context>
@@ -1069,7 +1069,7 @@ To do this you can use WinRar or 7zip.</target></trans-unit>
         </context-group>
         <note priority="1" from="description">Delete messages dialog title</note>
         <note priority="1" from="meaning">Delete messages</note>
-      <target>Delete alias?</target></trans-unit>
+      <target>Delete messages?</target></trans-unit>
       <trans-unit id="application" datatype="html">
         <source>Application</source>
         <context-group purpose="location">

@@ -9,3 +9,5 @@ DROP TABLE attachments CASCADE;
 DROP TABLE contacts_members CASCADE;
 DROP TABLE imports CASCADE;
 DROP FUNCTION FindRowNumber;
+DROP FUNCTION DeleteMessagesWithImportId;
+DROP FUNCTION DeleteEmptyContacts;

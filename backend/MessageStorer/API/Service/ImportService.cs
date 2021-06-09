@@ -34,8 +34,8 @@ namespace API.Service
                 {
                     Id = item.ImportId,
                     CreatedAt = item.CreatedAt,
-                    StartDate = (await _messageRepository.GetOldest(item.Id)).Date,
-                    EndDate = (await _messageRepository.GetNewest(item.Id)).Date,
+                    StartDate = (await _messageRepository.GetOldest(item.Id, false)).Date,
+                    EndDate = (await _messageRepository.GetNewest(item.Id, false)).Date,
                     Application = await _messageRepository.GetApplication(item.Id)
                 });
             }

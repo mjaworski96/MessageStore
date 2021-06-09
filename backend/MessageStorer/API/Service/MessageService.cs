@@ -173,6 +173,8 @@ namespace API.Service
             var import = await _importRepository.Get(importId);
             if (import != null)
             {
+                var owner = await _importRepository.GetOwnerId(importId);
+                _securityService.CheckIfUserIsOwnerOfImport(owner);
                 var attachments = await _messageRepository.GetFilenamesToRemove(import.Id);
 
                 foreach (var item in attachments)
@@ -185,6 +187,7 @@ namespace API.Service
                     await _messengerIntegrationClient.DeleteImport(importId);
                 }
                 await _messageRepository.RemoveMessagesWithImportId(import.Id);
+                await _contactRepository.RemoveEmpty(_httpMetadataService.UserId);
                 await _importRepository.Remove(import);
             }
             

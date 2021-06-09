@@ -13,8 +13,8 @@ namespace API.Persistance.Repository
         Task Save();
         Task<Messages> GetNewest(int userId, string application, int? contactId);
         Task<Messages> GetOldest(int userId, string application, int? contactId);
-        Task<Messages> GetOldest(int importId);
-        Task<Messages> GetNewest(int importId);
+        Task<Messages> GetOldest(int importId, bool addContactData);
+        Task<Messages> GetNewest(int importId, bool addContactData);
         Task<string> GetApplication(int importId);
         Task<List<Messages>> GetPage(int aliasId, int pageNumber, int pageSize);
         Task<List<Messages>> Find(int userId, string searchFor, List<int> aliasesIds, bool ignoreLetterSize,
@@ -141,20 +141,30 @@ namespace API.Persistance.Repository
             await _messageStoreContext.SaveChangesAsync();
         }
 
-        public Task<Messages> GetOldest(int importId)
+        public Task<Messages> GetOldest(int importId, bool addContactData)
         {
-            return _messageStoreContext.Messages
-                .Where(x => x.ImportId == importId)
+            return GetImportIdQuery(importId, addContactData)
                 .OrderBy(x => x.Date)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<Messages> GetNewest(int importId)
+        public Task<Messages> GetNewest(int importId, bool addContactData)
         {
-            return _messageStoreContext.Messages
-                .Where(x => x.ImportId == importId)
+            return GetImportIdQuery(importId, addContactData)
                 .OrderByDescending(x => x.Date)
                 .FirstOrDefaultAsync();
+        }
+        private IQueryable<Messages> GetImportIdQuery(int importId, bool addContactData)
+        {
+            var query = _messageStoreContext.Messages
+                .Where(x => x.ImportId == importId);
+
+            if (addContactData)
+            {
+                query = query.Include(x => x.Contact);
+            }
+
+            return query;
         }
         public async Task<string> GetApplication(int importId)
         {

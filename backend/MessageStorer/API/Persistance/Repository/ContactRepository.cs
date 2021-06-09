@@ -13,6 +13,7 @@ namespace API.Persistance.Repository
         Task<Contacts> Get(string appName, string inAppId, int userId);
         Task<AppUsers> GetOwner(int contactId);
         Task AddIfNotExists(Contacts entity);
+        Task RemoveEmpty(int appUserId);
         Task Save();
     }
     public class ContactRepository: IContactRepository
@@ -69,6 +70,11 @@ namespace API.Persistance.Repository
                 .Where(x => x.Id == contactId)
                 .Select(x => x.AppUser)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task RemoveEmpty(int appUserId)
+        {
+            await _messageStoreContext.RemoveEmptyContacts(appUserId);
         }
 
         public async Task Save()

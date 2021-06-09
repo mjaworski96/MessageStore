@@ -207,7 +207,7 @@ INSERT INTO applications(name) VALUES
 ('sms'), ('messenger');
 
 CREATE OR REPLACE FUNCTION FindRowNumber
-(pMessageId INT, pAliasId INT)
+(pMessageId INTEGER, pAliasId INTEGER)
 RETURNS TABLE ("RowNum" BIGINT)
 LANGUAGE plpgsql    
 AS $$
@@ -226,7 +226,7 @@ END;
 $$;
 
 CREATE OR REPLACE FUNCTION DeleteMessagesWithImportId
-(pImportId INT)
+(pImportId INTEGER)
 RETURNS VOID
 LANGUAGE plpgsql    
 AS $$
@@ -235,3 +235,24 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION DeleteEmptyContacts
+(pAppUserId INTEGER)
+RETURNS VOID
+LANGUAGE plpgsql    
+AS $$
+BEGIN
+	DELETE FROM aliases_members WHERE contact_id NOT IN
+	(
+		SELECT DISTINCT contact_id FROM messages
+	);
+	DELETE FROM contacts WHERE id NOT IN
+	(
+		SELECT DISTINCT contact_id FROM messages
+	) AND app_user_id = pAppUserId;
+	
+	DELETE FROM aliases WHERE id NOT IN 
+	(
+		SELECT alias_id FROM aliases_members
+	);
+END;
+$$;
