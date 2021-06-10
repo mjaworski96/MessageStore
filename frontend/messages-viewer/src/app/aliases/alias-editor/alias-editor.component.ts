@@ -34,7 +34,7 @@ export class AliasEditorComponent implements OnInit {
         id: new FormControl(element.id),
         name: new FormControl(element.name),
         application: new FormControl(element.application),
-        selected: new FormControl(this.isSelected(element.id))
+        selected: new FormControl(this.isSelected(element.members[0].id))
       }));
     }
 
