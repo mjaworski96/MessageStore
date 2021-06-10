@@ -11,7 +11,8 @@ const routes: Routes = [
     canActivate: [LoggedUserGuard],
     resolve: {
       imports: MessagesImportResolveService
-    }
+    },
+    runGuardsAndResolvers: 'always'
   },
 ];
 

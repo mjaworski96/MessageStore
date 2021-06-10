@@ -1,20 +1,20 @@
 <mat-toolbar [color]="'primary'">
   <span  [routerLink]="['/']" class="app-title"
          i18n="App title|App title@@app-title">Messages Viewer</span>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['aliases']"
+  <button mat-button *ngIf="isLoggedIn()" (click)="navigate(['aliases'])"
           i18n="Contacts|Contacts link@@contacts-link">Contacts</button>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['search']"
+  <button mat-button *ngIf="isLoggedIn()" (click)="navigate(['search'])"
           i18n="Search|Search link@@search-link">Search</button>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['imports']"
+  <button mat-button *ngIf="isLoggedIn()" (click)="navigate(['imports'])"
           i18n="Imports|Imports link@@imports-link">Imports</button>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['messenger']"
+  <button mat-button *ngIf="isLoggedIn()" (click)="navigate(['messenger'])"
           i18n="Messenger|Messenger link@@messenger-link">Messenger</button>
   <span class="spacer"></span>
-  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['login']"
+  <button mat-button *ngIf="!isLoggedIn()" (click)="navigate(['login'])"
           i18n="Login|Login link@@login-link">Login</button>
-  <button mat-button *ngIf="!isLoggedIn()" [routerLink]="['register']"
+  <button mat-button *ngIf="!isLoggedIn()" (click)="navigate(['register'])"
           i18n="Register|Register link@@register-link">Register</button>
-  <button mat-button *ngIf="isLoggedIn()" [routerLink]="['account']"
+  <button mat-button *ngIf="isLoggedIn()" (click)="navigate(['account'])"
           i18n="Account|Account link@@account-link">Account</button>
   <button mat-button *ngIf="isLoggedIn()" (click)="logout()"
           i18n="Logout|Logout link@@logout-button">Logout</button>

@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import {ImportService} from './import.service';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {ImportsList} from '../model/import';
 import {MessagesImportService} from './messages-import.service';
 import {MessagesImportList} from '../model/message-import';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MessagesImportResolveService {
+export class MessagesImportResolveService implements Resolve<MessagesImportList> {
 
   constructor(private messagesImportService: MessagesImportService) { }
 

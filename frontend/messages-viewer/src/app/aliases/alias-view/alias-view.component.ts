@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AliasService} from '../../services/alias.service';
-import {AliasWithId} from '../../model/alias';
-import {Router} from '@angular/router';
+import {AliasWithId, AliasWithIdList} from '../../model/alias';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {DeleteAliasDialogComponent} from './delete-alias-dialog/delete-alias-dialog.component';
 import {DialogConfig} from '../../shared/utils/dialog-config';
@@ -18,17 +18,13 @@ export class AliasViewComponent implements OnInit {
   filterBy = '';
   constructor(private aliasService: AliasService,
               private router: Router,
+              private route: ActivatedRoute,
               private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.aliasService
-      .getAll()
-      .toPromise()
-      .then((result) => {
-        this.aliases = result.aliases;
-        this.filtered = this.aliases;
-      });
-
+    const aliases: AliasWithIdList = this.route.snapshot.data.aliases;
+    this.aliases = aliases.aliases;
+    this.filtered = this.aliases;
   }
   filterByChange(event) {
     this.filter();

@@ -12,6 +12,7 @@ const routes: Routes = [
     resolve: {
       imports: ImportResolveService
     },
+    runGuardsAndResolvers: 'always'
   }
 ];
 

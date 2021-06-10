@@ -21,5 +21,7 @@ export class HeaderComponent implements OnInit {
     this.sessionStorageService.logout();
     this.router.navigate(['/']);
   }
-
+  navigate(commands: any[]) {
+    this.router.navigate(commands);
+  }
 }

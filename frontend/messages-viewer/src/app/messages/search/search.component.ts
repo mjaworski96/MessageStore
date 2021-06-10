@@ -2,9 +2,10 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AliasService} from '../../services/alias.service';
 import {SearchService} from '../../services/search.service';
 import {SearchResultDto} from '../../model/search';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MessagesListComponent} from '../messages-list/messages-list.component';
 import {ToastrService} from 'ngx-toastr';
+import {AliasWithIdList} from '../../model/alias';
 
 interface Checkbox {
   aliasId: number;
@@ -34,24 +35,23 @@ export class SearchComponent implements OnInit {
   constructor(private aliasService: AliasService,
               private searchService: SearchService,
               private router: Router,
+              private route: ActivatedRoute,
               private toastr: ToastrService) { }
 
   ngOnInit() {
     this.getAliases();
   }
   getAliases(): void {
+    const rawAliases: AliasWithIdList = this.route.snapshot.data.aliases;
+
     this.aliases = [];
-    this.aliasService.getAll()
-      .toPromise()
-      .then(result => {
-        result.aliases.forEach(item => {
-          this.aliases.push({
-            aliasId: item.id,
-            checked: false,
-            name: item.name
-          });
-        });
+    rawAliases.aliases.forEach(item => {
+      this.aliases.push({
+        aliasId: item.id,
+        checked: false,
+        name: item.name
       });
+    });
   }
   getAliasesIds(): number[] {
     const ids = [];

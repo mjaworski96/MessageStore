@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AliasService} from '../../services/alias.service';
 import {ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
-import {AliasWithId} from '../../model/alias';
+import {AliasWithId, AliasWithIdList} from '../../model/alias';
 import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -16,17 +16,13 @@ export class AliasEditorComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute) { }
 
-  async ngOnInit() {
-    const aliases = await this.aliasService
-      .getAll(true)
-      .toPromise();
-    const id = +this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.originalAlias = await this.aliasService.get(id).toPromise();
-      if (this.originalAlias.internal) {
-        await this.router.navigate(['aliases', 'new']);
-      }
-    }
+   async ngOnInit() {
+    const aliases: AliasWithIdList = this.route.snapshot.data.aliases;
+    this.originalAlias = this.route.snapshot.data.originalAlias;
+     if (this.originalAlias && this.originalAlias.internal) {
+       await this.router.navigate(['aliases', 'new']);
+     }
+
     this.buildForm(aliases.aliases);
   }
   buildForm(allAliases: AliasWithId[]) {
