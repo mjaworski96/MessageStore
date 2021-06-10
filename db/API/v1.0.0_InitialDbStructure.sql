@@ -250,9 +250,13 @@ BEGIN
 		SELECT DISTINCT contact_id FROM messages
 	) AND app_user_id = pAppUserId;
 	
-	DELETE FROM aliases WHERE id NOT IN 
+	DELETE FROM aliases a WHERE a.internal = FALSE AND
 	(
-		SELECT alias_id FROM aliases_members
-	);
+		SELECT COUNT(*) FROM aliases_members am WHERE am.alias_id = a.id
+	) < 2;
+	DELETE FROM aliases a WHERE a.internal = TRUE AND
+	(
+		SELECT COUNT(*) FROM aliases_members am WHERE am.alias_id = a.id
+	) = 0;
 END;
 $$;
