@@ -1,0 +1,10 @@
+[ v3_req ]
+subjectAltName  = @alt_names
+extendedKeyUsage = serverAuth
+[ alt_names ]
+IP.1 = 127.0.0.1
+DNS.1 = localhost
+DNS.2 = messagesender.com
+DNS.3 = messagesender.pl
+DNS.4 = messengerintegration.com
+DNS.5 = messengerintegration.pl

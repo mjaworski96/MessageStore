@@ -68,7 +68,7 @@
             },
             "en": {
               "aot": true,
-              "i18nFile": "src/locale/messages.plen.xlf",
+              "i18nFile": "src/locale/messages.en.xlf",
               "i18nFormat": "xlf",
               "i18nLocale": "en"
             }
@@ -77,14 +77,16 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "messages-viewer:build"
+            "browserTarget": "messages-viewer:build",
+            "sslKey": "../../certificate/messagesender.key",
+            "sslCert": "../../certificate/messagesender.crt"
           },
           "configurations": {
             "production": {
               "browserTarget": "messages-viewer:build:production"
             },
             "pl": {
-              "browserTarget": "messages-viewer:build:pl"
+              "browserTarget": "messages-viewer:build:pl",
             },
             "en": {
               "browserTarget": "messages-viewer:build:en"

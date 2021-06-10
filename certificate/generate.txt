@@ -1,0 +1,11 @@
+openssl genrsa -out root.key 4096
+openssl rsa -in root.key -out root.key
+openssl req -sha256 -new -key root.key -out root.csr -subj '/CN=mjaworski96'
+openssl x509 -req -sha256 -days 365 -in root.csr -signkey root.key -out root.crt
+
+openssl genrsa -out messagesender.key 4096
+openssl rsa -in messagesender.key -out messagesender.key
+openssl req -sha256 -new -key messagesender.key -out messagesender.csr -subj '/CN=MessageSender' -extensions v3_req
+openssl x509 -req -sha256 -days 365 -in messagesender.csr -CA root.crt -CAkey root.key -CAcreateserial -out messagesender.crt -extfile conf.txt -extensions v3_req 
+openssl pkcs12 -export -in messagesender.crt -inkey messagesender.key -out messagesender.p12 -name MessageSender -password pass:MessageSender
+rm *.csr

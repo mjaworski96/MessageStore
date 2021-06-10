@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Text;
-using System.Xml.Serialization;
-using MessageSender.Model;
+﻿using MessageSender.Model;
 
 namespace MessageSender.ViewModel
 {
@@ -14,7 +8,7 @@ namespace MessageSender.ViewModel
         {
             get
             {
-                return "http://192.168.1.122:5000";
+                return Constraints.URL;
             }
         }
     }
