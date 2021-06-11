@@ -83,7 +83,7 @@
         <note priority="1" from="description">Logout link</note>
         <note priority="1" from="meaning">Logout</note>
       <target>Wyloguj</target></trans-unit>
-      <trans-unit id="da162223a412a508c0d7e8f1fb976b10abd0c93d" datatype="html">
+      <trans-unit id="mobile-app" datatype="html">
         <source>
       To upload your sms and mms please use our app.
     </source>
@@ -94,7 +94,7 @@
         <note priority="1" from="description">Mobile app info@mobile-app</note>
         <note priority="1" from="meaning">Mobile app</note>
       <target>Aby wgrać swoje smsy i mmsy pobierz naszą aplikację.</target></trans-unit>
-      <trans-unit id="12fa374f695677c516a27918452649053311469a" datatype="html">
+      <trans-unit id="mobile-app-download" datatype="html">
         <source>Download app</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
@@ -103,7 +103,7 @@
         <note priority="1" from="description">Mobile app download button@mobile-app-dowload</note>
         <note priority="1" from="meaning">Mobile app download</note>
       <target>Pobierz aplikację</target></trans-unit>
-      <trans-unit id="fa63aae88a44ccba7cccb6df12402c3a8e3ee7ef" datatype="html">
+      <trans-unit id="mobile-app-instructions" datatype="html">
         <source>
       After downloading and installing app, login to your account and press "SYNC SMS" button
     </source>
@@ -114,7 +114,7 @@
         <note priority="1" from="description">Mobile app instructions@mobile-app-instructions</note>
         <note priority="1" from="meaning">Mobile app instructions</note>
       <target>Po pobraniu i zainstalowaniu aplikacji naciśnij przycisk "Synchronizuj SMS"</target></trans-unit>
-      <trans-unit id="5944fb4be52f6fe3e79148bcf2d765e748b55f35" datatype="html">
+      <trans-unit id="messenger-info" datatype="html">
         <source>
       To upload your messenger messages please go to messenger page and follow the instructions.
     </source>
@@ -125,7 +125,7 @@
         <note priority="1" from="description">Messenger info</note>
         <note priority="1" from="meaning">Messenger info</note>
       <target>Aby wgrać wiadomości z messengera udaj się do strony messenger i podążaj za instrukcjami.</target></trans-unit>
-      <trans-unit id="messenger-ling" datatype="html">
+      <trans-unit id="messenger-main-page-link" datatype="html">
         <source>Go to messenger page.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
@@ -134,7 +134,7 @@
         <note priority="1" from="description">Messenger page link</note>
         <note priority="1" from="meaning">Messenger page</note>
       <target>Idź do strony messenger.</target></trans-unit>
-      <trans-unit id="2dd1146d0484516e1d624855f86b7c3c41624378" datatype="html">
+      <trans-unit id="sms" datatype="html">
         <source>
   SMS
 </source>
@@ -142,7 +142,7 @@
           <context context-type="sourcefile">src/app/shared/components/application-name/application-name.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <note priority="1" from="description">Sms@sms</note>
+        <note priority="1" from="description">Sms</note>
         <note priority="1" from="meaning">Sms</note>
       <target>SMS</target></trans-unit>
       <trans-unit id="messenger" datatype="html">
