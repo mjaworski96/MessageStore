@@ -94,15 +94,15 @@
         <note priority="1" from="description">Mobile app info@mobile-app</note>
         <note priority="1" from="meaning">Mobile app</note>
       <target>To upload your sms and mms please use our app.</target></trans-unit>
-      <trans-unit id="mobile-app-download" datatype="html">
-        <source>Download app</source>
+      <trans-unit id="android-app-download" datatype="html">
+        <source>Download Android app</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">Mobile app download button@mobile-app-dowload</note>
         <note priority="1" from="meaning">Mobile app download</note>
-      <target>Download app</target></trans-unit>
+      <target>Download Android app</target></trans-unit>
       <trans-unit id="mobile-app-instructions" datatype="html">
         <source>
       After downloading and installing app, login to your account and press "SYNC SMS" button

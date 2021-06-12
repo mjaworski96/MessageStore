@@ -94,15 +94,15 @@
         <note priority="1" from="description">Mobile app info@mobile-app</note>
         <note priority="1" from="meaning">Mobile app</note>
       <target>Aby wgrać swoje smsy i mmsy pobierz naszą aplikację.</target></trans-unit>
-      <trans-unit id="mobile-app-download" datatype="html">
-        <source>Download app</source>
+      <trans-unit id="android-app-download" datatype="html">
+        <source>Download Android app</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main-page/main-page.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">Mobile app download button@mobile-app-dowload</note>
         <note priority="1" from="meaning">Mobile app download</note>
-      <target>Pobierz aplikację</target></trans-unit>
+      <target>Pobierz aplikację Android</target></trans-unit>
       <trans-unit id="mobile-app-instructions" datatype="html">
         <source>
       After downloading and installing app, login to your account and press "SYNC SMS" button
@@ -124,7 +124,7 @@
         </context-group>
         <note priority="1" from="description">Messenger info</note>
         <note priority="1" from="meaning">Messenger info</note>
-      <target>Aby wgrać wiadomości z messengera udaj się do strony messenger i podążaj za instrukcjami.</target></trans-unit>
+      <target>Aby wgrać wiadomości z messengera udaj się do strony messengera i podążaj za instrukcjami.</target></trans-unit>
       <trans-unit id="messenger-main-page-link" datatype="html">
         <source>Go to messenger page.</source>
         <context-group purpose="location">
@@ -133,7 +133,7 @@
         </context-group>
         <note priority="1" from="description">Messenger page link</note>
         <note priority="1" from="meaning">Messenger page</note>
-      <target>Idź do strony messenger.</target></trans-unit>
+      <target>Idź do strony messengera</target></trans-unit>
       <trans-unit id="sms" datatype="html">
         <source>
   SMS
