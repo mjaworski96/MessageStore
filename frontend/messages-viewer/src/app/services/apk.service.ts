@@ -15,7 +15,7 @@ export class ApkService {
     return this.http.get(`/api/apk`, {responseType: 'blob'})
       .toPromise()
       .then(result => {
-        saveAs(result, 'com.companyname.messagesender-Signed.apk');
+        saveAs(result, 'MessageSender.apk');
       });
   }
 }

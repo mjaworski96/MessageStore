@@ -107,6 +107,7 @@ namespace API
 
             services.AddSingleton<ISecurityConfig, SecurityConfig>();
             services.AddSingleton<IAttachmentConfig, AttachmentConfig>();
+            services.AddSingleton<IApkConfig, ApkConfig>();
 
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionHandler()));

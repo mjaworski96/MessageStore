@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.IO;
+using API.Config;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,10 +9,12 @@ namespace API.Controllers
     [ApiController]
     public class ApkController : ControllerBase
     {
+        private readonly IApkConfig _apkConfig;
         private readonly ILogger<ApkController> _logger;
 
-        public ApkController(ILogger<ApkController> logger)
+        public ApkController(IApkConfig apkConfig, ILogger<ApkController> logger)
         {
+            _apkConfig = apkConfig;
             _logger = logger;
         }
 
@@ -25,7 +23,7 @@ namespace API.Controllers
         {
             _logger.LogInformation($"Started GET /api/apk");
             _logger.LogInformation($"Ended GET /api/apk");
-            return PhysicalFile(Path.GetFullPath("APK/com.companyname.messagesender-Signed.apk"),
+            return PhysicalFile(Path.GetFullPath(_apkConfig.Filename),
                 "application/vnd.android.package-archive");
         }
     }

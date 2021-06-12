@@ -4,4 +4,3 @@ obj
 *.csproj.user
 Import Files
 backend/MessageStorer/API/Attachments/*
-backend/MessageStorer/API/APK/*
