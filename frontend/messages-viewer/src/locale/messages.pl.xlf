@@ -10,7 +10,7 @@
         </context-group>
         <note priority="1" from="description">App title</note>
         <note priority="1" from="meaning">App title</note>
-      <target>Podglądacz Wiadomości</target></trans-unit>
+      <target>Magazyn Wiadomości</target></trans-unit>
       <trans-unit id="contacts-link" datatype="html">
         <source>Contacts</source>
         <context-group purpose="location">
