@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json --configuration=pl --ssl --host 0.0.0.0",
-    "start:pl": "ng serve --proxy-config proxy.conf.json --configuration=pl --ssl",
-    "start:en": "ng serve --proxy-config proxy.conf.json --configuration=en --ssl",
+    "start:pl": "ng serve --proxy-config proxy.conf.json --configuration=pl --ssl --host 0.0.0.0",
+    "start:en": "ng serve --proxy-config proxy.conf.json --configuration=en --ssl --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
