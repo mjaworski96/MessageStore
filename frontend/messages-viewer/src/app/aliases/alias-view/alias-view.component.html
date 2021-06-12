@@ -6,11 +6,10 @@
       </button>
     </div>
     <div>
-      <mat-form-field>
+      <mat-form-field class="filter-input">
         <input matInput [(ngModel)]="filterBy" (ngModelChange)="filterByChange($event)"
         placeholder="Search" i18n-placeholder="Search aliases| Text in search alias input@@search-input">
       </mat-form-field>
-
     </div>
     <table class="table-wrapper">
       <thead>

@@ -26,11 +26,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .full-width-button .mat-flat-button {
   width: 100%;
 }
-.half-width-button .mat-button,
-.half-width-button .mat-flat-button {
-  width: 50%;
-  margin: 0 25%;
-}
 .half-width-form {
   width: 50%;
   margin-left: auto;
