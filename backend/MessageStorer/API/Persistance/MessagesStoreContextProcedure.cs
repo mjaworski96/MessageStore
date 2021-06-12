@@ -15,21 +15,22 @@ namespace API.Persistance
         }
         public async Task<RowNumber> GetRowNumber(int messageId, int aliasId)
         {
-            var query = "SELECT * FROM FindRowNumber({0}, {1});";
+            var query = "SELECT * FROM FindRowNumber({0}, {1})";
             return await RowNumbers
-                .FromSqlRaw(query, new object[] { messageId, aliasId})
+                .FromSqlRaw(query, messageId, aliasId)
                 .FirstOrDefaultAsync();
 
         }
         public async Task RemoveMessagesWithImportId(int importId)
         {
-            await Database.ExecuteSqlRawAsync("SELECT * FROM DeleteMessagesWithImportId({0});", 
-                new object[] { importId });
+            await Database.ExecuteSqlRawAsync(
+                "SELECT * FROM DeleteMessagesWithImportId({0});", 
+                importId);
         }
         public async Task RemoveEmptyContacts(int appUserId)
         {
             await Database.ExecuteSqlRawAsync("SELECT * FROM DeleteEmptyContacts({0});",
-                new object[] { appUserId });
+                appUserId);
         }
     }
 }
