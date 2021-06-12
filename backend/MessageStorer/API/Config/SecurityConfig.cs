@@ -7,7 +7,6 @@ namespace API.Config
         public string Key { get; }
         public int ValidFor { get; }
         public int RefreshBefore { get; }
-        public string InternalKey { get; }
         public int InternalValidFor { get; }
         public int InternalRefreshBefore { get; }
         public string InternalToken { get; }
@@ -21,7 +20,6 @@ namespace API.Config
         public string Key { get; set; }
         public int ValidFor { get; set; }
         public int RefreshBefore { get; set; }
-        public string InternalKey { get; set; }
         public int InternalValidFor { get; set; }
         public int InternalRefreshBefore { get; set; }
         public string InternalToken { get; set; }
