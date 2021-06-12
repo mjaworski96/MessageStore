@@ -22,7 +22,7 @@ namespace API.Infrastructure
         public async Task DeleteImport(string id)
         {
             var httpClient = _httpClientFactory.CreateClient("messengerIntegrationClient");
-            var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/import/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/MessengerImports/{id}");
             request.Headers.Add("Authorization", _httpMetadataService.AuthorizationToken);
             await httpClient.SendAsync(request);
         }
