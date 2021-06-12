@@ -703,6 +703,7 @@
         If there was more than one file please merge them into one .zip file.
         You must unzip all files and then zip them into single zip archive.
         To do this you can use WinRar or 7zip.
+        Directory messages must be in the archive root.
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-import-info/messenger-import-info.component.html</context>
@@ -712,7 +713,8 @@
         <note priority="1" from="meaning">Messenger import step 7</note>
       <target>Jeśli wygenerowanych zostało więcej niż jeden plik, połącz je w jeden plik .zip.
 Musisz wypakować wszystkie pliki i spakować je w pojedyncze archiwum zip.
-Możesz do tego wykorzystać WinRar lub 7zip.</target></trans-unit>
+Możesz do tego wykorzystać WinRar lub 7zip.
+Folder messages musi znajdować się w katalogu głównym archiwum</target></trans-unit>
       <trans-unit id="messenger-step-8" datatype="html">
         <source>
         Go to this page.
