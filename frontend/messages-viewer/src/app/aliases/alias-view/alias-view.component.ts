@@ -31,7 +31,8 @@ export class AliasViewComponent implements OnInit {
   }
   filter() {
     if (this.filterBy) {
-      this.filtered = this.aliases.filter(x => x.name.includes(this.filterBy));
+      const filterByLowerCase = this.filterBy.toLowerCase();
+      this.filtered = this.aliases.filter(x => x.name.toLowerCase().includes(filterByLowerCase));
     } else {
       this.filtered = this.aliases;
     }
