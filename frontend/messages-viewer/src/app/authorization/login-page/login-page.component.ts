@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthorizationService} from '../../services/authorization.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -14,7 +15,8 @@ export class LoginPageComponent implements OnInit {
   maxUsernameLength = 20;
 
   constructor(private formBuilder: FormBuilder,
-              private authorizationService: AuthorizationService) { }
+              private authorizationService: AuthorizationService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -31,7 +33,9 @@ export class LoginPageComponent implements OnInit {
     });
   }
   login(): void {
-    this.authorizationService.login(this.loginForm.value);
+    const navigateToParam = this.route.snapshot.queryParams.navigateTo;
+    const navigateTo = navigateToParam ? [navigateToParam] : ['/', 'aliases'];
+    this.authorizationService.login(this.loginForm.value, navigateTo);
   }
 
 }
