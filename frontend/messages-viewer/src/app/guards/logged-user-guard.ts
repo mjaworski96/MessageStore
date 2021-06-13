@@ -13,7 +13,7 @@ export class LoggedUserGuard implements CanActivate {
     if (this.sessionStorageService.isUserLoggedIn()) {
       return true;
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/', 'login']);
       return false;
     }
   }
