@@ -33,8 +33,10 @@ namespace MessageSender.Droid.DeviceServices
             {
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
                 var projection = new[] { "_id", "ct_t", "normalized_date", "thread_id" };
-                long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-                long toMiliseconds = (long)to.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                long fromMiliseconds = (long)from.ToUniversalTime()
+                    .Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                long toMiliseconds = (long)to.ToUniversalTime()
+                    .Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
                 var selection = $"normalized_date<{fromMiliseconds} OR normalized_date>{toMiliseconds}";
                 using (var cursor = _contentResolver.Query(uri, projection, selection, null, "normalized_date"))
                 {
@@ -47,7 +49,7 @@ namespace MessageSender.Droid.DeviceServices
 
                             var normalizedDate = cursor.GetString(cursor.GetColumnIndex("normalized_date"));
                             var unixTimestamp = long.Parse(normalizedDate);
-                            var smsDate = new DateTime(1970, 1, 1).AddMilliseconds(unixTimestamp);
+                            var smsDate = new DateTime(1970, 1, 1).AddMilliseconds(unixTimestamp).ToLocalTime();
                             Sms sms = type == "application/vnd.wap.multipart.related"
                                 ? GetMms(id, smsDate)
                                 : GetSms(id, smsDate);
@@ -66,8 +68,9 @@ namespace MessageSender.Droid.DeviceServices
             {
                 var uri = Android.Net.Uri.Parse("content://mms-sms/complete-conversations");
                 var projection = new[] { "_id" };
-                long fromMiliseconds = (long)from.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-                long toMiliseconds = (long)to.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                
+                long fromMiliseconds = (long)from.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+                long toMiliseconds = (long)to.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
                 var selection = $"normalized_date<{fromMiliseconds} OR normalized_date>{toMiliseconds}";
                 using (var cursor = _contentResolver.Query(uri, projection, selection, null, "normalized_date"))
                 {
