@@ -76,7 +76,8 @@ namespace MessageSender.Model.Http
             {
                 var body = await message.Content.ReadAsStringAsync();
                 var error = JsonConvert.DeserializeObject<ApiErrorResponse>(body);
-                if (message.StatusCode == HttpStatusCode.Unauthorized)
+                if (error == null &&
+                    message.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     throw new ApiException(401);
                 }

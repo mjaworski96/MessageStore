@@ -11,7 +11,7 @@
         <ProgressBar Progress="{Binding CurrentProgress}"></ProgressBar>
         <Button Text="{x:Static lang:Lang.SyncSms}" Command="{Binding SyncSmsCommand}"></Button>
         <Button Text="{x:Static lang:Lang.Logout}" Command="{Binding LogoutCommand}"></Button>
-        <Label Text="{Binding Error}"/>
+        <Label TextColor="Red" Text="{Binding Error}"/>
     </StackLayout>
 
 </ContentPage>
