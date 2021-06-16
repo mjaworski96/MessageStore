@@ -13,7 +13,7 @@ namespace MessengerIntegration.Infrastructure
         FileStream Open(Imports imports);
         ZipArchive Open(FileStream fileStream);
         Dictionary<string, List<ZipArchiveEntry>> GetMessages(ZipArchive zip);
-        Stream GetConversationStream(List<ZipArchiveEntry> entries);
+        IEnumerable<Stream> GetConversationStream(List<ZipArchiveEntry> entries);
         Task<JsonDocument> GetConversation(Stream conversationStream);
     }
     public class ZipFile : IZipFile
@@ -36,19 +36,20 @@ namespace MessengerIntegration.Infrastructure
         public Dictionary<string, List<ZipArchiveEntry>> GetMessages(ZipArchive zip)
         {
             return zip.Entries
-                .Where(x => x.FullName.Contains("messages/inbox/") && x.FullName.Split("/").Length > 3)
+                .Where(x => x.FullName.Contains("messages/") && x.FullName.Split("/").Length > 3)
                 .GroupBy(x => x.FullName.Split("/")[2])
                 .ToDictionary(key => key.Key, value => value.ToList());
         }
 
-        public Stream GetConversationStream(List<ZipArchiveEntry> entries)
+        public IEnumerable<Stream> GetConversationStream(List<ZipArchiveEntry> entries)
         {
-            var entry = entries.FirstOrDefault(x => x.FullName.EndsWith("message_1.json"));
-            if (entry != null)
+            var files = entries
+                .Where(x => x.FullName.Contains("message_") &&
+                    x.FullName.EndsWith(".json"));
+            foreach (var item in files)
             {
-                return entry.Open();
+                yield return item.Open();
             }
-            return null;
         }
         public async Task<JsonDocument> GetConversation(Stream conversationStream)
         {

@@ -155,20 +155,27 @@ namespace MessengerIntegration.HostedService
             MessageApiClient messageApiClient,
             CancellationToken cancellationToken)
         {
-            using var conversationStream = _zipFile.GetConversationStream(conversationData);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            if (conversationStream == null)
+            var streamCollection = _zipFile.GetConversationStream(conversationData);
+            foreach (var conversationStream in streamCollection)
             {
-                _logger.LogWarning($"Empty converstion {name} in import {_import.Id}");
-                return;
-            }
-            var conversationDocument = await _zipFile.GetConversation(conversationStream);
-            cancellationToken.ThrowIfCancellationRequested();
+                using(conversationStream)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (conversationStream == null)
+                    {
+                        _logger.LogWarning($"Empty converstion {name} in import {_import.Id}");
+                        return;
+                    }
+                    var conversationDocument = await _zipFile.GetConversation(conversationStream);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-            var contact = await ImportContact(name, conversationDocument, contactApiClient);
-            cancellationToken.ThrowIfCancellationRequested();
-            await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, cancellationToken);
+                    var contact = await ImportContact(name, conversationDocument, contactApiClient);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, cancellationToken);
+
+                }
+            }
+            
         }
 
         private async Task<ContactWithId> ImportContact(string conversationName, JsonDocument document,
@@ -240,25 +247,16 @@ namespace MessengerIntegration.HostedService
         {
             var result = new List<Attachment>();
 
-            result.AddRange(await GetAttachments(rawMessage.Photos, 
-                (name) => _attachmentResolve.ResolveForPhoto(conversation, name)));
-
-            result.AddRange(await GetAttachments(rawMessage.Videos,
-                (name) => _attachmentResolve.ResolveForVideo(conversation, name)));
-
-            result.AddRange(await GetAttachments(rawMessage.Gifs,
-                (name) => _attachmentResolve.ResolveForGif(conversation, name)));
-
-            result.AddRange(await GetAttachments(rawMessage.Audio,
-                (name) => _attachmentResolve.ResolveForAudio(conversation, name)));
-
-            result.AddRange(await GetAttachments(rawMessage.Files,
-                (name) => _attachmentResolve.ResolveForFile(conversation, name)));
+            result.AddRange(await GetAttachments(conversation, rawMessage.Photos));
+            result.AddRange(await GetAttachments(conversation, rawMessage.Videos));
+            result.AddRange(await GetAttachments(conversation, rawMessage.Gifs));
+            result.AddRange(await GetAttachments(conversation, rawMessage.Audio));
+            result.AddRange(await GetAttachments(conversation, rawMessage.Files));
 
             return result;
         }
-        private async Task<List<Attachment>> GetAttachments(List<RawAttachment> rawAttachments,
-            Func<string, ZipArchiveEntry> resolver)
+        private async Task<List<Attachment>> GetAttachments(List<ZipArchiveEntry> conversation,
+            List<RawAttachment> rawAttachments)
         {
             var result = new List<Attachment>();
             if (rawAttachments == null)
@@ -268,7 +266,7 @@ namespace MessengerIntegration.HostedService
 
             foreach (var attachment in rawAttachments)
             {
-                var file = resolver(attachment.Uri);
+                var file = _attachmentResolve.Resolve(conversation, attachment.Uri);
                 if (file != null)
                 {
                     using var stream = file.Open();
