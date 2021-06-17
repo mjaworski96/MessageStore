@@ -6,9 +6,9 @@ namespace API.Config
     {
         public string Key { get; }
         public int ValidFor { get; }
-        public int RefreshBefore { get; }
+        public int RefreshAfter { get; }
         public int InternalValidFor { get; }
-        public int InternalRefreshBefore { get; }
+        public int InternalRefreshAfter { get; }
         public string InternalToken { get; }
     }
     public class SecurityConfig: ISecurityConfig
@@ -19,9 +19,9 @@ namespace API.Config
         }
         public string Key { get; set; }
         public int ValidFor { get; set; }
-        public int RefreshBefore { get; set; }
+        public int RefreshAfter { get; set; }
         public int InternalValidFor { get; set; }
-        public int InternalRefreshBefore { get; set; }
+        public int InternalRefreshAfter { get; set; }
         public string InternalToken { get; set; }
     }
 }

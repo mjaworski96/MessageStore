@@ -102,14 +102,14 @@ namespace API.Service
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(oldToken.Substring(TokenPrefix.Length));
-            var expires = jwtToken.Claims.FirstOrDefault(x => x.Type == "exp")?.Value;
-            if (!string.IsNullOrEmpty(expires))
+            var issuedAt = jwtToken.Claims.FirstOrDefault(x => x.Type == "iat")?.Value;
+            if (!string.IsNullOrEmpty(issuedAt))
             {
-                var expirationTime = UnixEpochStart
-                    .Add(TimeSpan.FromSeconds(int.Parse(expires)));
-                var refreshBefore = _httpMetadataService.InternalToken ? _config.InternalRefreshBefore : _config.RefreshBefore;
-                if (expirationTime
-                    .AddMinutes(-refreshBefore)
+                var issuedAtDateTime = UnixEpochStart
+                    .Add(TimeSpan.FromSeconds(int.Parse(issuedAt)));
+                var refreshAfter = _httpMetadataService.InternalToken ? _config.InternalRefreshAfter : _config.RefreshAfter;
+                if (issuedAtDateTime
+                    .AddMinutes(refreshAfter)
                     .CompareTo(DateTime.UtcNow) < 0)
                 {
                     var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
@@ -195,12 +195,15 @@ namespace API.Service
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var validFor = internalToken ? _config.InternalValidFor : _config.ValidFor;
             var header = new JwtHeader(credentials);
+            var now = DateTime.UtcNow;
+            var nowUnix = ((int)(now - UnixEpochStart).TotalSeconds).ToString();
             var payload = new JwtPayload(
                 new Claim[]
                 {
                     new Claim("sub", user.Id.ToString()),
-                    new Claim("exp",
-                    ((int)(DateTime.UtcNow.AddMinutes(validFor) - UnixEpochStart).TotalSeconds).ToString()),
+                    new Claim("iat", nowUnix),
+                    new Claim("nbf", nowUnix),
+                    new Claim("exp", ((int)(now.AddMinutes(validFor) - UnixEpochStart).TotalSeconds).ToString()),
                     new Claim("int", internalToken.ToString())
                 });
 
