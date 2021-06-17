@@ -14,12 +14,13 @@ namespace MessengerIntegration.Service
 {
     public interface IImportService
     {
-        Task<ImportDtoWithId> StartProcess(ImportDto importDto);
+        Task<ImportDtoWithId> Start(ImportDto importDto);
         Task UploadFile(string importId, FileDto fileDto);
-        Task FinishUpload(string importId);
+        Task Finish(string importId);
         Task<ImportDtoWithIdList> GetAllForUser();
         Task SetStatus(Imports import, string statusName);
         Task Delete(string importId);
+        Task Cancel(string importId);
     }
     public class ImportService: IImportService
     {
@@ -39,7 +40,7 @@ namespace MessengerIntegration.Service
             _fileUtils = fileUtils;
         }
 
-        public async Task<ImportDtoWithId> StartProcess(ImportDto importDto)
+        public async Task<ImportDtoWithId> Start(ImportDto importDto)
         {
             if (string.IsNullOrEmpty(importDto.FacebookName))
             {
@@ -76,7 +77,7 @@ namespace MessengerIntegration.Service
                 throw e;
             }
         }
-        public async Task FinishUpload(string importId)
+        public async Task Finish(string importId)
         {
             var import = await _importRepository.Get(importId, true);
             CheckImport(import);
@@ -118,6 +119,20 @@ namespace MessengerIntegration.Service
                 _fileUtils.Delete(import.Id);
             }
         }
+        public async Task Cancel(string importId)
+        {
+            var import = await _importRepository.Get(importId, false);
+            if (import != null)
+            {
+                if (import.UserId != _httpMetadataService.UserId)
+                {
+                    throw new ForbiddenImportException();
+                }
+                CheckStatus(import, Statuses.Created);
+                await SetStatus(import, Statuses.Cancelled);
+                _fileUtils.Delete(import.Id);
+            }
+        }
         private void CheckStatus(Imports import, string validStatus)
         {
             if (import.Status.Name != validStatus)
@@ -144,6 +159,5 @@ namespace MessengerIntegration.Service
                 CreatedAt = importEntity.CreatedAt,
             };
         }
-        
     }
 }

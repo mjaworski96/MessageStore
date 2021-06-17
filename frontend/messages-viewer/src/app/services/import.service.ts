@@ -26,4 +26,8 @@ export class ImportService {
     return this.httpClient.put<Import>(`${this.url}/${importId}`, null)
       .toPromise();
   }
+  cancel(importId: string): Promise<Import> {
+    return this.httpClient.put<Import>(`${this.url}/${importId}/cancel`, null)
+      .toPromise();
+  }
 }

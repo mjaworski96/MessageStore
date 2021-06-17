@@ -32,7 +32,6 @@ export class ErrorHandlingService {
     }
   }
   handle401(): void {
-    console.log('error 401')
     this.router.navigate(['login']);
   }
   handle404and504(): void {

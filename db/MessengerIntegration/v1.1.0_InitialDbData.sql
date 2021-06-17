@@ -5,4 +5,5 @@ INSERT INTO statuses(name) VALUES
 ('Error_NoMessages'),
 ('Processing'),
 ('Completed'),
-('Error_UnknownError');
+('Error_UnknownError'),
+('Cancelled');

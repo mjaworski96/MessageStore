@@ -135,6 +135,9 @@
   <data name="AttachmentNotFound" xml:space="preserve">
     <value>Nie onaleziono załącznika z id {0}</value>
   </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Anulowany</value>
+  </data>
   <data name="Completed" xml:space="preserve">
     <value>Zakończony</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="ContactsNotFound" xml:space="preserve">
     <value>Nie odnaleziono kontaktu</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Utworzony</value>
   </data>
   <data name="EditNotInernalAliasName" xml:space="preserve">
     <value>Tylko nazwy wewnętrznych aliasów mogą być edytowane</value>

@@ -33,7 +33,7 @@ namespace MessengerIntegration.Controller
         public async Task<ActionResult<ImportDtoWithId>> StartImport(ImportDto importDto)
         {
             _logger.LogInformation($"Started POST /api/import");
-            var result = await _importService.StartProcess(importDto);
+            var result = await _importService.Start(importDto);
             _logger.LogInformation($"Ended POST /api/import");
             return Ok(result);
         }
@@ -49,8 +49,16 @@ namespace MessengerIntegration.Controller
         public async Task<IActionResult> FinishFileImport(string id)
         {
             _logger.LogInformation($"Started PUT /api/import/{id}");
-            await _importService.FinishUpload(id);
+            await _importService.Finish(id);
             _logger.LogInformation($"Ended PUT /api/import/{id}");
+            return NoContent();
+        }
+        [HttpPut("{id}/cancel")]
+        public async Task<IActionResult> CancelImport(string id)
+        {
+            _logger.LogInformation($"Started PUT /api/import/{id}/cancel");
+            await _importService.Cancel(id);
+            _logger.LogInformation($"Ended PUT /api/import/{id}/cancel");
             return NoContent();
         }
         [HttpDelete("{id}")]

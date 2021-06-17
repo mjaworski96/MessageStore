@@ -6,13 +6,14 @@ import { MessengerImportsListComponent } from './messenger-page/messenger-import
 import {MessengerRoutingModule} from './messenger-routing.module';
 import { MessengerImportInfoComponent } from './messenger-page/messenger-import/messenger-import-info/messenger-import-info.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule} from '@angular/material';
+import {MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressBarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MessengerLeavePageDialogComponent } from './messenger-page/messenger-import/messenger-leave-page-dialog/messenger-leave-page-dialog.component';
 
 
 
 @NgModule({
-  declarations: [MessengerPageComponent, MessengerImportComponent, MessengerImportsListComponent, MessengerImportInfoComponent],
+  declarations: [MessengerPageComponent, MessengerImportComponent, MessengerImportsListComponent, MessengerImportInfoComponent, MessengerLeavePageDialogComponent],
   imports: [
     CommonModule,
     MessengerRoutingModule,
@@ -22,7 +23,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     FormsModule,
     MatButtonModule,
     BrowserAnimationsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    MessengerLeavePageDialogComponent
   ]
 })
 export class MessengerModule { }

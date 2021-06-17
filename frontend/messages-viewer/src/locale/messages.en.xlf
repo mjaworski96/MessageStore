@@ -658,7 +658,7 @@
         <note priority="1" from="description">Completed status</note>
         <note priority="1" from="meaning">Completed status</note>
       <target>Completed</target></trans-unit>
-      <trans-unit id="error-status-unknown error" datatype="html">
+      <trans-unit id="error-status-unknown-error" datatype="html">
         <source>Unknown error</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
@@ -667,6 +667,16 @@
         <note priority="1" from="description">Unknown error status</note>
         <note priority="1" from="meaning">Unknown error status</note>
       <target>Unknown error</target></trans-unit>
+      <trans-unit id="cancelled-error" datatype="html">
+        <source>Cancelled</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-imports-list/messenger-imports-list.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <note priority="1" from="description">Cancelled status</note>
+        <note priority="1" from="meaning">Cancelled status</note>
+        <target>Cancelled</target>
+      </trans-unit>
       <trans-unit id="messenger-instructions" datatype="html">
         <source>
     How to import messenger data?
@@ -826,6 +836,30 @@ Directory messages must be in the archive root.</target></trans-unit>
 
           If you import many files please ensure to do it in chronological order.
         </target>
+      </trans-unit>
+      <trans-unit id="cancel-import-title" datatype="html">
+        <source>
+          There is file upload in progress
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-leave-page-dialog/messenger-leave-page-dialog.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Cancel import dialog title</note>
+        <note priority="1" from="meaning">Cancel import</note>
+        <target>There is file upload in progress</target>
+      </trans-unit>
+      <trans-unit id="cancel-import-info" datatype="html">
+        <source>
+          Leaving this page will cancel import!
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-leave-page-dialog/messenger-leave-page-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Cancel import dialog info</note>
+        <note priority="1" from="meaning">Cancel import</note>
+        <target>Leaving this page will cancel import!</target>
       </trans-unit>
       <trans-unit id="username" datatype="html">
         <source>Username</source>

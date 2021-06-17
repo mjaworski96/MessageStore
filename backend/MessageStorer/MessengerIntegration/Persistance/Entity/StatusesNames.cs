@@ -9,5 +9,6 @@
         public static readonly string Processing = "Processing";
         public static readonly string Completed = "Completed";
         public static readonly string ErrorUnknownError = "Error_UnknownError";
+        public static readonly string Cancelled = "Cancelled";
     }
 }

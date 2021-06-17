@@ -1,4 +1,4 @@
 export const DialogConfig = {
-  height: '250px',
+  height: '225px',
   width: '450px',
 };

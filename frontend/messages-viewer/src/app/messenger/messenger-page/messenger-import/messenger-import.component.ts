@@ -1,6 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ImportService} from '../../../services/import.service';
+import {ImportProgressData} from '../messenger-page.component';
 
 @Component({
   selector: 'app-messenger-import',
@@ -14,7 +15,9 @@ export class MessengerImportComponent implements OnInit {
   importAdded = new EventEmitter<void>();
 
   formGroup: FormGroup;
-  blockButton = false;
+  @Input()
+  importProgress: ImportProgressData;
+
   progressBarValue = 0;
   constructor(private formBuilder: FormBuilder,
               private importService: ImportService) { }
@@ -41,11 +44,10 @@ export class MessengerImportComponent implements OnInit {
         file: '',
         selectedFile: ''
       });
-      console.log('missing')
     }
   }
   async startImport() {
-    this.blockButton = true;
+    this.importProgress.importInProgress = true;
     try {
       const importData = await this.importService.start({
         facebookName: this.formGroup.value.facebookName,
@@ -53,6 +55,10 @@ export class MessengerImportComponent implements OnInit {
       const file = this.formGroup.value.selectedFile as File;
 
       for (let i = 0; i < file.size; i += this.fileChunkSize) {
+        if (this.importProgress.importCanceled) {
+          break;
+        }
+
         const chunk = file.slice(i, this.fileChunkSize + i);
 
         const reader = new FileReader();
@@ -67,13 +73,19 @@ export class MessengerImportComponent implements OnInit {
         this.progressBarValue = 100 * (i + chunk.size) / file.size;
       }
 
-      await this.importService.finish(importData.id);
+      if (this.importProgress.importCanceled) {
+        await this.importService.cancel(importData.id);
+      } else {
+        await this.importService.finish(importData.id);
+        this.importProgress.importCanceled = false;
+      }
+
       this.formGroup.reset();
       this.formGroup.get('facebookName').markAsPristine();
       this.formGroup.get('file').markAsPristine();
       this.formGroup.get('selectedFile').markAsPristine();
     } finally {
-       this.blockButton = false;
+       this.importProgress.importInProgress = false;
        this.progressBarValue = 0;
        this.importAdded.emit();
     }

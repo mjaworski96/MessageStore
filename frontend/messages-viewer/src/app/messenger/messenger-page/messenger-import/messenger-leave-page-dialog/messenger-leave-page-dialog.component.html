@@ -1,0 +1,13 @@
+<div class="dialog-wrapper">
+  <h2 class="dialog-title" mat-dialog-title i18n="Cancel import|Cancel import dialog title@@cancel-import-title">
+    There is file upload in progress
+  </h2>
+  <mat-dialog-content mat-dialog-title i18n="Cancel import|Cancel import dialog info@@cancel-import-info">
+    Leaving this page will cancel import!
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" mat-dialog-close i18n="No|No@@No">No</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true"
+            i18n="Yes|Yes@@yes">Yes</button>
+  </mat-dialog-actions>
+</div>

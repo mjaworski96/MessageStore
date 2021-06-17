@@ -22,7 +22,8 @@
           <span *ngIf="import.status === 'Error_NoMessages'" i18n="Error no messages status|Error no messages status@@error-status-no-messages">Error - No messages in imported file</span>
           <span *ngIf="import.status === 'Processing'" i18n="Processing status|Processing status@@status-processing">Processing</span>
           <span *ngIf="import.status === 'Completed'" i18n="Completed status|Completed status@@status-completed">Completed</span>
-          <span *ngIf="import.status === 'Error_UnknownError'" i18n="Unknown error status|Unknown error status@@error-status-unknown error">Unknown error</span>
+          <span *ngIf="import.status === 'Error_UnknownError'" i18n="Unknown error status|Unknown error status@@error-status-unknown-error">Unknown error</span>
+          <span *ngIf="import.status === 'Cancelled'" i18n="Cancelled status|Cancelled status@@cancelled-error">Cancelled</span>
         </td>
         <td>{{import.startDate | date: 'dd.MM.yyyy HH:mm'}}</td>
         <td>{{import.endDate | date: 'dd.MM.yyyy HH:mm'}}</td>
