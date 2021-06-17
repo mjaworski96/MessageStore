@@ -50,6 +50,10 @@ namespace API.Persistance
                     .IsRequired()
                     .HasColumnName("name")
                     .HasMaxLength(256);
+
+                entity.Property(e => e.UserGivenName)
+                    .HasColumnName("user_given_name")
+                    .HasMaxLength(256);
             });
 
             modelBuilder.Entity<AliasesMembers>(entity =>

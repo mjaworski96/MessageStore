@@ -28,4 +28,8 @@ namespace API.Dto
         public string Name { get; set; }
         public List<IdDto> Members { get; set; }
     }
+    public class UpdateAliasNameDto
+    {
+        public string Name { get; set; }
+    }
 }

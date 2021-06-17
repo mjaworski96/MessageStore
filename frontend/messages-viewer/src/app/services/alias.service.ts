@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AliasWithId, AliasWithIdList, EditAlias} from '../model/alias';
+import {AliasWithId, AliasWithIdList, EditAlias, EditAliasName} from '../model/alias';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,9 @@ export class AliasService {
   }
   edit(id: number, alias: EditAlias): Observable<AliasWithId> {
     return this.http.put<AliasWithId>(`${this.url}/${id}`, alias);
+  }
+  editName(id: number, aliasName: EditAliasName): Observable<AliasWithId> {
+    return this.http.patch<AliasWithId>(`${this.url}/${id}/name`, aliasName);
   }
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);

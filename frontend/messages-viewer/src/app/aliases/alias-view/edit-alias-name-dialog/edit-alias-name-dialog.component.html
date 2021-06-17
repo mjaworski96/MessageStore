@@ -1,0 +1,28 @@
+<div class="dialog-wrapper">
+  <h2 class="dialog-title" mat-dialog-title i18n="Edit alias name|Edit alias name dialog title@@edit-alias-name">
+    Edit alias name
+  </h2>
+  <mat-dialog-content>
+    <form [formGroup]="formGroup">
+      <div class="full-width-form alias-edit-wrapper">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="Name" [required]="true"
+                 i18n-placeholder="Name placeholder|Text in name placeholder@@name">
+          <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
+                     *ngIf="formGroup.get('name').hasError('required')">
+            Name is required.
+          </mat-error>
+          <mat-error i18n="Name validation|Shown when name is too long@@name-too-long-validation"
+                     *ngIf="formGroup.get('name').hasError('maxlength')">
+            Name can be maximum 256 characters long.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="warn" mat-dialog-close i18n="Cancel|Cancel@@Cancel">Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!formGroup.valid"
+            i18n="Save|Save@@Save" (click)="save()">Save</button>
+  </mat-dialog-actions>
+</div>

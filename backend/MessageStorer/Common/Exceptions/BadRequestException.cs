@@ -110,4 +110,10 @@ namespace Common.Exceptions
         public InvalidImportStatusException(string validStatus, string currentStatus) : 
             base (string.Format(Lang.Lang.InvalidImportStatus, validStatus.Translate(), currentStatus.Translate())) { }
     }
+    public class EditNotInernalAliasNameException : BadRequestException
+    {
+        public EditNotInernalAliasNameException() : base(Lang.Lang.EditNotInernalAliasName)
+        {
+        }
+    }
 }

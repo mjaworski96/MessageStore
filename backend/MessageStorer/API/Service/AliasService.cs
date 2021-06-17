@@ -16,6 +16,7 @@ namespace API.Service
         Task<AliasDtoWithId> Create(CreateAliasDto createAlias);
         Task<AliasDtoWithId> Update(int id, CreateAliasDto updateAlias);
         Task<AliasDtoWithId> Get(int id);
+        Task<AliasDtoWithId> UpdateName(int id, UpdateAliasNameDto updateName);
         Task Remove(int id);
     }
     public class AliasService : IAliasService
@@ -158,6 +159,10 @@ namespace API.Service
         {
             if (alias.Internal)
             {
+                if (!string.IsNullOrEmpty(alias.UserGivenName))
+                {
+                    return alias.UserGivenName;
+                }
                 if (alias.AliasesMembers.FirstOrDefault().Contact.ContactsMembers.Any())
                 {
                     return string.Join(" ", alias.AliasesMembers.FirstOrDefault().Contact.ContactsMembers.Select(x => x.Name));
@@ -172,6 +177,20 @@ namespace API.Service
             {
                 throw new InvalidAliasNameException();
             }
+        }
+
+        public async Task<AliasDtoWithId> UpdateName(int id, UpdateAliasNameDto updateName)
+        {
+            ValidateName(updateName.Name);
+            var alias = await _aliasRepository.Get(id, true);
+            _securityService.CheckIfUserIsOwnerOfAlias(alias);
+            if (!alias.Internal)
+            {
+                throw new EditNotInernalAliasNameException();
+            }
+            alias.UserGivenName = updateName.Name;
+            await _aliasRepository.Save();
+            return CreateAliasDtoWithId(alias);
         }
     }
 }

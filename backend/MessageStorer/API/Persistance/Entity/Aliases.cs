@@ -12,6 +12,7 @@ namespace API.Persistance.Entity
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public string UserGivenName { get; set; }
         public bool Internal { get; set; }
 
         public virtual ICollection<AliasesMembers> AliasesMembers { get; set; }

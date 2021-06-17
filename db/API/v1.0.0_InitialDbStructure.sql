@@ -2,6 +2,7 @@ CREATE TABLE aliases
 (
 	id INTEGER NOT NULL,
 	name VARCHAR(256) NOT NULL,
+	user_given_name VARCHAR(256),
 	internal BOOLEAN NOT NULL
 );
 ALTER TABLE aliases ADD CONSTRAINT aliases_pkey PRIMARY KEY (id);

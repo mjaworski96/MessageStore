@@ -147,6 +147,9 @@
   <data name="ContactsNotFound" xml:space="preserve">
     <value>Contacts not found</value>
   </data>
+  <data name="EditNotInernalAliasName" xml:space="preserve">
+    <value>Only internal aliases name's can be edited</value>
+  </data>
   <data name="EmailConflict" xml:space="preserve">
     <value>User with this email exists</value>
   </data>

@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {DeleteAliasDialogComponent} from './delete-alias-dialog/delete-alias-dialog.component';
 import {DialogConfig} from '../../shared/utils/dialog-config';
+import {EditAliasNameDialogComponent} from './edit-alias-name-dialog/edit-alias-name-dialog.component';
 
 @Component({
   selector: 'app-alias-view',
@@ -64,5 +65,18 @@ export class AliasViewComponent implements OnInit {
           });
       }
     });
+  }
+  async editName(alias: AliasWithId, event: Event) {
+    event.stopImmediatePropagation();
+    const config: any = DialogConfig;
+    config.data =  {
+      alias,
+      aliasService: this.aliasService
+    };
+    const dialogRef = this.dialog.open(EditAliasNameDialogComponent, DialogConfig);
+    const name = await dialogRef.afterClosed().toPromise();
+    if (name) {
+      alias.name = name;
+    }
   }
 }

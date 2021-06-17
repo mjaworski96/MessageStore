@@ -24,3 +24,7 @@ export interface EditAlias {
   name: string;
   members: Id[];
 }
+
+export interface EditAliasName {
+  name: string;
+}

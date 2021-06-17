@@ -49,7 +49,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   font-weight: bold;
 }
 .table-wrapper tbody td {
-  padding: 5px 0;
+  padding: 5px;
 }
 .unsent-message {
   border: 1px red solid !important;

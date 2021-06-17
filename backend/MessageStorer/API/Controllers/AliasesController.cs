@@ -11,6 +11,8 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [NoInternalAccess]
     public class AliasesController : ControllerBase
     {
         private readonly IAliasService _aliasService;
@@ -63,6 +65,14 @@ namespace API.Controllers
             await _aliasService.Remove(id);
             _logger.LogInformation($"Ended DELETE /api/aliases/{id}");
             return NoContent();
+        }
+        [HttpPatch("{id}/name")]
+        public async Task<ActionResult<AliasDtoWithId>> UpdateNam([FromRoute] int id, UpdateAliasNameDto updateName)
+        {
+            _logger.LogInformation($"Started PATCH /api/aliases/{id}/name");
+            var result = await _aliasService.UpdateName(id, updateName);
+            _logger.LogInformation($"Ended PATCH /api/aliases/{id}/name");
+            return Ok(result);
         }
     }
 }

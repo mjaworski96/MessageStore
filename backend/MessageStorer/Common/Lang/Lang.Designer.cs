@@ -142,11 +142,20 @@ namespace Common.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contacts not found..
+        ///   Looks up a localized string similar to Contacts not found.
         /// </summary>
         internal static string ContactsNotFound {
             get {
                 return ResourceManager.GetString("ContactsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only internal aliases name&apos;s can be edited.
+        /// </summary>
+        internal static string EditNotInernalAliasName {
+            get {
+                return ResourceManager.GetString("EditNotInernalAliasName", resourceCulture);
             }
         }
         
@@ -178,7 +187,7 @@ namespace Common.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username can&apos;t be empty..
+        ///   Looks up a localized string similar to Username can&apos;t be empty.
         /// </summary>
         internal static string EmptyUsername {
             get {
@@ -430,7 +439,7 @@ namespace Common.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Facebook usernname can contain maximum of 256.
+        ///   Looks up a localized string similar to Facebook usernname can contain maximum of 256 characters.
         /// </summary>
         internal static string TooLongFacebookName {
             get {

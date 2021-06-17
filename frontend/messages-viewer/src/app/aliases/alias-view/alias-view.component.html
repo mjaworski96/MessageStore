@@ -19,6 +19,7 @@
           <td i18n="Application identifier|Application identifier@@application-identifier">Application identifier</td>
           <td i18n="Edit|Edit@@edit">Edit</td>
           <td i18n="Delete|Delete@@delete">Delete</td>
+          <td i18n="Edit name|Edit name@@edit-name">Edit name</td>
         </tr>
       </thead>
       <tbody>
@@ -35,6 +36,11 @@
           <td>
             <button *ngIf="!alias.internal" mat-flat-button color="warn" (click)="delete(alias.id, $event)" i18n="Delete alias|Delete alias button@@delete-alias">
               Delete
+            </button>
+          </td>
+          <td>
+            <button *ngIf="alias.internal" mat-flat-button color="accent" (click)="editName(alias, $event)" i18n="Edit name|Edit name@@edit-name">
+              Edit name
             </button>
           </td>
         </tr>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AliasService} from '../../services/alias.service';
-import {ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AliasWithId, AliasWithIdList} from '../../model/alias';
 import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -39,7 +39,7 @@ export class AliasEditorComponent implements OnInit {
     }
 
     this.formGroup = new FormGroup({
-      name: new FormControl(this.getName(), [Validators.required]),
+      name: new FormControl(this.getName(), [Validators.required, Validators.maxLength(256)]),
       contacts: contactsForm
     });
   }

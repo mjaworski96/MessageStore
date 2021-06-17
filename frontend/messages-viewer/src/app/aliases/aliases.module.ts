@@ -8,10 +8,11 @@ import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule,
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { DeleteAliasDialogComponent } from './alias-view/delete-alias-dialog/delete-alias-dialog.component';
 import {SharedModule} from '../shared/shared.module';
+import { EditAliasNameDialogComponent } from './alias-view/edit-alias-name-dialog/edit-alias-name-dialog.component';
 
 
 @NgModule({
-  declarations: [AliasViewComponent, AliasEditorComponent, DeleteAliasDialogComponent],
+  declarations: [AliasViewComponent, AliasEditorComponent, DeleteAliasDialogComponent, EditAliasNameDialogComponent],
   imports: [
     CommonModule,
     AliasesRoutingModule,
@@ -27,7 +28,8 @@ import {SharedModule} from '../shared/shared.module';
     SharedModule
   ],
   entryComponents: [
-    DeleteAliasDialogComponent
+    DeleteAliasDialogComponent,
+    EditAliasNameDialogComponent
   ]
 })
 export class AliasesModule { }
