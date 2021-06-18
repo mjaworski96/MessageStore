@@ -12,7 +12,7 @@ export class MessengerImportComponent implements OnInit {
   fileChunkSize = 4 * 1024 * 1024; // 4MB
 
   @Output()
-  importAdded = new EventEmitter<void>();
+  updateImports = new EventEmitter<void>();
 
   formGroup: FormGroup;
   @Input()
@@ -52,6 +52,7 @@ export class MessengerImportComponent implements OnInit {
       const importData = await this.importService.start({
         facebookName: this.formGroup.value.facebookName,
       });
+      this.updateImports.emit();
       const file = this.formGroup.value.selectedFile as File;
 
       for (let i = 0; i < file.size; i += this.fileChunkSize) {
@@ -87,7 +88,7 @@ export class MessengerImportComponent implements OnInit {
     } finally {
        this.importProgress.importInProgress = false;
        this.progressBarValue = 0;
-       this.importAdded.emit();
+       this.updateImports.emit();
     }
   }
 }

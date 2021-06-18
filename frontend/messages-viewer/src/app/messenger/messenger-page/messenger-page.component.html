@@ -1,6 +1,6 @@
 <div>
   <div>
-    <app-messenger-import [importProgress]="importProgress" (importAdded)="refresh()"></app-messenger-import>
+    <app-messenger-import [importProgress]="importProgress" (updateImports)="refresh()"></app-messenger-import>
   </div>
   <div>
     <app-messenger-imports-list [imports]="imports"></app-messenger-imports-list>
