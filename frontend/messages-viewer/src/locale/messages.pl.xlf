@@ -473,6 +473,28 @@
         <note priority="1" from="description">Search button</note>
         <note priority="1" from="meaning">Search</note>
       <target>Szukaj</target></trans-unit>
+      <trans-unit id="written-by-you" datatype="html">
+        <source>written by you</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <note priority="1" from="description">Written by you</note>
+        <note priority="1" from="meaning">Written by you</note>
+        <target>napisane przez Ciebie</target>
+      </trans-unit>
+      <trans-unit id="written-by-contact" datatype="html">
+        <source>
+          written by <x id="INTERPOLATION" equiv-text="{{result.contactName}}"/>
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <note priority="1" from="description">Written by contact</note>
+        <note priority="1" from="meaning">Written by contact</note>
+        <target>napisane przez <x id="INTERPOLATION" equiv-text="{{result.contactName}}"/></target>
+      </trans-unit>
       <trans-unit id="cant-search" datatype="html">
         <source>You can't search without providing "Search for" or providing "from" / "to" date or setting "has Attachment"</source>
         <context-group purpose="location">
