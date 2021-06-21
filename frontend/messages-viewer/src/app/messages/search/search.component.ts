@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AliasService} from '../../services/alias.service';
 import {SearchService} from '../../services/search.service';
-import {SearchResultDto} from '../../model/search';
+import {SearchAlias, SearchResult} from '../../model/search';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessagesListComponent} from '../messages-list/messages-list.component';
 import {ToastrService} from 'ngx-toastr';
@@ -30,7 +30,7 @@ export class SearchComponent implements OnInit {
   from: string;
   to: string;
   pendingSearch = false;
-  results: SearchResultDto[];
+  results: SearchResult[];
 
   constructor(private aliasService: AliasService,
               private searchService: SearchService,
@@ -86,15 +86,21 @@ export class SearchComponent implements OnInit {
       this.pendingSearch = false;
     }
   }
-  navigate(result: SearchResultDto, event: MouseEvent): void {
+  navigateToOriginal(result: SearchResult, event: MouseEvent): void {
+    this.navigate(result.messageId, result.aliasId, event);
+  }
+  navigateToOther(alias: SearchAlias, result: SearchResult, event: MouseEvent): void {
+    this.navigate(result.messageId, alias.id, event);
+  }
+  navigate(messageId: number, aliasId: number, event: MouseEvent): void {
     this.searchService
-      .getOrder(result.messageId, result.aliasId)
+      .getOrder(messageId, aliasId)
       .toPromise()
       .then(order => {
         const messageOnPage = Math.ceil(order.order / MessagesListComponent.pageSize);
         const urlTree = this.router.createUrlTree(['messages'], {
           queryParams: {
-            aliasId: result.aliasId,
+            aliasId,
             page: messageOnPage
           }
         });
@@ -105,10 +111,10 @@ export class SearchComponent implements OnInit {
         }
       });
   }
-  writtenByAppUser(result: SearchResultDto): boolean {
+  writtenByAppUser(result: SearchResult): boolean {
     return result.writerType === 'app_user';
   }
-  writtenByContact(result: SearchResultDto): boolean {
+  writtenByContact(result: SearchResult): boolean {
     return result.writerType === 'contact';
   }
   searchHighlight(text: string): string {
@@ -125,5 +131,9 @@ export class SearchComponent implements OnInit {
   }
   canSearch() {
     return !this.query && !this.from && !this.to && !this.hasAttachments;
+  }
+  getOtherAliases(allAliases: SearchAlias[], result: SearchResult) {
+    return allAliases
+      .filter(x => x.id !== result.aliasId);
   }
 }

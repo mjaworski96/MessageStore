@@ -495,6 +495,16 @@
         <note priority="1" from="meaning">Written by contact</note>
         <target>napisane przez <x id="INTERPOLATION" equiv-text="{{result.contactName}}"/></target>
       </trans-unit>
+      <trans-unit id="other-aliases" datatype="html">
+        <source>Other aliases:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <note priority="1" from="description">Other aliases navigation</note>
+        <note priority="1" from="meaning">Other aliases</note>
+        <target>Inne aliasy:</target>
+      </trans-unit>
       <trans-unit id="cant-search" datatype="html">
         <source>You can't search without providing "Search for" or providing "from" / "to" date or setting "has Attachment"</source>
         <context-group purpose="location">

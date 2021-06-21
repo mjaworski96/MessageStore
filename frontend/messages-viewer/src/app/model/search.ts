@@ -12,7 +12,7 @@ export interface SearchAlias {
   id: number;
   name: string;
 }
-export interface SearchResultDto {
+export interface SearchResult {
   messageId: number;
   content: string;
   attachments: AttachmentWithID[];
@@ -24,6 +24,6 @@ export interface SearchResultDto {
   application: string;
   allAliases: SearchAlias[];
 }
-export interface SearchResultDtoList {
-  results: SearchResultDto[];
+export interface SearchResultList {
+  results: SearchResult[];
 }
