@@ -15,7 +15,6 @@ namespace API.Dto
     public class SearchResultDto
     {
         public int MessageId { get; set; }
-        public long MessageIndexOf { get; set; }
         public string Content { get; set; }
         public List<AttachmentDtoWithId> Attachments { get; set; }
         public DateTime Date { get; set; }
