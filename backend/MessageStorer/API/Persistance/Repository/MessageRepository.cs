@@ -56,11 +56,12 @@ namespace API.Persistance.Repository
 
             if (dateFrom != null)
             {
-                query = query.Where(x => x.Date >= dateFrom);
+                query = query.Where(x => x.Date >= dateFrom.Value.Date);
             }
             if (dateTo != null)
             {
-                query = query.Where(x => x.Date <= dateTo);
+                var endOfDay = dateTo.Value.AddDays(1).AddTicks(-1);
+                query = query.Where(x => x.Date <= endOfDay);
             }
 
             if (aliasesIds?.Any() ?? false)
