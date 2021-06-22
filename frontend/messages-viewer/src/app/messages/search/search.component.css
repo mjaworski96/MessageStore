@@ -31,6 +31,7 @@
   float: left;
   white-space: pre-line;
   word-break: break-word;
+  max-width: 80%;
 }
 .attachment {
   margin: 20px 0;
@@ -47,6 +48,7 @@
 .date {
   float: left;
   margin-right: 10px;
+  max-width: 20%;
 }
 .clear {
   clear: both;
