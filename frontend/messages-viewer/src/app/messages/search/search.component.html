@@ -26,9 +26,7 @@
         <mat-datepicker #pickerTo></mat-datepicker>
       </mat-form-field>
     </div>
-    <div class="clear">
-
-    </div>
+    <div class="clear"></div>
     <div class="checkbox">
       <mat-checkbox [(ngModel)]="ignoreLetterSize" color="primary" i18n="Ignore letter size|Ignore letter size checkbox@@ignore-letter-size">Ignore letter size</mat-checkbox>
     </div>
@@ -40,7 +38,7 @@
       [disabled]="canSearch()" i18n="Search|Search button@@search">Search</button>
     </div>
   </div>
-  <div *ngIf="results else noResults">
+  <div *ngIf="results && results.length > 0 else noResults">
     <div *ngFor="let result of results" (click)="navigateToOriginal(result, $event)" class="result"
          [ngClass]="{'unsent-message': result.hasError}">
       <div class="contact-name">
@@ -69,7 +67,7 @@
     </div>
     </div>
   <ng-template #noResults>
-    <div class="no-results">
+    <div class="no-results" i18n="No results|No results|@@no-results">
       No results.
     </div>
   </ng-template>

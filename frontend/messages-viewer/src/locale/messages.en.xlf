@@ -505,6 +505,18 @@
         <note priority="1" from="meaning">Other aliases</note>
         <target>Other aliases:</target>
       </trans-unit>
+      <trans-unit id="no-results" datatype="html">
+        <source>
+          No results.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/messages/search/search.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <note priority="1" from="description">No results</note>
+        <note priority="1" from="meaning">No results</note>
+        <target>No results.</target>
+      </trans-unit>
       <trans-unit id="cant-search" datatype="html">
         <source>You can't search without providing "Search for" or providing "from" / "to" date or setting "has Attachment"</source>
         <context-group purpose="location">
