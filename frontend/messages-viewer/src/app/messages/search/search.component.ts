@@ -129,8 +129,8 @@ export class SearchComponent implements OnInit {
     }
     return text.replace(regex, '<mark>$&</mark>');
   }
-  canSearch() {
-    return !this.query && !this.from && !this.to && !this.hasAttachments;
+  cantSearch() {
+    return this.pendingSearch || (!this.query && !this.from && !this.to && !this.hasAttachments);
   }
   getOtherAliases(allAliases: SearchAlias[], result: SearchResult) {
     return allAliases

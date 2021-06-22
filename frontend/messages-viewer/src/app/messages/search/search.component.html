@@ -35,7 +35,7 @@
     </div>
     <div class="search-button-container">
       <button class="full-width" mat-flat-button color="primary" (click)="search()"
-      [disabled]="canSearch()" i18n="Search|Search button@@search">Search</button>
+      [disabled]="cantSearch()" i18n="Search|Search button@@search">Search</button>
     </div>
   </div>
   <div *ngIf="results && results.length > 0 else noResults">
