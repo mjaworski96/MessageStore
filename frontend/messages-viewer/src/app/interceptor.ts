@@ -4,6 +4,7 @@ import {SessionStorageService} from './services/session-storage.service';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map, tap} from 'rxjs/operators';
 import {ErrorHandlingService} from './services/error-handling.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import {ErrorHandlingService} from './services/error-handling.service';
 export class Interceptor  implements HttpInterceptor {
 
   constructor(private sessionStorageService: SessionStorageService,
-              private errorHandlingService: ErrorHandlingService) { }
+              private errorHandlingService: ErrorHandlingService,
+              private spinner: NgxSpinnerService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.sessionStorageService.isUserLoggedIn()) {
@@ -22,7 +24,9 @@ export class Interceptor  implements HttpInterceptor {
       });
     }
     const ignoreError = request.url.includes('/api/attachments');
+    this.spinner.show();
     return next.handle(request).pipe(
+      finalize(() => this.spinner.hide()),
       tap(
         result => this.handleValidResponse(result),
         error => this.handleErrorResponse(error, ignoreError))

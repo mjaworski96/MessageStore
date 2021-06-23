@@ -16,6 +16,7 @@ import {MessengerModule} from './messenger/messenger.module';
 import {ImportsModule} from './imports/imports.module';
 import { MainPageComponent } from './main-page/main-page.component';
 import {MatButtonModule} from '@angular/material';
+import {NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {MatButtonModule} from '@angular/material';
     AppRoutingModule,
     MatButtonModule,
     ToastrModule.forRoot(),
+    NgxSpinnerModule,
   ],
   providers: [
     {
