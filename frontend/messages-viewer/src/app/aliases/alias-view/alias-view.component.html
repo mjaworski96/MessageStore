@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let alias of filtered" class="alias" (click)="navigate(alias)">
+        <tr *ngFor="let alias of filtered" class="alias" (click)="navigate(alias, $event)">
           <td class="long-text">{{alias.name}}</td>
           <td><app-application-name [application]="alias.application"></app-application-name></td>
           <td class="long-text">{{alias.inApplicationId}}</td>

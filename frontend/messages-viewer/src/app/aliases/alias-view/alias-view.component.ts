@@ -38,13 +38,25 @@ export class AliasViewComponent implements OnInit {
       this.filtered = this.aliases;
     }
   }
-  navigate(alias: AliasWithId): void {
-    this.router.navigate(['messages'], {
-      queryParams: {
-        aliasId: alias.id,
-        page: 1
-      }
-    });
+  navigate(alias: AliasWithId, event): void {
+    console.log(event);
+    if (event.ctrlKey) {
+      window.open(this.router.serializeUrl(
+        this.router.createUrlTree(['messages'], {
+          queryParams: {
+            aliasId: alias.id,
+            page: 1
+          }
+        })));
+    } else {
+      this.router.navigate(['messages'], {
+        queryParams: {
+          aliasId: alias.id,
+          page: 1
+        }
+      });
+    }
+
   }
   addNew() {
     this.router.navigate(['aliases', 'new']);
