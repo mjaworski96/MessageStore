@@ -54,3 +54,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .unsent-message {
   border: 1px red solid !important;
 }
+.long-text {
+  white-space: pre-line;
+  word-break: break-word;
+}

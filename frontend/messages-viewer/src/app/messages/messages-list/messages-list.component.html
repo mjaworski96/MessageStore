@@ -2,7 +2,7 @@
   <div>
     <div #scroll>
       <div *ngFor="let message of messages">
-        <div class="message"
+        <div class="message long-text"
           [ngClass]="{'message-by-contact': writtenByContact(message),
                       'message-by-user': writtenByUser(message),
                       'unsent-message': message.hasError}">

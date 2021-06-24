@@ -13,7 +13,7 @@
     <tbody>
     <tr *ngFor="let import of imports.imports">
       <td>{{import.id}}</td>
-      <td><app-application-name [application]="import.application"></app-application-name></td>
+      <td class="long-text"><app-application-name [application]="import.application"></app-application-name></td>
       <td>{{import.createdAt | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>{{import.startDate | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>{{import.endDate | date: 'dd.MM.yyyy HH:mm'}}</td>

@@ -29,8 +29,6 @@
 }
 .message-content {
   float: left;
-  white-space: pre-line;
-  word-break: break-word;
   max-width: 80%;
 }
 .attachment {

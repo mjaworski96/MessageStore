@@ -12,8 +12,8 @@
     </thead>
     <tbody>
       <tr *ngFor="let import of imports.imports">
-        <td>{{import.id}}</td>
-        <td>{{import.facebookName}}</td>
+        <td class="long-text">{{import.id}}</td>
+        <td class="long-text">{{import.facebookName}}</td>
         <td>{{import.createdAt | date: 'dd.MM.yyyy HH:mm'}}</td>
         <td>
           <span *ngIf="import.status === 'Created'" i18n="Created status|Created status@@status-created">Created</span>

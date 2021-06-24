@@ -52,7 +52,7 @@
         <span>)</span>
       </div>
       <div class="date">{{result.date | date: 'dd.MM.yyyy HH:mm:ss'}}</div>
-      <div class="message-content" [innerHTML]="searchHighlight(result.content)">
+      <div class="message-content long-text" [innerHTML]="searchHighlight(result.content)">
       </div>
       <div class="clear"></div>
       <app-attachments [attachments]="result.attachments"></app-attachments>
