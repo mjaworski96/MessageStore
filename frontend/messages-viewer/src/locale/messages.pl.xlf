@@ -895,7 +895,7 @@ Folder messages musi znajdować się w katalogu głównym archiwum</target></tra
       </trans-unit>
       <trans-unit id="cancel-import-info" datatype="html">
       <source>
-        Leaving this page will cancel import!
+        Leaving this page will cancel import! Do you want to leave this page?
       </source>
       <context-group purpose="location">
         <context context-type="sourcefile">src/app/messenger/messenger-page/messenger-import/messenger-leave-page-dialog/messenger-leave-page-dialog.component.html</context>
@@ -903,7 +903,7 @@ Folder messages musi znajdować się w katalogu głównym archiwum</target></tra
       </context-group>
       <note priority="1" from="description">Cancel import dialog info</note>
       <note priority="1" from="meaning">Cancel import</note>
-      <target>Opuszczenie tej strony anuluje import</target>
+      <target>Opuszczenie tej strony anuluje import! Chcesz opuścić tę stronę?</target>
       </trans-unit>
       <trans-unit id="username" datatype="html">
         <source>Username</source>
