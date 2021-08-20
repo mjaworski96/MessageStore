@@ -24,9 +24,18 @@ export class Interceptor  implements HttpInterceptor {
       });
     }
     const ignoreError = request.url.includes('/api/attachments');
-    this.spinner.show();
+    const ignoreSpinner = request.url.includes('/api/messengerImports/') && request.url.endsWith('/file');
+    
+    if (!ignoreSpinner) {
+      this.spinner.show();
+    }
+
     return next.handle(request).pipe(
-      finalize(() => this.spinner.hide()),
+      finalize(() => {
+        if (!ignoreSpinner) {
+          this.spinner.hide();
+        }
+      }),
       tap(
         result => this.handleValidResponse(result),
         error => this.handleErrorResponse(error, ignoreError))
