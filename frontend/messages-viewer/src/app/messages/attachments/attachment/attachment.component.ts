@@ -21,6 +21,9 @@ export class AttachmentComponent implements OnInit {
     return `/api/attachments/${this.attachment.id}/stream?access_token=${this.sessionStorageService.getToken()}`;
   }
   getType() {
+    if (!this.attachment.contentType) {
+      return 'file';
+    }
     return this.attachment.contentType.split('/')[0];
   }
   downloadAttachment() {
