@@ -891,7 +891,7 @@ Folder messages musi znajdować się w katalogu głównym archiwum</target></tra
         </context-group>
         <note priority="1" from="description">Cancel import dialog title</note>
         <note priority="1" from="meaning">Cancel import</note>
-        <target>Trwa wysyłka pliku </target>
+        <target>Trwa wysyłka pliku</target>
       </trans-unit>
       <trans-unit id="cancel-import-info" datatype="html">
       <source>

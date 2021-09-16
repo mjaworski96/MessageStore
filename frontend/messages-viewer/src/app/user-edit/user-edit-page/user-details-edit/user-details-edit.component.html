@@ -1,8 +1,9 @@
 <div class="user-details-edit-wrapper full-width-form">
-  <form [formGroup]="userDetailsForm" class="material-form">
+  <form [formGroup]="userDetailsForm" class="material-form" autocomplete="on">
     <div>
       <mat-form-field>
         <input matInput formControlName="username" placeholder="Username"
+               name="username"
                i18n-placeholder="Username placeholder| Text in username placeholder@@username">
         <mat-error i18n="Username validation|Shown when username is empty@@username-required-validation"
                    *ngIf="userDetailsForm.get('username').hasError('required')">
@@ -17,6 +18,7 @@
     <div>
       <mat-form-field>
         <input matInput email formControlName="email" placeholder="Email"
+        name="email"
                i18n-placeholder="Email placeholder| Text in email placeholder@@email">
         <mat-error i18n="Email validation|Shown when email is empty@@email-required-validation"
                    *ngIf="userDetailsForm.get('email').hasError('required')">
