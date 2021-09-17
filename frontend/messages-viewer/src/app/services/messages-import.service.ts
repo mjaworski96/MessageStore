@@ -14,6 +14,6 @@ export class MessagesImportService {
     return await this.http.get<MessagesImportList>(this.url).toPromise();
   }
   async delete(importId: string): Promise<any> {
-    return await this.http.delete(`${this.url}/${importId}/removeMessages`).toPromise();
+    return await this.http.delete(`${this.url}/${importId}/messages`).toPromise();
   }
 }

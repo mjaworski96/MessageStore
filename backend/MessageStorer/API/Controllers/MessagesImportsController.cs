@@ -33,12 +33,12 @@ namespace API.Controllers
             _logger.LogInformation($"Ended GET /api/messagesImports");
             return Ok(result);
         }
-        [HttpDelete("{importId}/removeMessages")]
+        [HttpDelete("{importId}/messages")]
         public async Task<ActionResult<ImportDtoList>> Remove(string importId)
         {
-            _logger.LogInformation($"Started DELETE /api/messagesImports/{importId}/removeMessages");
+            _logger.LogInformation($"Started DELETE /api/messagesImports/{importId}/messages");
             await _messageService.DeleteForImport(importId);
-            _logger.LogInformation($"Ended DELETE /api/messagesImports/{importId}/removeMessages");
+            _logger.LogInformation($"Ended DELETE /api/messagesImports/{importId}/messages");
             return NoContent();
         }
     }
