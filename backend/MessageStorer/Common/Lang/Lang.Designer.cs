@@ -286,6 +286,15 @@ namespace Common.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import is already being deleted.
+        /// </summary>
+        internal static string ImportIsBeingDeleted {
+            get {
+                return ResourceManager.GetString("ImportIsBeingDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import with id: {0} not found.
         /// </summary>
         internal static string ImportNotFound {

@@ -21,5 +21,12 @@ namespace Common.Exceptions
         {
         }
     }
+    public class ImportIsBeingDeletedException : ConflictException
+    {
+        public ImportIsBeingDeletedException() : base(Lang.Lang.ImportIsBeingDeleted)
+        {
+        }
+    }
+    
 
 }

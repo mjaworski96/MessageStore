@@ -192,6 +192,9 @@
   <data name="ForbiddenResource" xml:space="preserve">
     <value>Nie masz dostępu do tego zasobu</value>
   </data>
+  <data name="ImportIsBeingDeleted" xml:space="preserve">
+    <value>Import jest w trakcie kasowania</value>
+  </data>
   <data name="ImportNotFound" xml:space="preserve">
     <value>Nie odnaleziono importu z id {0}</value>
   </data>

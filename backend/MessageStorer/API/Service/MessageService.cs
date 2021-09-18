@@ -173,6 +173,9 @@ namespace API.Service
             var import = await _importRepository.Get(importId);
             if (import != null)
             {
+                import.IsBeingDeleted = true;
+                await _importRepository.Commit();
+
                 var owner = await _importRepository.GetOwnerId(importId);
                 _securityService.CheckIfUserIsOwnerOfImport(owner);
                 var attachments = await _messageRepository.GetFilenamesToRemove(import.Id);
@@ -190,7 +193,6 @@ namespace API.Service
                 await _contactRepository.RemoveEmpty(_httpMetadataService.UserId);
                 await _importRepository.Remove(import);
             }
-            
         }
     }
 }

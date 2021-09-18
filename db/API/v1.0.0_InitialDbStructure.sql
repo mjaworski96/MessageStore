@@ -135,6 +135,7 @@ CREATE TABLE imports
 (
 	id INTEGER NOT NULL,
 	import_id VARCHAR(64) NOT NULL,
+	is_being_deleted BOOLEAN NOT NULL DEFAULT FALSE,
 	created_at TIMESTAMP DEFAULT now()
 );
 ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);

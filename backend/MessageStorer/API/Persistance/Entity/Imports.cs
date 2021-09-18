@@ -13,6 +13,7 @@ namespace API.Persistance.Entity
         public int Id { get; set; }
         public string ImportId { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public bool IsBeingDeleted { get; set; }
 
         public virtual ICollection<Messages> Messages { get; set; }
     }

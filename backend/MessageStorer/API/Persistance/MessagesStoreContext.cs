@@ -209,6 +209,8 @@ namespace API.Persistance
                     .IsRequired()
                     .HasColumnName("import_id")
                     .HasMaxLength(64);
+
+                entity.Property(e => e.IsBeingDeleted).HasColumnName("is_being_deleted");
             });
 
             modelBuilder.Entity<Messages>(entity =>

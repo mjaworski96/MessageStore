@@ -1,4 +1,5 @@
 ﻿using API.Persistance.Entity;
+using Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace API.Persistance.Repository
         Task<int?> GetOwnerId(string importId);
         Task<List<Imports>> GetAllForUser(int userId);
         Task Remove(Imports import);
+        Task Commit();
     }
     public class ImportRepository : IImportRepository
     {
@@ -39,6 +41,10 @@ namespace API.Persistance.Repository
                 .SingleOrDefaultAsync(x => x.ImportId == importId);
             if (existing != null)
             {
+                if (existing.IsBeingDeleted)
+                {
+                    throw new ImportIsBeingDeletedException();
+                }
                 return existing;
             }
             var newImport = new Imports
@@ -52,8 +58,15 @@ namespace API.Persistance.Repository
         }
         public async Task<Imports> Get(string importId)
         {
-            return await _messageStoreContext.Imports
+            var import = await _messageStoreContext.Imports
                 .SingleOrDefaultAsync(x => x.ImportId == importId);
+
+            if (import != null && import.IsBeingDeleted)
+            {
+                throw new ImportIsBeingDeletedException();
+            }
+
+            return import;
         }
 
         public async Task Remove(Imports import)
@@ -69,6 +82,11 @@ namespace API.Persistance.Repository
                 .Where(x => x.Import.ImportId == importId)
                 .Select(x => x.Contact.AppUserId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task Commit()
+        {
+             await _messageStoreContext.SaveChangesAsync();
         }
     }
 }

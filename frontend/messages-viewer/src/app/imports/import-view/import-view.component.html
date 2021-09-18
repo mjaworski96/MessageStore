@@ -18,7 +18,7 @@
       <td>{{import.startDate | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>{{import.endDate | date: 'dd.MM.yyyy HH:mm'}}</td>
       <td>
-        <button mat-flat-button color="warn" (click)="delete(import.id)" [disabled]="deleting"
+        <button mat-flat-button color="warn" (click)="delete(import.id)" [disabled]="import.isBeingDeleted || deleting"
                 i18n="Delete message|Delete message button@@delete-message">
           Delete
         </button>

@@ -185,7 +185,7 @@
         </context-group>
         <note priority="1" from="description">Cannot undone operation</note>
         <note priority="1" from="meaning">Cannot undone</note>
-      <target>Ta operacja nie może zostać cofnięta!</target></trans-unit>
+      <target>Tej operacji nie da się cofnąć!</target></trans-unit>
       <trans-unit id="No" datatype="html">
         <source>No</source>
         <context-group purpose="location">
@@ -1205,6 +1205,17 @@ Folder messages musi znajdować się w katalogu głównym archiwum</target></tra
         <note priority="1" from="description">application</note>
         <note priority="1" from="meaning">Application</note>
       <target>Applikacja</target></trans-unit>
+      <trans-unit id="cancel-imports-message" datatype="html">
+        <source>
+          This operation cannot be undone! Imports in progress will be cancelled!
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/delete-messages-dialog/delete-messages-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <note priority="1" from="description">Imports will be ignored info</note>
+        <note priority="1" from="meaning">Imports will be ignored</note>
+      <target>Tej operacji nie da się cofnąć! Trwajace importy zostaną anulowane!</target></trans-unit>
       <trans-unit id="delete-messages" datatype="html">
         <source>Delete messages</source>
         <context-group purpose="location">
