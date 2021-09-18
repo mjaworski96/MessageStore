@@ -19,19 +19,21 @@ export class ErrorHandlingService {
       if (duplicate != null) {
         this.toastr.remove(duplicate.toastId);
       }
-      this.toastr.error(error.error.message, error.error.code, {
-        timeOut: 5000,
-        closeButton: true
-      });
+      if (error.error.message) {
+        this.toastr.error(error.error.message, '', {
+          timeOut: 5000,
+          closeButton: true
+        });
+      }
     }
     if (error.status === 404 ||  error.status === 504) {
       this.handle404and504();
     } else if (error.status === 401) {
-      this.sessionStorageService.logout();
       this.handle401();
     }
   }
   handle401(): void {
+    this.sessionStorageService.logout();
     this.router.navigate(['login']);
   }
   handle404and504(): void {
