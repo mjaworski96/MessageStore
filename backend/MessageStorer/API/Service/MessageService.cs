@@ -45,17 +45,18 @@ namespace API.Service
         {
             var contact = await _contactRepository.Get(messageDto.ContactId);
             Validate(messageDto, contact);
-            var importOwner = await _importRepository.GetOwnerId(messageDto.ImportId);
-            _securityService.CheckIfUserIsOwnerOfImport(importOwner);
+           
+            var import = await _importRepository.GetOrCreate(messageDto.ImportId, _httpMetadataService.UserId);
+            _securityService.CheckIfUserIsOwnerOfImport(import.AppUserId);
 
             var message = new Messages
             {
-                Contact = await _contactRepository.Get(messageDto.ContactId),
+                Contact = contact,
                 Content = messageDto.Content,
                 Date = messageDto.Date,
                 WriterType = await _writerTypeRepository.Get(messageDto.WriterType),
                 Attachments = await _attachmentService.CreateAttachments(messageDto.Attachments),
-                Import = await _importRepository.GetOrCreate(messageDto.ImportId),
+                Import = import,
                 HasError = messageDto.HasError
             };
 

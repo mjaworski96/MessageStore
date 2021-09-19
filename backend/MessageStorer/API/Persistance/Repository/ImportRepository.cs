@@ -10,7 +10,7 @@ namespace API.Persistance.Repository
 {
     public interface IImportRepository
     {
-        Task<Imports> GetOrCreate(string importId);
+        Task<Imports> GetOrCreate(string importId, int userId);
         Task<Imports> Get(string importId);
         Task<int?> GetOwnerId(string importId);
         Task<List<Imports>> GetAllForUser(int userId);
@@ -35,7 +35,7 @@ namespace API.Persistance.Repository
                 .ToListAsync();
         }
 
-        public async Task<Imports> GetOrCreate(string importId)
+        public async Task<Imports> GetOrCreate(string importId, int userId)
         {
             var existing = await _messageStoreContext.Imports
                 .SingleOrDefaultAsync(x => x.ImportId == importId);
@@ -50,7 +50,8 @@ namespace API.Persistance.Repository
             var newImport = new Imports
             {
                 ImportId = importId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                AppUserId = userId,
             };
             _messageStoreContext.Imports.Add(newImport);
             await _messageStoreContext.SaveChangesAsync();
@@ -77,11 +78,11 @@ namespace API.Persistance.Repository
 
         public async Task<int?> GetOwnerId(string importId)
         {
-            var query = _messageStoreContext
-                .Messages
-                .Where(x => x.Import.ImportId == importId)
-                .Select(x => x.Contact.AppUserId);
-            var result = await query.FirstOrDefaultAsync();
+            var result = await  _messageStoreContext
+                .Imports
+                .Where(x => x.ImportId == importId)
+                .Select(x => x.AppUserId)
+                .SingleOrDefaultAsync();
             if (result == 0)
             {
                 return null;

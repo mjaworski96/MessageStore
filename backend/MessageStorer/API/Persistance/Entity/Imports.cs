@@ -14,7 +14,9 @@ namespace API.Persistance.Entity
         public string ImportId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public bool IsBeingDeleted { get; set; }
+        public int AppUserId { get; set; }
 
+        public virtual AppUsers AppUser { get; set; }
         public virtual ICollection<Messages> Messages { get; set; }
     }
 }

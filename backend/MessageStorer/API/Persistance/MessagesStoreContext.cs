@@ -201,6 +201,8 @@ namespace API.Persistance
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.AppUserId).HasColumnName("app_user_id");
+
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("created_at")
                     .HasDefaultValueSql("now()");
@@ -211,6 +213,11 @@ namespace API.Persistance
                     .HasMaxLength(64);
 
                 entity.Property(e => e.IsBeingDeleted).HasColumnName("is_being_deleted");
+
+                entity.HasOne(d => d.AppUser)
+                    .WithMany(p => p.Imports)
+                    .HasForeignKey(d => d.AppUserId)
+                    .HasConstraintName("fk_imports_app_users");
             });
 
             modelBuilder.Entity<Messages>(entity =>

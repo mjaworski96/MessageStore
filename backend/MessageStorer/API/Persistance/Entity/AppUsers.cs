@@ -8,6 +8,7 @@ namespace API.Persistance.Entity
         public AppUsers()
         {
             Contacts = new HashSet<Contacts>();
+            Imports = new HashSet<Imports>();
         }
 
         public int Id { get; set; }
@@ -16,5 +17,6 @@ namespace API.Persistance.Entity
         public string Password { get; set; }
 
         public virtual ICollection<Contacts> Contacts { get; set; }
+        public virtual ICollection<Imports> Imports { get; set; }
     }
 }
