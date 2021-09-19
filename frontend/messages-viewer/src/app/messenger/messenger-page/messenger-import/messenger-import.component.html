@@ -1,9 +1,9 @@
 <div>
   <div class="half-width-form">
-    <form [formGroup]="formGroup">
+    <form [formGroup]="formGroup" autocomplete="on">
       <div>
         <mat-form-field>
-          <input matInput formControlName="facebookName" placeholder="Facebook name" [required]="true"
+          <input matInput formControlName="facebookName" placeholder="Facebook name" [required]="true" name="name"
                  i18n-placeholder="Facebook name placeholder|Text in facebook name placeholder@@fb-name">
           <mat-error i18n="Name validation|Shown when name is empty@@name-required-validation"
                      *ngIf="formGroup.get('facebookName').dirty &&  formGroup.get('facebookName').hasError('required')">
