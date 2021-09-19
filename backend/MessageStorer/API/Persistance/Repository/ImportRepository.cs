@@ -77,11 +77,16 @@ namespace API.Persistance.Repository
 
         public async Task<int?> GetOwnerId(string importId)
         {
-            return await _messageStoreContext
+            var query = _messageStoreContext
                 .Messages
                 .Where(x => x.Import.ImportId == importId)
-                .Select(x => x.Contact.AppUserId)
-                .FirstOrDefaultAsync();
+                .Select(x => x.Contact.AppUserId);
+            var result = await query.FirstOrDefaultAsync();
+            if (result == 0)
+            {
+                return null;
+            }
+            return result;
         }
 
         public async Task Commit()

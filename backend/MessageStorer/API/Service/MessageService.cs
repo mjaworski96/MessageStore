@@ -45,6 +45,8 @@ namespace API.Service
         {
             var contact = await _contactRepository.Get(messageDto.ContactId);
             Validate(messageDto, contact);
+            var importOwner = await _importRepository.GetOwnerId(messageDto.ImportId);
+            _securityService.CheckIfUserIsOwnerOfImport(importOwner);
 
             var message = new Messages
             {
