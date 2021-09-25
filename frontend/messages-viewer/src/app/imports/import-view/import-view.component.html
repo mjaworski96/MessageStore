@@ -1,13 +1,14 @@
 <div>
   <div class="full-width-button refresh-button-container">
-    <button mat-flat-button (click)="refresh()" color="primary" i18n="Refresh button|Refresh button@@refresh">Refresh</button>
+    <button mat-flat-button (click)="refresh()" color="primary" 
+    i18n="Refresh button|Refresh button@@refresh" [disabled]="refreshed">Refresh</button>
   </div>
   <table class="table-wrapper">
     <thead>
     <tr>
       <td i18n="Id|Import id@@id">Id</td>
       <td i18n="Application|application@@application">Application</td>
-      <td i18n="Created at|Created at table header@@created-at">Crated at
+      <td i18n="Created at|Created at table header@@created-at">Crated at</td>
       <td i18n="Start date|Start date header@@start-date">Start date</td>
       <td i18n="End date|End date header@@end-date">End date</td>
       <td i18n="Delete messages|Delete messages button@@delete-messages">Delete messages</td>

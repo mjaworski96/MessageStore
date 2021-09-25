@@ -17,6 +17,8 @@ export class ImportViewComponent implements OnInit {
 
   imports: MessagesImportList;
   deleting = false;
+  refreshed = false;
+
   constructor(private route: ActivatedRoute,
               private messagesImportService: MessagesImportService,
               private dialog: MatDialog) { }
@@ -40,5 +42,6 @@ export class ImportViewComponent implements OnInit {
   }
   async refresh() {
     this.imports = await this.messagesImportService.refresh();
+    this.refreshed = true;
   }
 }
