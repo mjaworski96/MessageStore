@@ -103,6 +103,7 @@ namespace MessageSender.ViewModel
             var importId = Guid.NewGuid().ToString();
             using (var contactHttpSender = new ContactHttpSender(ServerIp))
             using (var smsHttpSender = new SmsHttpSender(ServerIp))
+            using (var importHttpSender = new ImportApiSender(ServerIp))
             {
                 var lastSyncTime = await smsHttpSender.GetLastSyncTime();
                 int maxProgress = _smsSource.GetCount(lastSyncTime.From, lastSyncTime.To);
@@ -130,11 +131,14 @@ namespace MessageSender.ViewModel
                             sms.ContactMemberId = member.Id;
                         }
                     }
-
                     await smsHttpSender.Send(sms);
                     UpdateProgress(ref currentSent, maxProgress);
                 }
-
+                if (currentSent > 0)
+                {
+                    await importHttpSender.Finish(importId);
+                }
+               
             }
             CurrentProgress = 0;
             UpdateCanLogout(true);
@@ -153,15 +157,7 @@ namespace MessageSender.ViewModel
             _pageChanger.ShowLoginPage();
             await Task.CompletedTask;
         }
-        private string GetPhoneNumberDictionaryKey(string phoneNumber)
-        {
-            if (phoneNumber.StartsWith("+") && phoneNumber.Length > 3 && phoneNumber.ContainsOnlyDigits(1))
-            {
-                return phoneNumber.Substring(3);
-            }
-            else
-                return phoneNumber;
-        }
+
         private void UpdateProgress(ref int current, int max)
         {
             current++;

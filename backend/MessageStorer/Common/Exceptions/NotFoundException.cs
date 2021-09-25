@@ -65,6 +65,10 @@ namespace Common.Exceptions
     }
     public class ImportNotFoundException : NotFoundException
     {
+        public ImportNotFoundException(string importId) :
+            base(string.Format(Lang.Lang.ImportNotFound, importId))
+        { }
+
         public ImportNotFoundException(string importId, Exception innerException) :
             base(string.Format(Lang.Lang.ImportNotFound, importId), innerException)
         { }

@@ -137,8 +137,12 @@ CREATE TABLE imports
 	import_id VARCHAR(64) NOT NULL,
 	is_being_deleted BOOLEAN NOT NULL DEFAULT FALSE,
 	app_user_id INTEGER NOT NULL,
-	created_at TIMESTAMP DEFAULT now()
+	created_at TIMESTAMP DEFAULT now(),
+	start_date TIMESTAMP,
+	end_date TIMESTAMP,
+	application_id INTEGER NOT NULL,
 );
+
 ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);
 CREATE SEQUENCE public.imports_id_seq
     AS INTEGER
@@ -149,6 +153,8 @@ CREATE SEQUENCE public.imports_id_seq
     CACHE 1;
 ALTER SEQUENCE imports_id_seq OWNED BY imports.id;
 ALTER TABLE imports ALTER COLUMN id SET DEFAULT nextval('public.imports_id_seq'::regclass);
+ALTER TABLE imports ADD CONSTRAINT fk_imports_app_users FOREIGN KEY (app_user_id) REFERENCES app_users(id) ON DELETE CASCADE;
+ALTER TABLE imports ADD CONSTRAINT fk_imports_applications FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE;
 CREATE UNIQUE INDEX imports_unq_import_id on imports (LOWER(import_id));
 
 CREATE TABLE messages
@@ -157,7 +163,7 @@ CREATE TABLE messages
 	content VARCHAR(307200), -- 30KiB
 	date TIMESTAMP,
 	has_error BOOLEAN NOT NULL DEFAULT FALSE,
-	import_id INT NOT NULL,
+	import_id INTEGER NOT NULL,
 	writer_type_id INTEGER NOT NULL,
 	contact_id INTEGER NOT NULL,
 	contact_member_id INTEGER

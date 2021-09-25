@@ -203,9 +203,13 @@ namespace API.Persistance
 
                 entity.Property(e => e.AppUserId).HasColumnName("app_user_id");
 
+                entity.Property(e => e.ApplicationId).HasColumnName("application_id");
+
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("created_at")
                     .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.EndDate).HasColumnName("end_date");
 
                 entity.Property(e => e.ImportId)
                     .IsRequired()
@@ -214,10 +218,17 @@ namespace API.Persistance
 
                 entity.Property(e => e.IsBeingDeleted).HasColumnName("is_being_deleted");
 
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
+
                 entity.HasOne(d => d.AppUser)
                     .WithMany(p => p.Imports)
                     .HasForeignKey(d => d.AppUserId)
                     .HasConstraintName("fk_imports_app_users");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.Imports)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("fk_imports_applications");
             });
 
             modelBuilder.Entity<Messages>(entity =>

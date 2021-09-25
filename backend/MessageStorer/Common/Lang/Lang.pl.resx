@@ -199,7 +199,7 @@
     <value>Nie odnaleziono importu z id {0}</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Wewnętrzy błąd servera</value>
+    <value>Wewnętrzny błąd serwera</value>
   </data>
   <data name="InvalidAliasName" xml:space="preserve">
     <value>Niepoprawna nazwa aliasu</value>

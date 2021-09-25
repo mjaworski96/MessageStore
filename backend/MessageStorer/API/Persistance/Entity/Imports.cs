@@ -15,8 +15,12 @@ namespace API.Persistance.Entity
         public DateTime? CreatedAt { get; set; }
         public bool IsBeingDeleted { get; set; }
         public int AppUserId { get; set; }
+        public int ApplicationId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public virtual AppUsers AppUser { get; set; }
+        public virtual Applications Application { get; set; }
         public virtual ICollection<Messages> Messages { get; set; }
     }
 }

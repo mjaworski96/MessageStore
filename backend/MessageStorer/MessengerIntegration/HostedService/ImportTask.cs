@@ -66,9 +66,9 @@ namespace MessengerIntegration.HostedService
             var token = _cancellationTokenSource.Token;
             PrepareScope();
             _import = await _importRepository.Get(importId, true);
-            #pragma warning disable CS4014
+#pragma warning disable CS4014
             Task.Run(async () => await ImportFile(token), token);
-            #pragma warning restore CS4014
+#pragma warning restore CS4014
 
         }
         public async Task Cancel()
@@ -78,7 +78,10 @@ namespace MessengerIntegration.HostedService
             _serviceScope?.Dispose();
         }
         private async Task ImportFile(CancellationToken cancellationToken)
-        {        
+        {
+            var token = new SharedToken();
+            var httpClient = _httpClientFactory.CreateClient("apiClient");
+            var importApiClient = new ImportApiClient(token, httpClient);
             try
             {
                 _logger.LogInformation($"Start import {_import.Id}");
@@ -96,8 +99,6 @@ namespace MessengerIntegration.HostedService
                     await SetStatus(Statuses.ErrorNoMessages);
                 }
 
-                var token = new SharedToken();
-                var httpClient = _httpClientFactory.CreateClient("apiClient");
                 var userApiClient = new UserApiClient(token, httpClient, _apiConfig);
                 var contactApiClient = new ContactApiClient(token, httpClient);
                 var messageApiClient = new MessageApiClient(token, httpClient);
@@ -124,6 +125,7 @@ namespace MessengerIntegration.HostedService
             finally
             {
                 await _importRepository.Save();
+                await importApiClient.Finish(_import.Id);
                 _serviceScope?.Dispose();
                 if (_config.DeleteFileAfterImport && _import != null)
                 {
@@ -134,7 +136,6 @@ namespace MessengerIntegration.HostedService
                     Completed = true;
                 }
             }
-
         }
         private async Task SetStatus(string statusName)
         {
@@ -158,7 +159,7 @@ namespace MessengerIntegration.HostedService
             var streamCollection = _zipFile.GetConversationStream(conversationData);
             foreach (var conversationStream in streamCollection)
             {
-                using(conversationStream)
+                using (conversationStream)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     if (conversationStream == null)
@@ -172,10 +173,8 @@ namespace MessengerIntegration.HostedService
                     var contact = await ImportContact(name, conversationDocument, contactApiClient);
                     cancellationToken.ThrowIfCancellationRequested();
                     await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, cancellationToken);
-
                 }
             }
-            
         }
 
         private async Task<ContactWithId> ImportContact(string conversationName, JsonDocument document,
@@ -184,7 +183,7 @@ namespace MessengerIntegration.HostedService
             var participantsRaw = document.RootElement.GetProperty("participants");
             var participants = JsonConvert.DeserializeObject<List<Participant>>(participantsRaw.GetRawText());
             var others = participants.Where(x => FixEncoding(x.Name) != _import.FacebookName).ToList();
-            
+
             var contact = new Contact()
             {
                 InApplicationId = conversationName,
@@ -192,7 +191,7 @@ namespace MessengerIntegration.HostedService
                     ? FixEncoding(others.First().Name) : conversationName,
                 Members = others.Count == 1
                     ? null : others.Select(x => new ContactMember()
-                    { Name = FixEncoding(x.Name), InternalId=FixEncoding(x.Name) }).ToList(),
+                    { Name = FixEncoding(x.Name), InternalId = FixEncoding(x.Name) }).ToList(),
             };
             return await contactApiClient.CreateOrUpdateContact(contact);
         }

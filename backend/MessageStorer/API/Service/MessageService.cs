@@ -46,7 +46,7 @@ namespace API.Service
             var contact = await _contactRepository.Get(messageDto.ContactId);
             Validate(messageDto, contact);
            
-            var import = await _importRepository.GetOrCreate(messageDto.ImportId, _httpMetadataService.UserId);
+            var import = await _importRepository.GetOrCreate(messageDto.ImportId, _httpMetadataService.UserId, contact.Application);
             _securityService.CheckIfUserIsOwnerOfImport(import.AppUserId);
 
             var message = new Messages

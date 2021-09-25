@@ -38,4 +38,7 @@ export class ImportViewComponent implements OnInit {
       this.deleting = false;
     }
   }
+  async refresh() {
+    this.imports = await this.messagesImportService.refresh();
+  }
 }

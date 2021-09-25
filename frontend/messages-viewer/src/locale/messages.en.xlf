@@ -1216,6 +1216,15 @@ Directory messages must be in the archive root.</target></trans-unit>
         <note priority="1" from="description">Imports will be ignored info</note>
         <note priority="1" from="meaning">Imports will be ignored</note>
       <target>This operation cannot be undone! Imports in progress will be cancelled!</target></trans-unit>
+      <trans-unit id="refresh" datatype="html">
+        <source>Refresh</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/imports/import-view/import-view.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">Refresh button</note>
+        <note priority="1" from="meaning">Refresh button</note>
+      <target>Refresh</target></trans-unit>
       <trans-unit id="delete-messages" datatype="html">
         <source>Delete messages</source>
         <context-group purpose="location">

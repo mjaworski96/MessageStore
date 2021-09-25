@@ -10,7 +10,7 @@ namespace API.Persistance.Repository
 {
     public interface IImportRepository
     {
-        Task<Imports> GetOrCreate(string importId, int userId);
+        Task<Imports> GetOrCreate(string importId, int userId, Applications application);
         Task<Imports> Get(string importId);
         Task<int?> GetOwnerId(string importId);
         Task<List<Imports>> GetAllForUser(int userId);
@@ -29,13 +29,14 @@ namespace API.Persistance.Repository
         public async Task<List<Imports>> GetAllForUser(int userId)
         {
             return await _messageStoreContext.Imports
+                .Include(x => x.Application)
                 .Where(x => x.Messages
                     .Any(y => y.Contact.AppUserId == userId))
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
 
-        public async Task<Imports> GetOrCreate(string importId, int userId)
+        public async Task<Imports> GetOrCreate(string importId, int userId, Applications application)
         {
             var existing = await _messageStoreContext.Imports
                 .SingleOrDefaultAsync(x => x.ImportId == importId);
@@ -52,6 +53,7 @@ namespace API.Persistance.Repository
                 ImportId = importId,
                 CreatedAt = DateTime.UtcNow,
                 AppUserId = userId,
+                Application = application,
             };
             _messageStoreContext.Imports.Add(newImport);
             await _messageStoreContext.SaveChangesAsync();
