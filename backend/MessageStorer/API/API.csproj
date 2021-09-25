@@ -28,6 +28,9 @@
     <None Update="APK\org.mjaworski96.messagesender-Signed.apk">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="APK\org.mjaworski96.messagesender.apk">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 
