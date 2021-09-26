@@ -46,6 +46,6 @@ export class ImportViewComponent implements OnInit {
   }
   isBeingDeleted(): boolean {
     return !!this.imports.imports
-      .find(x => ~!x.isBeingDeleted);
+      .find(x => x.isBeingDeleted);
   }
 }
