@@ -44,4 +44,8 @@ export class ImportViewComponent implements OnInit {
     this.imports = await this.messagesImportService.refresh();
     this.refreshed = true;
   }
+  isBeingDeleted(): boolean {
+    return !!this.imports.imports
+      .find(x => ~!x.isBeingDeleted);
+  }
 }
