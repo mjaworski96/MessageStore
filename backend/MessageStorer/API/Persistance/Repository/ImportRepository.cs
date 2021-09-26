@@ -31,7 +31,8 @@ namespace API.Persistance.Repository
             return await _messageStoreContext.Imports
                 .Include(x => x.Application)
                 .Where(x => x.Messages
-                    .Any(y => y.Contact.AppUserId == userId))
+                    .Any(y => y.Contact.AppUserId == userId) &&
+                    !x.IsBeingDeleted)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
