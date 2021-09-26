@@ -49,8 +49,11 @@ namespace API.Service
 
             foreach (var item in imports)
             {
-                item.StartDate = (await _messageRepository.GetOldest(item.Id, false)).Date;
-                item.EndDate = (await _messageRepository.GetNewest(item.Id, false)).Date;
+                if (!item.IsBeingDeleted)
+                {
+                    item.StartDate = (await _messageRepository.GetOldest(item.Id, false)).Date;
+                    item.EndDate = (await _messageRepository.GetNewest(item.Id, false)).Date;
+                }
 
                 importsDto.Add(CreateImportDto(item));
             }
