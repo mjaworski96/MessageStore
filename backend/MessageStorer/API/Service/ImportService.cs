@@ -1,5 +1,4 @@
 ﻿using API.Dto;
-using API.Persistance.Entity;
 using API.Persistance.Repository;
 using Common.Exceptions;
 using Common.Service;
@@ -77,12 +76,13 @@ namespace API.Service
             await _importRepository.Commit();
         }
 
-        private ImportDto CreateImportDto(Imports item)
+        private ImportDto CreateImportDto(Persistance.Entity.Imports item)
         {
             return new ImportDto
             {
                 Id = item.ImportId,
                 CreatedAt = item.CreatedAt,
+                IsBeingDeleted = item.IsBeingDeleted,
                 StartDate = item.StartDate,
                 EndDate = item.EndDate,
                 Application = item.Application.Name
