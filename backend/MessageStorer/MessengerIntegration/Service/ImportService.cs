@@ -55,7 +55,8 @@ namespace MessengerIntegration.Service
                 Id = Guid.NewGuid().ToString(),
                 Status = await _statusRepository.GetStatusByName(Statuses.Created),
                 UserId = _httpMetadataService.UserId,
-                FacebookName = importDto.FacebookName
+                FacebookName = importDto.FacebookName,
+                CreatedAt = DateTime.Now,
             };
             await _importRepository.Add(importEntity);
             await _importRepository.Save();

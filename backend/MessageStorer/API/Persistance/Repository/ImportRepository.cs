@@ -50,7 +50,7 @@ namespace API.Persistance.Repository
             var newImport = new Imports
             {
                 ImportId = importId,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 AppUserId = userId,
                 Application = application,
             };
