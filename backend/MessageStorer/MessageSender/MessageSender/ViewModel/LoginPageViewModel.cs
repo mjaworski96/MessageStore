@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace MessageSender.ViewModel
 {
-    public class LoginPageViewModel : BaseViewModel, INotifyPropertyChanged, IExceptionHandler
+    public class LoginPageViewModel : BaseViewModel, IExceptionHandler
     {
         private string _error;
         private string _username;
@@ -20,8 +20,6 @@ namespace MessageSender.ViewModel
         {
             _pageChanger = pageChanger;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public string Error
         {
@@ -58,24 +56,24 @@ namespace MessageSender.ViewModel
         {
             if (e is ApiException apiException)
             {
-                Error = $"{apiException.Code} - {apiException.Message}";
+                Error = CreateErrorMessage(apiException);
             }
             else
             {
-                Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
+                Error = CreateErrorMessage(e);
             }
         }
         public void Clear()
         {
             Error = "";
-        }    
+        }
         private bool CanLogIn()
         {
-            return (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password));
+            return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password);
         }
         private async Task Login()
         {
-            using(var userHttpSender = new UserHttpSender(ServerIp))
+            using (var userHttpSender = new UserHttpSender(ServerIp))
             {
                 var loginDetails = new LoginDetails
                 {
@@ -85,10 +83,6 @@ namespace MessageSender.ViewModel
                 await userHttpSender.Login(loginDetails);
                 _pageChanger.ShowMainPage();
             }
-        }
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

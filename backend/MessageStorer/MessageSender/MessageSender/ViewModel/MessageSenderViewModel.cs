@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MessageSender.ViewModel
 {
-    public class MessageSenderViewModel : BaseViewModel, INotifyPropertyChanged, IExceptionHandler
+    public class MessageSenderViewModel : BaseViewModel, IExceptionHandler
     {
         private readonly ISmsSource _smsSource;
         private readonly IContactSource _contactSource;
@@ -34,14 +34,10 @@ namespace MessageSender.ViewModel
             _appStoped = false;
             SyncSmsCommand = new DelegateCommand(Sync, this, true, true);
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+
         public ICommand SyncSmsCommand { get; set; }
         public ICommand LogoutCommand { get => new DelegateCommand(Logout, this, _canLogout, true); }
-        
+
         public double CurrentProgress
         {
             get => _currentProgress;
@@ -70,12 +66,12 @@ namespace MessageSender.ViewModel
                 }
                 else
                 {
-                    Error = $"{apiException.Code} - {apiException.Message}";
+                    Error = CreateErrorMessage(apiException);
                 }
             }
             else
             {
-                Error = $"{e.GetType().Name}\n{e.Message}\n{e.StackTrace}";
+                Error = CreateErrorMessage(e);
             }
             UpdateCanLogout(true);
         }
@@ -138,7 +134,7 @@ namespace MessageSender.ViewModel
                 {
                     await importHttpSender.Finish(importId);
                 }
-               
+
             }
             CurrentProgress = 0;
             UpdateCanLogout(true);
