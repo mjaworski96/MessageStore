@@ -7,6 +7,7 @@ namespace API.Infrastructure
     public interface IMessengerIntegrationClient
     {
         Task DeleteImport(string id);
+        Task DeleteAllImports(int userId);
     }
     public class MessengerIntegrationClient: IMessengerIntegrationClient
     {
@@ -23,8 +24,21 @@ namespace API.Infrastructure
         {
             var httpClient = _httpClientFactory.CreateClient("messengerIntegrationClient");
             var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/MessengerImports/{id}");
-            request.Headers.Add("Authorization", _httpMetadataService.AuthorizationToken);
+            AddAuthorization(request); 
             await httpClient.SendAsync(request);
+        }
+
+        public async Task DeleteAllImports(int userId)
+        {
+            var httpClient = _httpClientFactory.CreateClient("messengerIntegrationClient");
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/MessengerImports/user/{userId}");
+            AddAuthorization(request); 
+            await httpClient.SendAsync(request);
+        }
+
+        private void AddAuthorization(HttpRequestMessage request)
+        {
+            request.Headers.Add("Authorization", _httpMetadataService.AuthorizationToken);
         }
     }
 }

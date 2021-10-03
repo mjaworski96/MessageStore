@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Common.Service;
+using API.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace API.Service
 {
@@ -34,13 +36,26 @@ namespace API.Service
         private const string TokenPrefix = "Bearer ";
 
         private readonly IAppUserRepository _appUserRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IAttachmentService _attachmentService;
+        private readonly ISecurityService _securityService;
+        private readonly IMessengerIntegrationClient _messengerIntegrationClient;
         private readonly ISecurityConfig _config;
         private readonly IHttpMetadataService _httpMetadataService;
 
         public AppUserService(IAppUserRepository appUserRepository,
-            ISecurityConfig config, IHttpMetadataService httpMetadataService)
+            IAttachmentRepository attachmentRepository,
+            IAttachmentService attachmentService,
+            ISecurityService securityService,
+            IMessengerIntegrationClient messengerIntegrationClient,
+            ISecurityConfig config, 
+            IHttpMetadataService httpMetadataService)
         {
             _appUserRepository = appUserRepository;
+            _attachmentRepository = attachmentRepository;
+            _attachmentService = attachmentService;
+            _securityService = securityService;
+            _messengerIntegrationClient = messengerIntegrationClient;
             _config = config;
             _httpMetadataService = httpMetadataService;
         }
@@ -87,7 +102,11 @@ namespace API.Service
 
         public async Task Remove(int userId)
         {
+            _securityService.CheckUser(userId);
+            var userAttachments = await _attachmentRepository.GetAllAttachmentsFilenamesForUser(userId);
             await _appUserRepository.Remove(userId);
+            await _messengerIntegrationClient.DeleteAllImports(userId);
+            _attachmentService.DeleteAllAttachments(userId, userAttachments);
         }
         public async Task ChangePassword(int userId, AppUserPasswordChange password)
         {

@@ -17,20 +17,19 @@ namespace API.Service
         void CheckIfUserIsOwnerOfContact(Contacts contact);
         void CheckIfUserIsOwnerOfAttachment(Attachments attachment);
         void CheckIfUserIsOwnerOfImport(int? ownerId);
+        void CheckUser(int userId);
     }
     public class SecurityService: ISecurityService
     {
         private readonly IAliasRepository _aliasRepository;
         private readonly IHttpMetadataService _httpMetadataService;
         private readonly IContactRepository _contactRepository;
-        private readonly IMessageRepository _messageRepository;
 
-        public SecurityService(IAliasRepository aliasRepository, IHttpMetadataService httpMetadataService, IContactRepository contactRepository, IMessageRepository messageRepository)
+        public SecurityService(IAliasRepository aliasRepository, IHttpMetadataService httpMetadataService, IContactRepository contactRepository)
         {
             _aliasRepository = aliasRepository;
             _httpMetadataService = httpMetadataService;
             _contactRepository = contactRepository;
-            _messageRepository = messageRepository;
         }
 
         public async Task CheckIfUserIsOwnerOfAlias(int aliasId)
@@ -86,6 +85,14 @@ namespace API.Service
             {
                 if (ownerId != _httpMetadataService.UserId)
                     throw new ForbiddenImportException();
+            }
+        }
+
+        public void CheckUser(int userId)
+        {
+            if (userId != _httpMetadataService.UserId)
+            {
+                throw new ForbiddenAliasException();
             }
         }
     }

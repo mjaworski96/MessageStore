@@ -20,6 +20,7 @@ namespace MessengerIntegration.Service
         Task<ImportDtoWithIdList> GetAllForUser();
         Task SetStatus(Imports import, string statusName);
         Task Delete(string importId);
+        Task DeleteAllForUser(int userId);
         Task Cancel(string importId);
     }
     public class ImportService: IImportService
@@ -116,10 +117,10 @@ namespace MessengerIntegration.Service
                 {
                     throw new ForbiddenImportException();
                 }
-                await _importRepository.Delete(import);
-                _fileUtils.Delete(import.Id);
+                await DeleteImport(import);
             }
         }
+
         public async Task Cancel(string importId)
         {
             var import = await _importRepository.Get(importId, false);
@@ -159,6 +160,25 @@ namespace MessengerIntegration.Service
                 Status = importEntity.Status.Name,
                 CreatedAt = importEntity.CreatedAt,
             };
+        }
+
+        public async Task DeleteAllForUser(int userId)
+        {
+            if (userId != _httpMetadataService.UserId)
+            {
+                throw new ForbiddenImportException();
+            }
+            var entities = await _importRepository.GetAll(_httpMetadataService.UserId);
+            foreach (var import in entities)
+            {
+                await DeleteImport(import);
+            }
+        }
+
+        private async Task DeleteImport(Imports import)
+        {
+            await _importRepository.Delete(import);
+            _fileUtils.Delete(import.Id);
         }
     }
 }

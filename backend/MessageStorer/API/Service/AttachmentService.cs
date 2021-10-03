@@ -3,6 +3,7 @@ using API.Dto;
 using API.Persistance.Entity;
 using API.Persistance.Repository;
 using HeyRed.Mime;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,18 +19,24 @@ namespace API.Service
         Task<AttachmentMetadataDto> GetMetadata(int id);
         AttachmentDtoWithId CreateAttachemtDtoWithId(Attachments attachment);
         void Remove(string filename);
+        void DeleteAllAttachments(int userId, List<string> filenames);
     }
     public class AttachmentService : IAttachmentService
     {
         private readonly IAttachmentConfig _attachmentsConfig;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly ISecurityService _securityService;
+        private readonly ILogger<AttachmentService> _logger;
 
-        public AttachmentService(IAttachmentConfig attachmentsConfig, IAttachmentRepository attachmentRepository, ISecurityService securityService)
+        public AttachmentService(IAttachmentConfig attachmentsConfig,
+            IAttachmentRepository attachmentRepository,
+            ISecurityService securityService,
+            ILogger<AttachmentService> logger)
         {
             _attachmentsConfig = attachmentsConfig;
             _attachmentRepository = attachmentRepository;
             _securityService = securityService;
+            _logger = logger;
         }
 
         public async Task<List<Attachments>> CreateAttachments(List<AttachmentDto> attachments)
@@ -100,6 +107,26 @@ namespace API.Service
         public void Remove(string filename)
         {
             File.Delete(Path.Combine(_attachmentsConfig.Directory, filename));
+        }
+
+        public void DeleteAllAttachments(int userId, List<string> filenames)
+        {
+            Task.Run(() => //Long operation, fire and forget
+            {
+                try
+                {
+                    foreach (var file in filenames)
+                    {
+                        Remove(file);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"Error while deleting user data for user with id: {userId}\n" +
+                        $"{e.GetType().Name}: {e.Message}\n" +
+                        $"{e.StackTrace}");
+                }
+            });
         }
     }
 }

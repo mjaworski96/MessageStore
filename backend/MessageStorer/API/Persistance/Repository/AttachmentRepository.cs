@@ -1,7 +1,10 @@
 ﻿using API.Persistance.Entity;
 using Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Persistance.Repository
@@ -9,6 +12,7 @@ namespace API.Persistance.Repository
     public interface IAttachmentRepository
     {
         Task<Attachments> Get(int id);
+        Task<List<string>> GetAllAttachmentsFilenamesForUser(int userId);
     }
     public class AttachmentRepository : IAttachmentRepository
     {
@@ -32,6 +36,14 @@ namespace API.Persistance.Repository
             {
                 throw new AttachmentNotFoundException(id, e);
             }
+        }
+
+        public async Task<List<string>> GetAllAttachmentsFilenamesForUser(int userId)
+        {
+            return await _messagesStoreContext.Attachments
+                .Where(x => x.Message.Contact.AppUserId == userId)
+                .Select(x => x.Filename)
+                .ToListAsync();
         }
     }
 }
