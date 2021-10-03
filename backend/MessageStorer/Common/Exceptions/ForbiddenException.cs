@@ -46,5 +46,10 @@ namespace Common.Exceptions
         {
         }
     }
-
+    public class ForbiddenUserDeleteException: ForbiddenException
+    {
+        public ForbiddenUserDeleteException() : base(Lang.Lang.ForbiddenUserDelete)
+        {
+        }
+    }
 }

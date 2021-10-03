@@ -102,7 +102,7 @@ namespace API.Service
 
         public async Task Remove(int userId)
         {
-            _securityService.CheckUser(userId);
+            _securityService.CheckIfUserCanDeleteAccount(userId);
             var userAttachments = await _attachmentRepository.GetAllAttachmentsFilenamesForUser(userId);
             await _appUserRepository.Remove(userId);
             await _messengerIntegrationClient.DeleteAllImports(userId);

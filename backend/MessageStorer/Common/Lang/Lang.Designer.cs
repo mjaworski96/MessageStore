@@ -286,6 +286,15 @@ namespace Common.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can delete only your own account.
+        /// </summary>
+        internal static string ForbiddenUserDelete {
+            get {
+                return ResourceManager.GetString("ForbiddenUserDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import is already being deleted.
         /// </summary>
         internal static string ImportIsBeingDeleted {

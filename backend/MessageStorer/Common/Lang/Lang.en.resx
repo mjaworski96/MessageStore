@@ -192,6 +192,9 @@
   <data name="ForbiddenResource" xml:space="preserve">
     <value>You can't acces this resuorce</value>
   </data>
+  <data name="ForbiddenUserDelete" xml:space="preserve">
+    <value>You can delete only your own account</value>
+  </data>
   <data name="ImportIsBeingDeleted" xml:space="preserve">
     <value>Import is already being deleted</value>
   </data>

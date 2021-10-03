@@ -192,6 +192,9 @@
   <data name="ForbiddenResource" xml:space="preserve">
     <value>Nie masz dostępu do tego zasobu</value>
   </data>
+  <data name="ForbiddenUserDelete" xml:space="preserve">
+    <value>Możesz skasować tylko swoje konto</value>
+  </data>
   <data name="ImportIsBeingDeleted" xml:space="preserve">
     <value>Import jest w trakcie kasowania</value>
   </data>

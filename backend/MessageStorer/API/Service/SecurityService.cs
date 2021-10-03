@@ -17,7 +17,7 @@ namespace API.Service
         void CheckIfUserIsOwnerOfContact(Contacts contact);
         void CheckIfUserIsOwnerOfAttachment(Attachments attachment);
         void CheckIfUserIsOwnerOfImport(Imports import);
-        void CheckUser(int userId);
+        void CheckIfUserCanDeleteAccount(int userId);
     }
     public class SecurityService: ISecurityService
     {
@@ -85,11 +85,11 @@ namespace API.Service
                 throw new ForbiddenImportException();
         }
 
-        public void CheckUser(int userId)
+        public void CheckIfUserCanDeleteAccount(int userId)
         {
             if (userId != _httpMetadataService.UserId)
             {
-                throw new ForbiddenAliasException();
+                throw new ForbiddenUserDeleteException();
             }
         }
     }
