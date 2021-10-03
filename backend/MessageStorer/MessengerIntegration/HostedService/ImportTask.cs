@@ -124,18 +124,46 @@ namespace MessengerIntegration.HostedService
             }
             finally
             {
-                await _importRepository.Save();
-                await importApiClient.Finish(_import.Id);
-                _serviceScope?.Dispose();
-                if (_config.DeleteFileAfterImport && _import != null)
-                {
-                    _fileUtils.Delete(_import.Id);
-                }
+                await Finish(importApiClient);
                 lock (_syncObject)
                 {
                     Completed = true;
                 }
             }
+        }
+
+        private async Task Finish(ImportApiClient importApiClient)
+        {
+            try
+            {
+                await _importRepository.Save();
+            }
+            catch (Exception e) { LogErrorWhileFinish(e); }
+            try
+            {
+                await importApiClient.Finish(_import.Id);
+            }
+            catch (Exception e) { LogErrorWhileFinish(e); }
+            try
+            {
+                _serviceScope?.Dispose();
+            }
+            catch (Exception e) { LogErrorWhileFinish(e); }
+            try
+            {
+                if (_config.DeleteFileAfterImport && _import != null)
+                {
+                    _fileUtils.Delete(_import.Id);
+                }
+            }
+            catch (Exception e) { LogErrorWhileFinish(e); }
+        }
+        private void LogErrorWhileFinish(Exception e)
+        {
+            _logger.LogError($"Error while finishing import:" +
+                $"{e.GetType().Name}: {e.Message}\n" +
+                $"{e.StackTrace}");
+
         }
         private async Task SetStatus(string statusName)
         {
