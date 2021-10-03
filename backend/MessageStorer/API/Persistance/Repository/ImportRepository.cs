@@ -12,7 +12,6 @@ namespace API.Persistance.Repository
     {
         Task<Imports> GetOrCreate(string importId, int userId, Applications application);
         Task<Imports> Get(string importId);
-        Task<int?> GetOwnerId(string importId);
         Task<List<Imports>> GetAllForUser(int userId);
         Task Remove(Imports import);
         Task Commit();
@@ -75,20 +74,6 @@ namespace API.Persistance.Repository
         {
             _messageStoreContext.Remove(import);
             await _messageStoreContext.SaveChangesAsync();
-        }
-
-        public async Task<int?> GetOwnerId(string importId)
-        {
-            var result = await  _messageStoreContext
-                .Imports
-                .Where(x => x.ImportId == importId)
-                .Select(x => x.AppUserId)
-                .SingleOrDefaultAsync();
-            if (result == 0)
-            {
-                return null;
-            }
-            return result;
         }
 
         public async Task Commit()

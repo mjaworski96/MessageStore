@@ -16,7 +16,7 @@ namespace API.Service
         Task CheckIfUserIsOwnerOfContact(int contactId);
         void CheckIfUserIsOwnerOfContact(Contacts contact);
         void CheckIfUserIsOwnerOfAttachment(Attachments attachment);
-        void CheckIfUserIsOwnerOfImport(int? ownerId);
+        void CheckIfUserIsOwnerOfImport(Imports import);
         void CheckUser(int userId);
     }
     public class SecurityService: ISecurityService
@@ -79,13 +79,10 @@ namespace API.Service
                 throw new ForbiddenAttachmentException();
         }
 
-        public void CheckIfUserIsOwnerOfImport(int? ownerId)
+        public void CheckIfUserIsOwnerOfImport(Imports import)
         {
-            if (ownerId != null)
-            {
-                if (ownerId != _httpMetadataService.UserId)
-                    throw new ForbiddenImportException();
-            }
+            if (import.AppUserId != _httpMetadataService.UserId)
+                throw new ForbiddenImportException();
         }
 
         public void CheckUser(int userId)

@@ -47,7 +47,7 @@ namespace API.Service
             Validate(messageDto, contact);
            
             var import = await _importRepository.GetOrCreate(messageDto.ImportId, _httpMetadataService.UserId, contact.Application);
-            _securityService.CheckIfUserIsOwnerOfImport(import.AppUserId);
+            _securityService.CheckIfUserIsOwnerOfImport(import);
 
             var message = new Messages
             {
@@ -179,8 +179,7 @@ namespace API.Service
                 import.IsBeingDeleted = true;
                 await _importRepository.Commit();
 
-                var owner = await _importRepository.GetOwnerId(importId);
-                _securityService.CheckIfUserIsOwnerOfImport(owner);
+                _securityService.CheckIfUserIsOwnerOfImport(import);
                 var attachments = await _messageRepository.GetFilenamesToRemove(import.Id);
 
                 foreach (var item in attachments)
