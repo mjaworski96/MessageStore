@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material';
 import {DeleteAliasDialogComponent} from './delete-alias-dialog/delete-alias-dialog.component';
 import {DialogConfig} from '../../shared/utils/dialog-config';
 import {EditAliasNameDialogComponent} from './edit-alias-name-dialog/edit-alias-name-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-alias-view',
@@ -17,16 +18,24 @@ export class AliasViewComponent implements OnInit {
   aliases: AliasWithId[];
   filtered: AliasWithId[];
   filterBy = '';
+  dataSubscription: Subscription;
+
   constructor(private aliasService: AliasService,
               private router: Router,
               private route: ActivatedRoute,
               private dialog: MatDialog) { }
 
   ngOnInit() {
-    const aliases: AliasWithIdList = this.route.snapshot.data.aliases;
-    this.aliases = aliases.aliases;
-    this.filtered = this.aliases;
+    this.dataSubscription = this.route.data.subscribe(data => {
+      const aliases: AliasWithIdList = data.aliases;
+      this.aliases = aliases.aliases;
+      this.filtered = this.aliases;
+    });
   }
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
+  }
+  
   filterByChange(event) {
     this.filter();
   }

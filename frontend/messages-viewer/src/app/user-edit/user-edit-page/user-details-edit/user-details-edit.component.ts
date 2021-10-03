@@ -7,6 +7,7 @@ import {HttpResponse} from '@angular/common/http';
 import {ErrorHandlingService} from '../../../services/error-handling.service';
 import {SessionStorageService} from '../../../services/session-storage.service';
 import {ToastrService} from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-details-edit',
@@ -20,8 +21,8 @@ export class UserDetailsEditComponent implements OnInit {
 
   user: LoggedUser;
   userDetailsForm: FormGroup;
-
   maxUsernameLength = 20;
+  dataSubscription: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private userAccountService: UserAccountService,
@@ -29,9 +30,14 @@ export class UserDetailsEditComponent implements OnInit {
               private route: ActivatedRoute,
               private toastr: ToastrService) { }
 
-  ngOnInit(): void {
-    this.user = this.route.snapshot.data.user;
-    this.buildForm();
+  ngOnInit() {
+    this.dataSubscription = this.route.data.subscribe(data => {
+      this.user = data.user;
+      this.buildForm();
+    });
+  }
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
   }
   buildForm(): void {
     this.userDetailsForm = this.formBuilder.group({

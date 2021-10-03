@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import { Subscription } from 'rxjs';
 import {LoggedUser} from '../../model/user';
 
 @Component({
@@ -8,13 +9,17 @@ import {LoggedUser} from '../../model/user';
   styleUrls: ['./user-edit-page.component.css']
 })
 export class UserEditPageComponent implements OnInit {
-
   user: LoggedUser;
+  dataSubscription: Subscription;
 
   constructor(private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-    this.user = this.route.snapshot.data.user;
+  ngOnInit() {
+    this.dataSubscription = this.route.data.subscribe(data => {
+      this.user = data.user;
+    });
   }
-
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
+  }
 }

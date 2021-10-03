@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import { Subscription } from 'rxjs';
 import {ImportsList} from '../../model/import';
 import {ImportService} from '../../services/import.service';
 
@@ -17,13 +18,19 @@ export class MessengerPageComponent implements OnInit {
 
   imports: ImportsList;
   importProgress: ImportProgressData;
-
+  dataSubscription: Subscription;
+  
   constructor(private route: ActivatedRoute,
               private importService: ImportService) { }
 
   ngOnInit() {
-    this.importProgress = new ImportProgressData();
-    this.imports = this.route.snapshot.data.imports;
+    this.dataSubscription = this.route.data.subscribe(data => {
+      this.importProgress = new ImportProgressData();
+      this.imports = data.imports;
+    });
+  }
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
   }
   async refresh() {
     this.imports = await this.importService.getAll();

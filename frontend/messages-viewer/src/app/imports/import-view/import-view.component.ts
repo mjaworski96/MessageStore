@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {ImportsList} from '../../model/import';
 import {ActivatedRoute} from '@angular/router';
 import {ImportService} from '../../services/import.service';
@@ -7,24 +7,32 @@ import {MessagesImportList} from '../../model/message-import';
 import {MatDialog} from '@angular/material';
 import {DeleteMessagesDialogComponent} from './delete-messages-dialog/delete-messages-dialog.component';
 import {DialogConfig} from '../../shared/utils/dialog-config';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-import-view',
   templateUrl: './import-view.component.html',
   styleUrls: ['./import-view.component.css']
 })
-export class ImportViewComponent implements OnInit {
+export class ImportViewComponent implements OnInit, OnDestroy {
 
   imports: MessagesImportList;
   deleting = false;
   refreshed = false;
+  dataSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private messagesImportService: MessagesImportService,
               private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.imports = this.route.snapshot.data.imports;
+    this.dataSubscription = this.route.data.subscribe(data => {
+      this.imports = data.imports;
+      this.refreshed = false;
+    });
+  }
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
   }
   async delete(importId: string) {
     const dialogRef = this.dialog.open(DeleteMessagesDialogComponent, DialogConfig);

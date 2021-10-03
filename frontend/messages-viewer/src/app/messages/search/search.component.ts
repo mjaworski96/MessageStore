@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MessagesListComponent} from '../messages-list/messages-list.component';
 import {ToastrService} from 'ngx-toastr';
 import {AliasWithIdList} from '../../model/alias';
+import { Subscription } from 'rxjs';
 
 interface Checkbox {
   aliasId: number;
@@ -31,18 +32,23 @@ export class SearchComponent implements OnInit {
   to: string;
   pendingSearch = false;
   results: SearchResult[];
+  dataSubscription: Subscription;
 
-  constructor(private aliasService: AliasService,
-              private searchService: SearchService,
+  constructor(private searchService: SearchService,
               private router: Router,
               private route: ActivatedRoute,
               private toastr: ToastrService) { }
 
   ngOnInit() {
-    this.getAliases();
+    this.dataSubscription = this.route.data.subscribe(data => {
+      this.getAliases(data);
+    });
   }
-  getAliases(): void {
-    const rawAliases: AliasWithIdList = this.route.snapshot.data.aliases;
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
+  }
+  getAliases(data): void {
+    const rawAliases: AliasWithIdList = data.aliases;
 
     this.aliases = [];
     rawAliases.aliases.forEach(item => {
