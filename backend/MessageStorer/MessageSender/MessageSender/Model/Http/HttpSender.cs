@@ -19,14 +19,22 @@ namespace MessageSender.Model.Http
 
     internal class BypassSslValidationClientHandler : Xamarin.Android.Net.AndroidClientHandler
     {
+        private readonly SSLSocketFactory _factory;
+        private readonly IHostnameVerifier _hostnameVerifier;
+
+        internal BypassSslValidationClientHandler()
+        {
+            _factory = Android.Net.SSLCertificateSocketFactory.GetInsecure(60000, null);
+            _hostnameVerifier = new BypassHostnameVerifier();
+        }
         protected override SSLSocketFactory ConfigureCustomSSLSocketFactory(HttpsURLConnection connection)
         {
-            return Android.Net.SSLCertificateSocketFactory.GetInsecure(1000, null);
+            return _factory;
         }
 
         protected override IHostnameVerifier GetSSLHostnameVerifier(HttpsURLConnection connection)
         {
-            return new BypassHostnameVerifier();
+            return _hostnameVerifier;
         }
     }
 
