@@ -140,7 +140,7 @@ CREATE TABLE imports
 	created_at TIMESTAMP DEFAULT now(),
 	start_date TIMESTAMP,
 	end_date TIMESTAMP,
-	application_id INTEGER NOT NULL,
+	application_id INTEGER NOT NULL
 );
 
 ALTER TABLE imports ADD CONSTRAINT imports_pkey PRIMARY KEY (id);
