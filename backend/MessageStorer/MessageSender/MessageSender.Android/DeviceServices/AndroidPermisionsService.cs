@@ -1,6 +1,7 @@
 ﻿using Android;
 using Android.App;
 using Android.Support.V4.App;
+using Android.Support.V4.Content;
 using MessageSender.ViewModel.Interfaces;
 
 namespace MessageSender.Droid.DeviceServices
@@ -16,7 +17,7 @@ namespace MessageSender.Droid.DeviceServices
         {
             ActivityCompat.RequestPermissions(_context,
                 new[] { Manifest.Permission.ReadContacts, Manifest.Permission.ReadSms },
-                (int)RequestPermissionCodes.READ_SMS_AND_CONTACT);
+                PermissionChecker.PermissionGranted);
         }
     }
 }
