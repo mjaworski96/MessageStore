@@ -9,7 +9,6 @@ using MessengerIntegration.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,9 +16,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -185,6 +182,7 @@ namespace MessengerIntegration.HostedService
             CancellationToken cancellationToken)
         {
             var streamCollection = _zipFile.GetConversationStream(conversationData);
+            SyncDateTime lastSyncDateTime = null;
             foreach (var conversationStream in streamCollection)
             {
                 using (conversationStream)
@@ -200,7 +198,14 @@ namespace MessengerIntegration.HostedService
 
                     var contact = await ImportContact(name, conversationDocument, contactApiClient);
                     cancellationToken.ThrowIfCancellationRequested();
-                    await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, cancellationToken);
+
+                    if (lastSyncDateTime == null)
+                    {
+                        lastSyncDateTime = await messageApiClient.GetSyncTime(contact.Id);
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+
+                    await ImportMessages(contact, messageApiClient, conversationDocument, conversationData, lastSyncDateTime, cancellationToken);
                 }
             }
         }
@@ -225,18 +230,17 @@ namespace MessengerIntegration.HostedService
         }
         private async Task ImportMessages(ContactWithId contact, MessageApiClient messageApiClient,
             JsonDocument document, List<ZipArchiveEntry> conversationData,
-            CancellationToken cancellationToken)
+            SyncDateTime lastSyncDateTime, CancellationToken cancellationToken)
         {
-            var lastSyncTime = await messageApiClient.GetSyncTime(contact.Id);
             var messages = document.RootElement.GetProperty("messages");
             foreach (var message in messages.EnumerateArray())
             {
-                await ImportMessages(contact, messageApiClient, message, conversationData, lastSyncTime);
+                await ImportMessage(contact, messageApiClient, message, conversationData, lastSyncDateTime);
                 cancellationToken.ThrowIfCancellationRequested();
             }
         }
 
-        private async Task ImportMessages(ContactWithId contact, MessageApiClient messageApiClient, JsonElement message, List<ZipArchiveEntry> conversationData, SyncDateTime lastSyncTime)
+        private async Task ImportMessage(ContactWithId contact, MessageApiClient messageApiClient, JsonElement message, List<ZipArchiveEntry> conversationData, SyncDateTime lastSyncTime)
         {
             var rawMessage = JsonConvert.DeserializeObject<RawMessage>(message.GetRawText());
             var messageDate = new DateTime(1970, 1, 1).AddMilliseconds(rawMessage.TimestampMs);
