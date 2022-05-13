@@ -8,9 +8,9 @@
     </video>
   </div>
   <div *ngIf="getType() !== 'image' && getType() !== 'video'" class="full-width-button">
-    <button mat-flat-button color="primary" (click)="downloadAttachment()"
-            i18n="Download attachment|Text on download attachment button@@download-attachment">
-      Download attachment
+    <button mat-flat-button color="primary" (click)="downloadAttachment()">
+      <span i18n="Download attachment|Text on download attachment button@@download-attachment">Download attachment</span>
+      <span class="long-text"> ({{attachment.saveAsFilename}})</span>
     </button>
   </div>
 </div>
