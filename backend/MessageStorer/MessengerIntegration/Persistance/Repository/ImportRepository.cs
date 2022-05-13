@@ -71,13 +71,20 @@ namespace MessengerIntegration.Persistance.Repository
 
         public async Task<List<Imports>> GetQueued(int parallelImportsCount)
         {
-            return await _messengerIntegrationContext
+            var imports = await _messengerIntegrationContext
                .Imports
                .Include(x => x.Status)
-               .Where(x => x.Status.Name == Statuses.Queued)
+               .Where(x => x.Status.Name == Statuses.Queued &&
+                    !_messengerIntegrationContext.Imports
+                        .Where(y => y.UserId == x.UserId &&
+                            y.Status.Name == Statuses.Processing).Any())
                .OrderBy(x => x.CreatedAt)
                .Take(parallelImportsCount)
                .ToListAsync();
+
+            return imports.GroupBy(x => x.UserId)
+               .Select(x => x.First())
+               .ToList();
         }
 
         public async Task Save()
